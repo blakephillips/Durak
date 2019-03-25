@@ -94,5 +94,19 @@ namespace DurakXtreme
                 btn.Size = new Size(btn.Width - buttonPop, btn.Height - buttonPop);
             }
         }
+
+        /// <summary>
+        /// btnPlay_Click - Closes the main menu form and opens the Durak game UI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+
+            MainForm durakUI = new MainForm();
+            this.Hide();
+            durakUI.ShowDialog();
+            this.Close();
+        }
     }
 }
