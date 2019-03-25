@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CardLibrary
 {
-    class PlayingCard
+    public class PlayingCard
     {
         #region "Get/Set Methods"
         protected CardSuit mySuit;
