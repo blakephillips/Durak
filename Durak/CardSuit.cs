@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Durak
+namespace CardLibrary
 {
-    public class Class1
+    public enum CardSuit : byte
     {
+        Spades,
+        Hearts,
+        Diamonds, 
+        Clubs
     }
 }
