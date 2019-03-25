@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardLib", "Durak\CardLib.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DurakGame", "DurakGame\DurakGame.csproj", "{987FEDF6-4508-47A1-94CE-2E40615C578E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DurakXtreme", "DurakXtreme\DurakXtreme.csproj", "{267E740A-132A-4D08-ABF7-575EE6E888EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{987FEDF6-4508-47A1-94CE-2E40615C578E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{987FEDF6-4508-47A1-94CE-2E40615C578E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{987FEDF6-4508-47A1-94CE-2E40615C578E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{267E740A-132A-4D08-ABF7-575EE6E888EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{267E740A-132A-4D08-ABF7-575EE6E888EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{267E740A-132A-4D08-ABF7-575EE6E888EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{267E740A-132A-4D08-ABF7-575EE6E888EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
