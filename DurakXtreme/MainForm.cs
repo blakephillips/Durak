@@ -16,5 +16,25 @@ namespace DurakXtreme
         {
             InitializeComponent();
         }
+
+        private void btnTake_MouseEnter(object sender, EventArgs e)
+        {
+            UIEffects.btnPop(sender as Button);
+        }
+
+        private void btnTake_MouseLeave(object sender, EventArgs e)
+        {
+            UIEffects.btnPop(sender as Button, false);
+        }
+
+        private void btnPass_MouseEnter(object sender, EventArgs e)
+        {
+            UIEffects.btnPop(sender as Button);
+        }
+
+        private void btnPass_MouseLeave(object sender, EventArgs e)
+        {
+            UIEffects.btnPop(sender as Button, false);
+        }
     }
 }
