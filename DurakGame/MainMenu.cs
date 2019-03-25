@@ -74,7 +74,7 @@ namespace DurakGame
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("By: Blake, Dylan, Clayton\n Attributes:\n MainMenu: https://pixabay.com/illustrations/gambling-pattern-casino-play-1228728/ \nAccessed March 24 2019");
+            MessageBox.Show("By: Blake, Dylan, Clayton\n Attribution:\n MainMenu: https://pixabay.com/illustrations/gambling-pattern-casino-play-1228728/ \nAccessed March 24 2019");
         }
         /// <summary>
         /// Pops a button. 
