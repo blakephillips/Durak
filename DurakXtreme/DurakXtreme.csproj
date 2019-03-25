@@ -96,14 +96,10 @@
     <None Include="Resources\menu_background.jpg" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <None Include="Resources\menu_background.png" />
-=======
     <ProjectReference Include="..\Durak\CardLib.csproj">
       <Project>{1bca90dc-2587-42b5-865a-d614aca8ea59}</Project>
       <Name>CardLib</Name>
     </ProjectReference>
->>>>>>> f5e935af75ec304747c7af034897ed2e3dd49071
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
