@@ -53,6 +53,7 @@ namespace DurakGame
         private void btnAbout_MouseEnter(object sender, EventArgs e)
         {
             btnPop(sender as Button);
+           
         }
 
         private void btnAbout_MouseLeave(object sender, EventArgs e)
@@ -85,14 +86,12 @@ namespace DurakGame
             if (isEntering == true)
             {
                 btn.Location = new Point(btn.Location.X - (buttonPop / 2), btn.Location.Y - (buttonPop / 2));
-                btn.Width = btn.Width + buttonPop;
-                btn.Height = btn.Height + buttonPop;
+                btn.Size = new Size(btn.Width + buttonPop, btn.Height + buttonPop);
             }
             else
             {
                 btn.Location = new Point(btn.Location.X + (buttonPop / 2), btn.Location.Y + (buttonPop / 2));
-                btn.Width = btn.Width - buttonPop;
-                btn.Height = btn.Height - buttonPop;
+                btn.Size = new Size(btn.Width - buttonPop, btn.Height - buttonPop);
             }
         }
     }
