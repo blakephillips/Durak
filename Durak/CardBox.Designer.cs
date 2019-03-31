@@ -41,6 +41,7 @@
             this.pbCard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbCard.TabIndex = 0;
             this.pbCard.TabStop = false;
+            this.pbCard.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCard_MouseClick);
             // 
             // CardBox
             // 

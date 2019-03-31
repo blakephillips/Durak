@@ -8,6 +8,13 @@ namespace CardLibrary
 {
    public class Deck : List<PlayingCard>
     {
+        public Deck() { }
+        public Deck(string deckName)
+        {
+            Name = deckName;
+        }
+
+
         private static Random rand = new Random();
         //TODO add IClonable
         /// <summary>
@@ -28,12 +35,27 @@ namespace CardLibrary
             }
         }
 
-       public PlayingCard DrawCard()
+        public PlayingCard DrawCard()
         {
             PlayingCard card = this.First();
             this.Remove(card);
             return card;
         }
+
+        private String name;
+        public String Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+
+
 
     }
 }

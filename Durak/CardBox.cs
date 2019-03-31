@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CardLibrary
 {
     public partial class CardBox : UserControl
     {
-
+        #region "Get/Set Methods"
         private PlayingCard myCard;
         
         public PlayingCard Card
@@ -75,6 +69,7 @@ namespace CardLibrary
             }
             get { return myOrientation; }
         }
+        #endregion
 
         private void UpdateCardImage()
         {
@@ -86,7 +81,7 @@ namespace CardLibrary
             }
 
         }
-
+        #region "Constructors"
         public CardBox()
         {
             InitializeComponent();
@@ -108,16 +103,43 @@ namespace CardLibrary
             Card = new PlayingCard(rank, suit);
             myOrientation = Orientation.Vertical;
         }
+        #endregion
 
+
+        /// <summary>
+        /// Initialize card image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CardBox_Load(object sender, EventArgs e)
         {
             UpdateCardImage();
         }
 
+        /// <summary>
+        /// Overrides ToString() to return the card lib's toString method
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Card.ToString();
         }
 
+        /// <summary>
+        /// Click event handler
+        /// </summary>
+        new public event EventHandler Click;
+
+
+        /// <summary>
+        /// On click of card, if event handler is set, trigger event handler
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pbCard_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (Click != null)
+                Click(this,e);
+        }
     }
 }

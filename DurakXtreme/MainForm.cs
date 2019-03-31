@@ -15,6 +15,10 @@ namespace DurakXtreme
     {
         //Unused pile of cards
         Deck cardPile = new Deck();
+
+        Deck player1Hand = new Deck("Player 1");
+        Deck player2Hand = new Deck("Player 2");
+
         public MainForm()
         {
             InitializeComponent();
@@ -27,9 +31,13 @@ namespace DurakXtreme
 
             InitializeDeck(ref cardPile);
             cardPile.Shuffle();
+
+            DrawCards(ref player1Hand, ref cardPile, 6);
+            DrawCards(ref player2Hand, ref cardPile, 6);
+
             CardBox trumpCard = new CardBox(cardPile.DrawCard());
             trumpCard.FaceUp = true;
-            Console.WriteLine("TRUMP CARD IS: " + trumpCard.ToString());
+            GameplayLog.Log("Trump Card: " + trumpCard.ToString());
             pbTrump.Controls.Add(trumpCard);
             
             lblCardCount.Text = cardPile.Count().ToString();
@@ -55,6 +63,22 @@ namespace DurakXtreme
                 }
             }
         }
+
+        private void DrawCards(ref Deck hand, ref Deck deck, int amount)
+        {
+            if (deck.Count >= amount)
+            {
+                for (int i = 0; i < amount; i++)
+                {
+                    PlayingCard card = deck.DrawCard();
+                    hand.Add(card);
+                    GameplayLog.Log(card.ToString() + " has been drawn to " + hand.ToString());
+                }
+            }
+            lblCardCount.Text = deck.Count().ToString();
+        }
+
+
 
         #region "UI Effects"
         private void btnTake_MouseEnter(object sender, EventArgs e)
