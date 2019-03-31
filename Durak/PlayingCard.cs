@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Drawing;
 namespace CardLibrary
 {
     public class PlayingCard
@@ -91,5 +91,43 @@ namespace CardLibrary
         {
             return this.myValue * 100 + (int)this.mySuit * 10 + ((this.FaceUp) ? 1 : 0);
         }
+
+        public override string ToString()
+        {
+            return Rank.ToString() + " of " + Suit.ToString();
+        }
+
+        public Image GetCardImage()
+        {
+            string imageName;
+            Image cardImage;
+
+            if (!FaceUp)
+            {
+                imageName = "back";
+            }
+            else if (myRank == CardRank.Joker)
+            {
+                if (mySuit == CardSuit.Clubs || mySuit == CardSuit.Spades)
+                {
+                    imageName = "black_joker";
+                }
+                else
+                {
+                    imageName = "red_joker";
+                }
+            }
+            else
+            {
+                imageName = myRank.ToString().ToLower() + "_of_" + mySuit.ToString().ToLower();
+            }
+
+            cardImage = Properties.Resources.ResourceManager.GetObject(imageName) as Image;
+
+
+            return cardImage;
+
+        }
+
     }
 }
