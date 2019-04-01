@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace CardLibrary
 {
@@ -16,6 +17,19 @@ namespace CardLibrary
         {
             //TODO write this data to a file
             Console.WriteLine(logData);
+
+            try
+            {
+                DateTime now = DateTime.Now;
+                StreamWriter sw = new StreamWriter("log.txt", true);
+                sw.WriteLine(now.ToShortDateString() +": "+ logData);
+                sw.Close();
+            } catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+
+
         }
     }
 }

@@ -181,7 +181,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.BackgroundImage = global::DurakXtreme.Properties.Resources.texturedBackground;
-            this.ClientSize = new System.Drawing.Size(962, 552);
+            this.ClientSize = new System.Drawing.Size(962, 627);
             this.Controls.Add(this.pbTrump);
             this.Controls.Add(this.lblCardCount);
             this.Controls.Add(this.lblStatusUpdate);
@@ -194,6 +194,7 @@
             this.Controls.Add(this.lblPlayerOne);
             this.Controls.Add(this.pnlPlayerOne);
             this.Controls.Add(this.pnlOpponent);
+            this.DoubleBuffered = true;
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

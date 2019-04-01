@@ -16,8 +16,8 @@ namespace DurakXtreme
         //Unused pile of cards
         Deck cardPile = new Deck();
 
-        Deck player1Hand = new Deck("Player 1");
-        Deck player2Hand = new Deck("Player 2");
+        Player player1 = new Player("Player 1");
+        Player player2 = new Player("Player 2");
 
         public MainForm()
         {
@@ -32,16 +32,42 @@ namespace DurakXtreme
             InitializeDeck(ref cardPile);
             cardPile.Shuffle();
 
-            DrawCards(ref player1Hand, ref cardPile, 6);
-            DrawCards(ref player2Hand, ref cardPile, 6);
+            DrawCards(ref player1, ref cardPile, 6);
+            DrawCards(ref player2, ref cardPile, 6);
 
             CardBox trumpCard = new CardBox(cardPile.DrawCard());
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
             pbTrump.Controls.Add(trumpCard);
-            
-            lblCardCount.Text = cardPile.Count().ToString();
 
+            PlayingCard p1TrumpCard = new PlayingCard();
+            bool p1TrumpCardExist = false;
+            if (LowestTrumpCard(ref player1, trumpCard.Card, ref p1TrumpCard))
+            {
+               GameplayLog.Log ("P1 Trump Card: "+p1TrumpCard.ToString());
+                p1TrumpCardExist = true;
+            }
+
+            PlayingCard p2TrumpCard = new PlayingCard();
+            bool p2TrumpCardExist = false;
+            if (LowestTrumpCard(ref player2, trumpCard.Card, ref p2TrumpCard))
+            {
+                GameplayLog.Log("P2 Trump Card: " + p2TrumpCard.ToString());
+                p2TrumpCardExist = true;
+            }
+            
+
+        }
+
+
+        private void p1Attacking()
+        {
+            GameplayLog.Log("P1 is now attacking.");
+        }
+
+        public void p2Attacking()
+        {
+            GameplayLog.Log("P2 is now attacking.");
         }
 
 
@@ -63,19 +89,53 @@ namespace DurakXtreme
                 }
             }
         }
-
-        private void DrawCards(ref Deck hand, ref Deck deck, int amount)
+        /// <summary>
+        /// Draws a specified amount of cards from the deck and puts them into the players hand
+        /// </summary>
+        /// <param name="player">Player object the cards are to be placed in</param>
+        /// <param name="deck">Deck to withdraw the cards from</param>
+        /// <param name="amount">Amount to take and put in players hand</param>
+        private void DrawCards(ref Player player, ref Deck deck, int amount)
         {
             if (deck.Count >= amount)
             {
                 for (int i = 0; i < amount; i++)
                 {
                     PlayingCard card = deck.DrawCard();
-                    hand.Add(card);
-                    GameplayLog.Log(card.ToString() + " has been drawn to " + hand.ToString());
+                    player.Add(card);
+                    GameplayLog.Log(card.ToString() + " has been drawn to " + player.ToString());
                 }
             }
             lblCardCount.Text = deck.Count().ToString();
+        }
+
+        /// <summary>
+        /// Returns the lowest trump card in a players hand
+        /// </summary>
+        /// <param name="player">Player object that has PlayingCards in its list</param>
+        /// <param name="trumpCard">TrumpCard for the game</param>
+        /// <param name="outCard">Reference to the card the lowest trumpCard will be stored in</param>
+        /// <returns>Returns true if there is any trump cards in the hand, false otherwise</returns>
+        private bool LowestTrumpCard(ref Player player, PlayingCard trumpCard, ref PlayingCard outCard)
+        {
+            bool cardFound = false;
+
+            for (int i = 0; i < player.Count; i++)
+            {
+                if (player[i].Suit == trumpCard.Suit)
+                {
+                    if (cardFound == false)
+                    {
+                        outCard = player[i];
+                    }
+                    else if (outCard.Rank > player[i].Rank)
+                    {
+                        outCard = player[i];
+                    }
+                    cardFound = true;
+                }
+            }
+            return cardFound;
         }
 
 

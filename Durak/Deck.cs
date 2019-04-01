@@ -9,10 +9,7 @@ namespace CardLibrary
    public class Deck : List<PlayingCard>
     {
         public Deck() { }
-        public Deck(string deckName)
-        {
-            Name = deckName;
-        }
+
 
 
         private static Random rand = new Random();
@@ -42,17 +39,7 @@ namespace CardLibrary
             return card;
         }
 
-        private String name;
-        public String Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
 
-        public override string ToString()
-        {
-            return Name;
-        }
 
 
 

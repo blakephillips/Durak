@@ -118,6 +118,7 @@
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.btnExit);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmMainMenu";
             this.ShowInTaskbar = false;
