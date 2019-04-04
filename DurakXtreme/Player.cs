@@ -20,12 +20,23 @@ namespace DurakXtreme
 
         /// <summary>
         /// If the player is attacking or defending currently.
+        /// Depending on turnStatus, set off appopriate EventHandler.
         /// </summary>
         private TurnStatus myTurnStatus;
         public TurnStatus CurrentTurnStatus
         {
             get { return myTurnStatus; }
-            set { myTurnStatus = value; }
+            set
+            {
+                if (value == TurnStatus.Attacking)
+                {
+                    Player_Attacking();
+                } else if (value == TurnStatus.Defending)
+                {
+                    Player_Defending();
+                }
+                myTurnStatus = value;
+            }
         }
         /// <summary>
         /// Name of the player to be displayed
@@ -36,6 +47,29 @@ namespace DurakXtreme
             get { return myPlayerName; }
             set { myPlayerName = value; }
         }
+
+        new public EventHandler Defending;
+        new public EventHandler Attacking;
+        /// <summary>
+        /// If Defending Event Handler is set, 
+        ///     set off EventHandler.
+        /// </summary>
+        private void Player_Defending()
+        {
+            if (Defending != null)
+                Defending(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// If Attacking Event Handler is set,
+        ///     set off EventHandler.
+        /// </summary>
+        private void Player_Attacking()
+        {
+            if (Attacking != null)
+                Attacking(this, new EventArgs());
+        }
+
 
         public override string ToString()
         {

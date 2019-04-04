@@ -23,23 +23,32 @@ namespace DurakXtreme
         {
             InitializeComponent();
 
+            //Add event listeners for attacking/defending 
+            player1.Attacking += Player_Attacking;
+            player1.Defending += Player_Defending;
+
+            //Initialize DeckCard image/cardbox
             CardBox DeckCard = new CardBox();
 
+            //make FaceDown/Add to proper panel
             DeckCard.FaceUp = false;
             pbDeck.Controls.Add(DeckCard);
 
-
+            //Initialize and shuffle standard deck
             InitializeDeck(ref cardPile);
             cardPile.Shuffle();
 
+            //Draw the first 6 cards to each player
             DrawCards(ref player1, ref cardPile, 6);
             DrawCards(ref player2, ref cardPile, 6);
 
+            //Draw and initialize trumpCard control
             CardBox trumpCard = new CardBox(cardPile.DrawCard());
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
             pbTrump.Controls.Add(trumpCard);
 
+            //Get P1's lowest trump card
             PlayingCard p1TrumpCard = new PlayingCard();
             bool p1TrumpCardExist = false;
             if (LowestTrumpCard(ref player1, trumpCard.Card, ref p1TrumpCard))
@@ -48,6 +57,7 @@ namespace DurakXtreme
                 p1TrumpCardExist = true;
             }
 
+            //Get P2's lowest trump card
             PlayingCard p2TrumpCard = new PlayingCard();
             bool p2TrumpCardExist = false;
             if (LowestTrumpCard(ref player2, trumpCard.Card, ref p2TrumpCard))
@@ -55,19 +65,49 @@ namespace DurakXtreme
                 GameplayLog.Log("P2 Trump Card: " + p2TrumpCard.ToString());
                 p2TrumpCardExist = true;
             }
-            
+            //Decide who is attacking/defending
+            if (p1TrumpCardExist == true && p2TrumpCardExist == true)
+            {
+                if (p1TrumpCard.Rank > p2TrumpCard.Rank)
+                {
+                    player1.CurrentTurnStatus = TurnStatus.Attacking;
+                } else
+                {
+                    player1.CurrentTurnStatus = TurnStatus.Defending;
+                }
+            } else
+            {
+                if (p1TrumpCardExist == true)
+                {
+                    player1.CurrentTurnStatus = TurnStatus.Attacking;
+                } else
+                {
+                    player1.CurrentTurnStatus = TurnStatus.Defending;
+                }
+            }
 
         }
 
-
-        private void p1Attacking()
+        /// <summary>
+        /// Event listener if the player begins attacking
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Player_Attacking(object sender, EventArgs e)
         {
-            GameplayLog.Log("P1 is now attacking.");
+            GameplayLog.Log(sender.ToString() + " is attacking.");
+            player2.CurrentTurnStatus = TurnStatus.Defending;
         }
-
-        public void p2Attacking()
+        
+        /// <summary>
+        /// Event listener if the player begins defending
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Player_Defending(object sender, EventArgs e)
         {
-            GameplayLog.Log("P2 is now attacking.");
+            GameplayLog.Log(sender.ToString() + " is defending.");
+            player2.CurrentTurnStatus = TurnStatus.Attacking;
         }
 
 
@@ -138,7 +178,7 @@ namespace DurakXtreme
             return cardFound;
         }
 
-
+       
 
         #region "UI Effects"
         private void btnTake_MouseEnter(object sender, EventArgs e)
