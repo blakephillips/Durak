@@ -68,7 +68,7 @@ namespace DurakXtreme
             //Decide who is attacking/defending
             if (p1TrumpCardExist == true && p2TrumpCardExist == true)
             {
-                if (p1TrumpCard.Rank > p2TrumpCard.Rank)
+                if (p1TrumpCard > p2TrumpCard)
                 {
                     player1.CurrentTurnStatus = TurnStatus.Attacking;
                 } else
@@ -124,6 +124,8 @@ namespace DurakXtreme
                     if (cardRank < 2 || cardRank > 5)
                     {
                         PlayingCard card = new PlayingCard((CardRank)cardRank, (CardSuit)cardSuit);
+                        if (card.Rank == CardRank.Ace)
+                            card.CardValue = 15;
                         deck.Add(card);
                     }
                 }
