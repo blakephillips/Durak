@@ -87,7 +87,7 @@ namespace DurakXtreme
             }
 
         }
-
+        //TODO: Change colours of attack/defend
         /// <summary>
         /// Event listener if the player begins attacking
         /// </summary>
