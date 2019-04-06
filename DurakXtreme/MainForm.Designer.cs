@@ -42,6 +42,7 @@
             this.lblStatusUpdate = new System.Windows.Forms.Label();
             this.lblCardCount = new System.Windows.Forms.Label();
             this.pbTrump = new System.Windows.Forms.PictureBox();
+            this.btnReset = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbTrump)).BeginInit();
             this.SuspendLayout();
@@ -112,7 +113,7 @@
             this.pnlGraveyard.BackColor = System.Drawing.Color.Transparent;
             this.pnlGraveyard.Location = new System.Drawing.Point(810, 222);
             this.pnlGraveyard.Name = "pnlGraveyard";
-            this.pnlGraveyard.Size = new System.Drawing.Size(200, 167);
+            this.pnlGraveyard.Size = new System.Drawing.Size(119, 167);
             this.pnlGraveyard.TabIndex = 6;
             // 
             // btnTake
@@ -175,13 +176,24 @@
             this.pbTrump.TabIndex = 11;
             this.pbTrump.TabStop = false;
             // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(82, 536);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(75, 23);
+            this.btnReset.TabIndex = 12;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.BackgroundImage = global::DurakXtreme.Properties.Resources.texturedBackground;
-            this.ClientSize = new System.Drawing.Size(962, 627);
+            this.ClientSize = new System.Drawing.Size(962, 657);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.pbTrump);
             this.Controls.Add(this.lblCardCount);
             this.Controls.Add(this.lblStatusUpdate);
@@ -224,6 +236,7 @@
         private System.Windows.Forms.Label lblStatusUpdate;
         private System.Windows.Forms.Label lblCardCount;
         private System.Windows.Forms.PictureBox pbTrump;
+        private System.Windows.Forms.Button btnReset;
     }
 }
 
