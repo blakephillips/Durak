@@ -97,6 +97,7 @@ namespace DurakXtreme
         {
             GameplayLog.Log(sender.ToString() + " is attacking.");
             player2.CurrentTurnStatus = TurnStatus.Defending;
+            btnTake.Hide();
         }
         
         /// <summary>
@@ -108,6 +109,7 @@ namespace DurakXtreme
         {
             GameplayLog.Log(sender.ToString() + " is defending.");
             player2.CurrentTurnStatus = TurnStatus.Attacking;
+            btnTake.Hide();
         }
 
 

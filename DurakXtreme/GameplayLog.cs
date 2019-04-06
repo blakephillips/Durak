@@ -15,7 +15,7 @@ namespace CardLibrary
         /// <param name="logData">String of data to be logged</param>
         public static void Log(string logData)
         {
-            //TODO write this data to a file
+           
             Console.WriteLine(logData);
 
             try

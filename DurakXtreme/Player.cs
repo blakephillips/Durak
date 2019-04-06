@@ -7,7 +7,7 @@ using CardLibrary;
 
 namespace DurakXtreme
 {
-    public class Player : List<PlayingCard>
+    public class Player : Deck
     {
         /// <summary>
         /// Constructor that includes name of player
