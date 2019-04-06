@@ -27,9 +27,10 @@ namespace DurakXtreme
 
         //Unused pile of cards
         Deck cardPile = new Deck();
+        Deck river = new Deck();
 
         Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
+        ComputerPlayer player2 = new ComputerPlayer("Player 2");
 
         public MainForm()
         {
@@ -51,8 +52,9 @@ namespace DurakXtreme
             cardPile.Shuffle();
 
             //Draw the first 6 cards to each player
-            DrawCards(ref player1, ref cardPile, handAmount);
-            DrawCards(ref player2, ref cardPile, handAmount);
+            player1.AddRange(DrawCards(player1, ref cardPile, handAmount));
+            player2.AddRange(DrawCards(player2, ref cardPile, handAmount));
+            
 
             //Draw and initialize trumpCard control
             CardBox trumpCard = cardPile.DrawCard().CardControl;
@@ -65,7 +67,7 @@ namespace DurakXtreme
             //Get P1's lowest trump card
             PlayingCard p1TrumpCard = new PlayingCard();
             bool p1TrumpCardExist = false;
-            if (LowestTrumpCard(ref player1, trumpCard.Card, ref p1TrumpCard))
+            if (LowestTrumpCard(player1, trumpCard.Card, ref p1TrumpCard))
             {
                GameplayLog.Log ("P1 Trump Card: "+p1TrumpCard.ToString());
                 p1TrumpCardExist = true;
@@ -74,7 +76,7 @@ namespace DurakXtreme
             //Get P2's lowest trump card
             PlayingCard p2TrumpCard = new PlayingCard();
             bool p2TrumpCardExist = false;
-            if (LowestTrumpCard(ref player2, trumpCard.Card, ref p2TrumpCard))
+            if (LowestTrumpCard(player2, trumpCard.Card, ref p2TrumpCard))
             {
                 GameplayLog.Log("P2 Trump Card: " + p2TrumpCard.ToString());
                 p2TrumpCardExist = true;
@@ -155,7 +157,14 @@ namespace DurakXtreme
         private void Card_Clicked(object sender, EventArgs e)
         {
             Console.WriteLine("Click: " + sender.ToString());
+            player2.PlayMove(ref river);
         }
+
+        private void Computer_Turn()
+        {
+
+        }
+
 
         /// <summary>
         /// Initialize Standard Durak Deck
@@ -177,25 +186,30 @@ namespace DurakXtreme
                 }
             }
         }
+
+
+
+      
         /// <summary>
         /// Draws a specified amount of cards from the deck and puts them into the players hand
         /// </summary>
         /// <param name="player">Player object the cards are to be placed in</param>
         /// <param name="deck">Deck to withdraw the cards from</param>
         /// <param name="amount">Amount to take and put in players hand</param>
-        private void DrawCards(ref Player player, ref Deck deck, int amount)
+        private Deck DrawCards(Player player, ref Deck deck, int amount)
         {
-
+            Deck cards = new Deck();
             if (deck.Count >= amount)
             {
                 for (int i = 0; i < amount; i++)
                 {
                     PlayingCard card = deck.DrawCard();
-                    player.Add(card);
+                    cards.Add(card);
                     GameplayLog.Log(card.ToString() + " has been drawn to " + player.ToString());
                 }
             }
             lblCardCount.Text = deck.Count().ToString();
+            return cards;
         }
 
         /// <summary>
@@ -205,7 +219,7 @@ namespace DurakXtreme
         /// <param name="trumpCard">TrumpCard for the game</param>
         /// <param name="outCard">Reference to the card the lowest trumpCard will be stored in</param>
         /// <returns>Returns true if there is any trump cards in the hand, false otherwise</returns>
-        private bool LowestTrumpCard(ref Player player, PlayingCard trumpCard, ref PlayingCard outCard)
+        private bool LowestTrumpCard(Player player, PlayingCard trumpCard, ref PlayingCard outCard)
         {
             bool cardFound = false;
 
