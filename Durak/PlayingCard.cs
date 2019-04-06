@@ -9,6 +9,19 @@ namespace CardLibrary
     public class PlayingCard
     {
         #region "Get/Set Methods"
+
+        private CardBox myCardBox;
+        public CardBox CardControl
+        {
+            get
+            {
+                if (myCardBox == null)
+                    IntializeCardBox();
+                return myCardBox;
+            }
+            set { myCardBox = value; }
+        }
+
         protected CardSuit mySuit;
         public CardSuit Suit
         {
@@ -128,6 +141,12 @@ namespace CardLibrary
             return cardImage;
 
         }
+
+        private void IntializeCardBox()
+        {
+            myCardBox = new CardBox(this);
+        }
+
 
     }
 }

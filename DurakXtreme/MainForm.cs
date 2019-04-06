@@ -43,9 +43,10 @@ namespace DurakXtreme
             DrawCards(ref player2, ref cardPile, 6);
 
             //Draw and initialize trumpCard control
-            CardBox trumpCard = new CardBox(cardPile.DrawCard());
+            CardBox trumpCard = cardPile.DrawCard().CardControl;
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
+            
             pbTrump.Controls.Add(trumpCard);
 
             //Get P1's lowest trump card
