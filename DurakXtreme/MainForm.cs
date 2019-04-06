@@ -15,7 +15,11 @@ namespace DurakXtreme
     {
         #region FIELDS AND PROPERTIES 
 
-        private int amountStartCards = 6;
+        /// <summary>
+        /// Amount of cards to start with, and refill to if lower then threshold
+        /// </summary>
+        private int handAmount = 6;
+        
 
         private const int POP = 25;
 
@@ -47,15 +51,8 @@ namespace DurakXtreme
             cardPile.Shuffle();
 
             //Draw the first 6 cards to each player
-            DrawCards(ref player1, ref cardPile, 6);
-            DrawCards(ref player2, ref cardPile, 6);
-
-
-
-
-
-
-
+            DrawCards(ref player1, ref cardPile, handAmount);
+            DrawCards(ref player2, ref cardPile, handAmount);
 
             //Draw and initialize trumpCard control
             CardBox trumpCard = cardPile.DrawCard().CardControl;
@@ -112,22 +109,18 @@ namespace DurakXtreme
         /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-
-
             for (int i = 0; i < player1.Count; i++)
             {
-                CardBox playerOneCardBox = new CardBox(player1[i]);
-                pnlPlayerOne.Controls.Add(playerOneCardBox);
+                
+                pnlPlayerOne.Controls.Add(player1[i].CardControl);
                 AlignCards(pnlPlayerOne);
-
-                CardBox playerTwoCardBox = new CardBox(player2[i]);
-                pnlOpponent.Controls.Add(playerTwoCardBox);
-                AlignCards(pnlOpponent);
             }
 
-
-
-
+            for (int i = 0; i < player2.Count; i++)
+            {
+                pnlOpponent.Controls.Add(player2[i].CardControl);
+                AlignCards(pnlOpponent);
+            }
         }
 
         //TODO: Change colours of attack/defend
