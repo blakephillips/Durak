@@ -23,14 +23,14 @@ namespace DurakXtreme
 
         private const int POP = 25;
 
-        static private Size cardSize = new Size(75,  107);
         #endregion
 
         //Unused pile of cards
         Deck cardPile = new Deck();
+        Deck river = new Deck();
 
         Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
+        ComputerPlayer player2 = new ComputerPlayer("Player 2");
 
         public MainForm()
         {
@@ -52,30 +52,31 @@ namespace DurakXtreme
             cardPile.Shuffle();
 
             //Draw the first 6 cards to each player
-            DrawCards(ref player1, ref cardPile, handAmount);
-            DrawCards(ref player2, ref cardPile, handAmount);
+            player1.AddRange(DrawCards(player1, ref cardPile, handAmount));
+            player2.AddRange(DrawCards(player2, ref cardPile, handAmount));
+            
 
             //Draw and initialize trumpCard control
             CardBox trumpCard = cardPile.DrawCard().CardControl;
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
-
+            
             pbTrump.Controls.Add(trumpCard);
 
 
             //Get P1's lowest trump card
             PlayingCard p1TrumpCard = new PlayingCard();
             bool p1TrumpCardExist = false;
-            if (LowestTrumpCard(ref player1, trumpCard.Card, ref p1TrumpCard))
+            if (LowestTrumpCard(player1, trumpCard.Card, ref p1TrumpCard))
             {
-                GameplayLog.Log("P1 Trump Card: " + p1TrumpCard.ToString());
+               GameplayLog.Log ("P1 Trump Card: "+p1TrumpCard.ToString());
                 p1TrumpCardExist = true;
             }
 
             //Get P2's lowest trump card
             PlayingCard p2TrumpCard = new PlayingCard();
             bool p2TrumpCardExist = false;
-            if (LowestTrumpCard(ref player2, trumpCard.Card, ref p2TrumpCard))
+            if (LowestTrumpCard(player2, trumpCard.Card, ref p2TrumpCard))
             {
                 GameplayLog.Log("P2 Trump Card: " + p2TrumpCard.ToString());
                 p2TrumpCardExist = true;
@@ -101,7 +102,6 @@ namespace DurakXtreme
                 }
             }
 
-
         }
 
         /// <summary>
@@ -111,15 +111,12 @@ namespace DurakXtreme
         /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-
             for (int i = 0; i < player1.Count; i++)
             {
                 
                 pnlPlayerOne.Controls.Add(player1[i].CardControl);
                 AlignCards(pnlPlayerOne);
-                player1[i].CardControl.MouseEnter += CardBox_MouseEnter;
-                player1[i].CardControl.MouseLeave += CardBox_MouseLeave;
-
+                player1[i].CardControl.Click += Card_Clicked;
             }
 
             for (int i = 0; i < player2.Count; i++)
@@ -142,7 +139,6 @@ namespace DurakXtreme
             player2.CurrentTurnStatus = TurnStatus.Defending;
             btnTake.Hide();
             btnPass.Show();
-            
         }
         
         /// <summary>
@@ -158,35 +154,17 @@ namespace DurakXtreme
             btnTake.Show();
         }
 
-        private void CardBox_MouseEnter(object sender, EventArgs e)
+        private void Card_Clicked(object sender, EventArgs e)
         {
-            Console.WriteLine("Mouse hovering over: " + sender.ToString());
+            Console.WriteLine("Click: " + sender.ToString());
+            player2.PlayMove(ref river);
+        }
 
-            // Converting sender object to a CardBox
-            CardBox aCardBox = sender as CardBox;
-
-            if (aCardBox != null)
-            {
-                aCardBox.Size = new Size(cardSize.Width + POP, cardSize.Height + POP);
-                aCardBox.Top = 0;
-            }
+        private void Computer_Turn()
+        {
 
         }
 
-        private void CardBox_MouseLeave(object sender, EventArgs e)
-        {
-            Console.WriteLine("Mouse left : " + sender.ToString());
-
-            // Converting sender object to a CardBox
-            CardBox aCardBox = sender as CardBox;
-
-            if (aCardBox != null)
-            {
-                aCardBox.Size = cardSize;
-                aCardBox.Top = POP;
-            }
-
-        }
 
         /// <summary>
         /// Initialize Standard Durak Deck
@@ -208,25 +186,30 @@ namespace DurakXtreme
                 }
             }
         }
+
+
+
+      
         /// <summary>
         /// Draws a specified amount of cards from the deck and puts them into the players hand
         /// </summary>
         /// <param name="player">Player object the cards are to be placed in</param>
         /// <param name="deck">Deck to withdraw the cards from</param>
         /// <param name="amount">Amount to take and put in players hand</param>
-        private void DrawCards(ref Player player, ref Deck deck, int amount)
+        private Deck DrawCards(Player player, ref Deck deck, int amount)
         {
-
+            Deck cards = new Deck();
             if (deck.Count >= amount)
             {
                 for (int i = 0; i < amount; i++)
                 {
                     PlayingCard card = deck.DrawCard();
-                    player.Add(card);
+                    cards.Add(card);
                     GameplayLog.Log(card.ToString() + " has been drawn to " + player.ToString());
                 }
             }
             lblCardCount.Text = deck.Count().ToString();
+            return cards;
         }
 
         /// <summary>
@@ -236,7 +219,7 @@ namespace DurakXtreme
         /// <param name="trumpCard">TrumpCard for the game</param>
         /// <param name="outCard">Reference to the card the lowest trumpCard will be stored in</param>
         /// <returns>Returns true if there is any trump cards in the hand, false otherwise</returns>
-        private bool LowestTrumpCard(ref Player player, PlayingCard trumpCard, ref PlayingCard outCard)
+        private bool LowestTrumpCard(Player player, PlayingCard trumpCard, ref PlayingCard outCard)
         {
             bool cardFound = false;
 
@@ -331,10 +314,5 @@ namespace DurakXtreme
 
 
         #endregion
-
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            
-        }
     }
 }
