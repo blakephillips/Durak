@@ -69,9 +69,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\back.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\black_joker.png" />
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +229,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ace_of_spades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\back.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -201,6 +201,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Durak Xtreme";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbTrump)).EndInit();
             this.ResumeLayout(false);

@@ -13,6 +13,14 @@ namespace DurakXtreme
 {
     public partial class MainForm : Form
     {
+        #region FIELDS AND PROPERTIES 
+
+        private int amountStartCards = 6;
+
+        private const int POP = 25;
+
+        #endregion
+
         //Unused pile of cards
         Deck cardPile = new Deck();
 
@@ -28,11 +36,11 @@ namespace DurakXtreme
             player1.Defending += Player_Defending;
 
             //Initialize DeckCard image/cardbox
-            CardBox DeckCard = new CardBox();
+            CardBox BackDeckCard = new CardBox();
 
             //make FaceDown/Add to proper panel
-            DeckCard.FaceUp = false;
-            pbDeck.Controls.Add(DeckCard);
+            BackDeckCard.FaceUp = false;
+            pbDeck.Controls.Add(BackDeckCard);
 
             //Initialize and shuffle standard deck
             InitializeDeck(ref cardPile);
@@ -42,11 +50,19 @@ namespace DurakXtreme
             DrawCards(ref player1, ref cardPile, 6);
             DrawCards(ref player2, ref cardPile, 6);
 
+
+
+
+
+
+
+
             //Draw and initialize trumpCard control
             CardBox trumpCard = new CardBox(cardPile.DrawCard());
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
             pbTrump.Controls.Add(trumpCard);
+
 
             //Get P1's lowest trump card
             PlayingCard p1TrumpCard = new PlayingCard();
@@ -87,6 +103,32 @@ namespace DurakXtreme
             }
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+
+            for (int i = 0; i < player1.Count; i++)
+            {
+                CardBox playerOneCardBox = new CardBox(player1[i]);
+                pnlPlayerOne.Controls.Add(playerOneCardBox);
+                AlignCards(pnlPlayerOne);
+
+                CardBox playerTwoCardBox = new CardBox(player2[i]);
+                pnlOpponent.Controls.Add(playerTwoCardBox);
+                AlignCards(pnlOpponent);
+            }
+
+
+
+
+        }
+
         //TODO: Change colours of attack/defend
         /// <summary>
         /// Event listener if the player begins attacking
@@ -143,6 +185,7 @@ namespace DurakXtreme
         /// <param name="amount">Amount to take and put in players hand</param>
         private void DrawCards(ref Player player, ref Deck deck, int amount)
         {
+
             if (deck.Count >= amount)
             {
                 for (int i = 0; i < amount; i++)
@@ -208,5 +251,54 @@ namespace DurakXtreme
         }
         #endregion
 
+        #region Helper Methods
+
+
+        private void AlignCards(Panel playerPanel)
+        {
+            // Storing the number of cards/CardBoxes in the panel
+            int cardCount = playerPanel.Controls.Count;
+
+            // Check if card boxes are in the panel
+            if (cardCount > 0)
+            {
+                // Determining the width of an existing card box object in the panel
+                int cardBoxWidth = playerPanel.Controls[0].Width;
+
+                int startPoint = (playerPanel.Width - cardBoxWidth) / 2;
+
+                int offset = 0;
+
+                if (cardCount > 1)
+                {
+                    offset = (playerPanel.Width - cardBoxWidth - 2 * POP) / (cardCount - 1);
+
+                    if (offset > cardBoxWidth)
+                        offset = cardBoxWidth;
+
+                    int totalCardBoxWidth = (cardCount - 1) * offset + cardBoxWidth;
+
+                    startPoint = (playerPanel.Width - totalCardBoxWidth) / 2;
+                }
+
+                playerPanel.Controls[cardCount - 1].Top = POP;
+                System.Diagnostics.Debug.Write(playerPanel.Controls[cardCount - 1].Top.ToString() + "\n");
+                playerPanel.Controls[cardCount - 1].Left = startPoint;
+
+                for (int index = cardCount - 2; index >= 0; index--)
+                {
+                    playerPanel.Controls[index].Top = POP;
+                    playerPanel.Controls[index].Left = playerPanel.Controls[index + 1].Left + offset;
+                }
+            }
+
+        }
+
+
+
+
+
+
+        #endregion
     }
 }
