@@ -90,12 +90,14 @@ namespace CardLibrary
         }
 
 
-        public CardBox(PlayingCard card, Orientation orientation = Orientation.Vertical)
+        public CardBox(PlayingCard card, Orientation orientation = Orientation.Vertical, bool isFaceUp = true)
         {
             InitializeComponent();
             myOrientation = orientation;
             Card = card;
+            FaceUp = isFaceUp;
         }
+
 
         public CardBox(CardRank rank, CardSuit suit)
         {
@@ -140,6 +142,11 @@ namespace CardLibrary
         {
             if (Click != null)
                 Click(this,e);
+        }
+
+        private void pbCard_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
