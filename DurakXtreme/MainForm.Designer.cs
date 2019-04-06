@@ -195,8 +195,10 @@
             this.Controls.Add(this.pnlPlayerOne);
             this.Controls.Add(this.pnlOpponent);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Durak Xtreme";
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).EndInit();
