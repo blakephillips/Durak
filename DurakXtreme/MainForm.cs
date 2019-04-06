@@ -114,11 +114,13 @@ namespace DurakXtreme
                 
                 pnlPlayerOne.Controls.Add(player1[i].CardControl);
                 AlignCards(pnlPlayerOne);
+                player1[i].CardControl.Click += Card_Clicked;
             }
 
             for (int i = 0; i < player2.Count; i++)
             {
                 pnlOpponent.Controls.Add(player2[i].CardControl);
+
                 AlignCards(pnlOpponent);
             }
         }
@@ -150,6 +152,10 @@ namespace DurakXtreme
             btnTake.Show();
         }
 
+        private void Card_Clicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Click: " + sender.ToString());
+        }
 
         /// <summary>
         /// Initialize Standard Durak Deck
