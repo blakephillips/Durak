@@ -19,8 +19,8 @@ namespace DurakXtreme
         /// Amount of cards to start with, and refill to if lower then threshold
         /// </summary>
         private int handAmount = 6;
-        
 
+        CardBox trumpCard = new CardBox();
         private const int POP = 25;
 
         #endregion
@@ -40,6 +40,9 @@ namespace DurakXtreme
             player1.Attacking += Player_Attacking;
             player1.Defending += Player_Defending;
 
+            player2.TakeEvent += Computer_Take;
+            player2.PassEvent += Computer_Pass;
+
             //Initialize DeckCard image/cardbox
             CardBox BackDeckCard = new CardBox();
 
@@ -57,7 +60,7 @@ namespace DurakXtreme
             
 
             //Draw and initialize trumpCard control
-            CardBox trumpCard = cardPile.DrawCard().CardControl;
+            trumpCard = cardPile.DrawCard().CardControl;
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
             
@@ -90,6 +93,8 @@ namespace DurakXtreme
                 } else
                 {
                     player1.CurrentTurnStatus = TurnStatus.Defending;
+                    player2.PlayMove(ref river);
+                    ReloadAllPanels();
                 }
             } else
             {
@@ -99,6 +104,8 @@ namespace DurakXtreme
                 } else
                 {
                     player1.CurrentTurnStatus = TurnStatus.Defending;
+                    player2.PlayMove(ref river);
+                    ReloadAllPanels();
                 }
             }
 
@@ -154,17 +161,82 @@ namespace DurakXtreme
             btnTake.Show();
         }
 
+
+        private void Computer_Take(object sender, EventArgs e)
+        {
+            GameplayLog.Log("Computer has taken the river.");
+            ReplenishCards();
+            ReloadAllPanels();
+        }
+
+        private void Computer_Pass(object sender, EventArgs e)
+        {
+            GameplayLog.Log("Computer has passed.");
+            player1.CurrentTurnStatus = TurnStatus.Attacking;
+            ReplenishCards();
+            ReloadAllPanels();
+        }
+
+
         private void Card_Clicked(object sender, EventArgs e)
         {
             Console.WriteLine("Click: " + sender.ToString());
-            player2.PlayMove(ref river);
+            
+            if (player1.CurrentTurnStatus == TurnStatus.Attacking)
+            {
+                if (river.Count == 0)
+                {
+                    river.RiverInsert(sender as CardBox);
+                    player1.Remove((sender as CardBox).Card);
+                    GameplayLog.Log(player1.ToString() + " is playing " + sender.ToString());
+                    player2.PlayMove(ref river);
+                    ReloadAllPanels();
+                } else
+                {
+                    bool isPlayable = false; 
+                    for (int i = 0; i < river.Count; i++)
+                    {
+                        if ((sender as CardBox).Card.Rank == river[i].Rank)
+                        {
+                            isPlayable = true;
+                        } 
+                    }
+                    if (isPlayable == true)
+                    {
+                        river.RiverInsert(sender as CardBox);
+                        player1.Remove((sender as CardBox).Card);
+                        player2.PlayMove(ref river);
+                        ReloadAllPanels();
+                    } else
+                    {
+                        Console.WriteLine("That card is unplayable.");
+                    }
+                }
+
+            } else if (player1.CurrentTurnStatus == TurnStatus.Defending)
+            {
+                if ((sender as CardBox).Suit == trumpCard.Suit)
+                {
+                    river.RiverInsert(sender as CardBox);
+                    player1.Remove((sender as CardBox).Card);
+                    player2.PlayMove(ref river);
+                    ReloadAllPanels();
+                } else
+                {
+                    if ((sender as CardBox).Suit == river.LastCardInputted.Suit && (sender as CardBox).Card.CardValue > river.LastCardInputted.CardValue)
+                    {
+                        river.RiverInsert(sender as CardBox);
+                        player1.Remove((sender as CardBox).Card);
+                        player2.PlayMove(ref river);
+                        ReloadAllPanels();
+                    } else
+                    {
+                        Console.WriteLine("That card is unplayable.");
+                    }
+                }
+            }
+           
         }
-
-        private void Computer_Turn()
-        {
-
-        }
-
 
         /// <summary>
         /// Initialize Standard Durak Deck
@@ -207,6 +279,14 @@ namespace DurakXtreme
                     cards.Add(card);
                     GameplayLog.Log(card.ToString() + " has been drawn to " + player.ToString());
                 }
+            } else if (deck.Count != 0)
+            {
+                for (int i = 0; i < deck.Count; i++)
+                {
+                    PlayingCard card = deck.DrawCard();
+                    cards.Add(card);
+                    GameplayLog.Log(card.ToString() + " has been drawn to " + player.ToString());
+                }
             }
             lblCardCount.Text = deck.Count().ToString();
             return cards;
@@ -242,7 +322,10 @@ namespace DurakXtreme
         }
 
        
+        private void btnReset_Click(object sender, EventArgs e)
+        {
 
+        }
         #region "UI Effects"
         private void btnTake_MouseEnter(object sender, EventArgs e)
         {
@@ -267,42 +350,81 @@ namespace DurakXtreme
 
         #region Helper Methods
 
+        public void ReloadAllPanels()
+        {
+            AddAlignCards(player1, pnlPlayerOne);
+            AddAlignCards(player2, pnlOpponent);
+            AddAlignCards(river, pnlPlayArea);
+        }
 
-        private void AlignCards(Panel playerPanel)
+        private void ReplenishCards()
+        {
+            if (player1.Count < handAmount && cardPile.Count != 0)
+            {
+                player1.AddRange(DrawCards(player1, ref cardPile, (handAmount - player1.Count)));
+
+            }
+            if (player2.Count < handAmount && cardPile.Count != 0)
+            {
+                player2.AddRange(DrawCards(player2, ref cardPile, (handAmount - player2.Count)));
+            }
+        }
+
+        private void AddAlignCards(Deck deck, Panel panel)
+        {
+            panel.Controls.Clear();
+            for (int i = 0; i < deck.Count; i++)
+            {
+                if (panel == pnlPlayerOne)
+                {
+                    //make sure each card has click event listener.
+                    //just in case it is a new card
+                    deck[i].CardControl.Click -= Card_Clicked;
+                    deck[i].CardControl.Click += Card_Clicked;
+                }
+                    
+                panel.Controls.Add(deck[i].CardControl);
+            }
+            AlignCards(panel);
+
+        }
+
+
+        private void AlignCards(Panel panel)
         {
             // Storing the number of cards/CardBoxes in the panel
-            int cardCount = playerPanel.Controls.Count;
+            int cardCount = panel.Controls.Count;
 
             // Check if card boxes are in the panel
             if (cardCount > 0)
             {
                 // Determining the width of an existing card box object in the panel
-                int cardBoxWidth = playerPanel.Controls[0].Width;
+                int cardBoxWidth = panel.Controls[0].Width;
 
-                int startPoint = (playerPanel.Width - cardBoxWidth) / 2;
+                int startPoint = (panel.Width - cardBoxWidth) / 2;
 
                 int offset = 0;
 
                 if (cardCount > 1)
                 {
-                    offset = (playerPanel.Width - cardBoxWidth - 2 * POP) / (cardCount - 1);
+                    offset = (panel.Width - cardBoxWidth - 2 * POP) / (cardCount - 1);
 
                     if (offset > cardBoxWidth)
                         offset = cardBoxWidth;
 
                     int totalCardBoxWidth = (cardCount - 1) * offset + cardBoxWidth;
 
-                    startPoint = (playerPanel.Width - totalCardBoxWidth) / 2;
+                    startPoint = (panel.Width - totalCardBoxWidth) / 2;
                 }
 
-                playerPanel.Controls[cardCount - 1].Top = POP;
-                System.Diagnostics.Debug.Write(playerPanel.Controls[cardCount - 1].Top.ToString() + "\n");
-                playerPanel.Controls[cardCount - 1].Left = startPoint;
+                panel.Controls[cardCount - 1].Top = POP;
+                System.Diagnostics.Debug.Write(panel.Controls[cardCount - 1].Top.ToString() + "\n");
+                panel.Controls[cardCount - 1].Left = startPoint;
 
                 for (int index = cardCount - 2; index >= 0; index--)
                 {
-                    playerPanel.Controls[index].Top = POP;
-                    playerPanel.Controls[index].Left = playerPanel.Controls[index + 1].Left + offset;
+                    panel.Controls[index].Top = POP;
+                    panel.Controls[index].Left = panel.Controls[index + 1].Left + offset;
                 }
             }
 
@@ -314,5 +436,22 @@ namespace DurakXtreme
 
 
         #endregion
+
+        private void btnTake_Click(object sender, EventArgs e)
+        {
+            player1.Take(ref river);
+            player2.PlayMove(ref river);
+            ReplenishCards();
+            ReloadAllPanels();
+        }
+
+        private void btnPass_Click(object sender, EventArgs e)
+        {
+            player1.Pass(ref river);
+            player1.CurrentTurnStatus = TurnStatus.Defending;
+            player2.PlayMove(ref river);
+            ReplenishCards();
+            ReloadAllPanels();
+        }
     }
 }

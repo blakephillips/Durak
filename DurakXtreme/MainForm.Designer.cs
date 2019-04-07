@@ -128,6 +128,7 @@
             this.btnTake.TabIndex = 7;
             this.btnTake.Text = "Take";
             this.btnTake.UseVisualStyleBackColor = false;
+            this.btnTake.Click += new System.EventHandler(this.btnTake_Click);
             this.btnTake.MouseEnter += new System.EventHandler(this.btnTake_MouseEnter);
             this.btnTake.MouseLeave += new System.EventHandler(this.btnTake_MouseLeave);
             // 
@@ -143,6 +144,7 @@
             this.btnPass.TabIndex = 8;
             this.btnPass.Text = "Pass";
             this.btnPass.UseVisualStyleBackColor = false;
+            this.btnPass.Click += new System.EventHandler(this.btnPass_Click);
             this.btnPass.MouseEnter += new System.EventHandler(this.btnPass_MouseEnter);
             this.btnPass.MouseLeave += new System.EventHandler(this.btnPass_MouseLeave);
             // 
