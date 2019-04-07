@@ -37,7 +37,7 @@ namespace DurakXtreme
                     {
                         playedCardIndex = i;
                     }
-                    else if (this[playedCardIndex].CardValue < this[i].CardValue)
+                    else if (this[playedCardIndex].CardValue > this[i].CardValue)
                     {
                         playedCardIndex = i;
                     }
