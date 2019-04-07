@@ -37,21 +37,32 @@ namespace DurakXtreme
         private void Attack(ref Deck playedCards)
         {
 
-            
+            int playedCardIndex = 0;
             if (playedCards.Count == 0)
             {
                
-                int lowestCardIndex = 0;
+                
                 for (int i = 0; i < this.Count; i++)
                 {
-                    if (this[i].CardValue < this[lowestCardIndex].CardValue)
+                    if (this[i].CardValue < this[playedCardIndex].CardValue)
                     {
-                        lowestCardIndex = i;
+                        playedCardIndex = i;
                     }
                 }
-                PlayCard(lowestCardIndex);
+                
            
+            } else if (playedCards.Count > 0)
+            {
+                
+                for (int i = 0; i > playedCards.Count; i++)
+                {
+                    for (int j = 0; j > this.Count; j++)
+                    {
+                       
+                    }
+                }
             }
+            PlayCard(playedCardIndex);
         }
 
         private void PlayCard(int cardIndex)
