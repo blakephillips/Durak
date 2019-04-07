@@ -43,6 +43,8 @@
             this.pbCard.TabStop = false;
             this.pbCard.Click += new System.EventHandler(this.pbCard_Click);
             this.pbCard.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCard_MouseClick);
+            this.pbCard.MouseEnter += new System.EventHandler(this.pbCard_MouseEnter);
+            this.pbCard.MouseLeave += new System.EventHandler(this.pbCard_MouseLeave);
             // 
             // CardBox
             // 

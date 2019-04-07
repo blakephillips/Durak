@@ -132,6 +132,16 @@ namespace CardLibrary
         /// </summary>
         new public event EventHandler Click;
 
+        /// <summary>
+        /// Mouse over event handler
+        /// </summary>
+        new public event EventHandler MouseEnter;
+
+        /// <summary>
+        /// Mouse leave event handler
+        /// </summary>
+        new public event EventHandler MouseLeave;
+
 
         /// <summary>
         /// On click of card, if event handler is set, trigger event handler
@@ -147,6 +157,28 @@ namespace CardLibrary
         private void pbCard_Click(object sender, EventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// When the mouse hovers over a card it will trigger an event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pbCard_MouseEnter(object sender, EventArgs e)
+        {
+            if (MouseEnter != null)
+                MouseEnter(this, e);
+        }
+
+        /// <summary>
+        /// When the mouse leaves over a card it will trigger an event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pbCard_MouseLeave(object sender, EventArgs e)
+        {
+            if (MouseLeave != null)
+                MouseLeave(this, e);
         }
     }
 }
