@@ -38,6 +38,25 @@ namespace DurakXtreme
                 myTurnStatus = value;
             }
         }
+
+        new public EventHandler TakeEvent;
+        new public EventHandler PassEvent;
+
+        public void Take(ref Deck river)
+        {
+            this.AddRange(river);
+            river.Clear();
+            if (TakeEvent != null)
+                TakeEvent(this, new EventArgs());
+        }
+
+        public void Pass(ref Deck river)
+        {
+            river.Clear();
+            if (TakeEvent != null)
+                PassEvent(this, new EventArgs());
+        }
+
         /// <summary>
         /// Name of the player to be displayed
         /// </summary>
@@ -69,8 +88,7 @@ namespace DurakXtreme
             if (Attacking != null)
                 Attacking(this, new EventArgs());
         }
-
-
+      
         public override string ToString()
         {
             return Name;

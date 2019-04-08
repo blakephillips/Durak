@@ -11,6 +11,24 @@ namespace CardLibrary
         public Deck() { }
 
 
+        private PlayingCard lastCard= new PlayingCard();
+
+        public PlayingCard LastCardInputted
+        {
+            get { return lastCard; }
+        }
+
+        public void RiverInsert(PlayingCard card)
+        {
+            lastCard = card;
+            this.Add(card);
+        }
+
+        public void RiverInsert(CardBox card)
+        {
+            RiverInsert(card.Card);
+        }
+
 
         private static Random rand = new Random();
         //TODO add IClonable
@@ -31,6 +49,8 @@ namespace CardLibrary
                 this[cardIndex] = card;
             }
         }
+
+        
 
         public PlayingCard DrawCard()
         {

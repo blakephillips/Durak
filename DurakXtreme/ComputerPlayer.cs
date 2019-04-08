@@ -24,39 +24,95 @@ namespace DurakXtreme
         /// <summary>
         /// Logic for AI defending against the player
         /// </summary>
-        /// <param name="playedCards">Cards in river</param>
-        private void Defend(ref Deck playedCards)
+        /// <param name="river">Cards in river</param>
+        private void Defend(ref Deck river)
         {
+            int playedCardIndex = -1;
+
+            for (int i = 0; i < this.Count; i++)
+            {
+                if (this[i].Suit == river.LastCardInputted.Suit && this[i].CardValue > river.LastCardInputted.CardValue)
+                {
+                    if (playedCardIndex == -1)
+                    {
+                        playedCardIndex = i;
+                    }
+                    else if (this[playedCardIndex].CardValue > this[i].CardValue)
+                    {
+                        playedCardIndex = i;
+                    }
+                }
+            }
+            if (playedCardIndex != -1)
+            {
+                PlayCard(playedCardIndex, ref river);
+            } else
+            {
+                this.Take(ref river);
+            }
             
+
         }
 
         /// <summary>
         /// Logic for AI attacking the player.
         /// </summary>
-        /// <param name="playedCards"></param>
-        private void Attack(ref Deck playedCards)
+        /// <param name="river"></param>
+        private void Attack(ref Deck river)
         {
-
-            
-            if (playedCards.Count == 0)
+            bool foundAttackCard = false;
+            //index of the card to be played
+            int playedCardIndex = 0;
+            //if there is 0 cards in t
+            if (river.Count == 0)
             {
-               
-                int lowestCardIndex = 0;
+                
+               //Get lowest card in hand and set the played card to it 
                 for (int i = 0; i < this.Count; i++)
                 {
-                    if (this[i].CardValue < this[lowestCardIndex].CardValue)
+                    if (this[i].CardValue <= this[playedCardIndex].CardValue)
                     {
-                        lowestCardIndex = i;
+                        foundAttackCard = true;
+                        playedCardIndex = i;
                     }
                 }
-                PlayCard(lowestCardIndex);
-           
+                
+           //if there are cards on the table
+            } else if (river.Count > 0)
+            {
+                //play the first cardValue that is equal to one on the table
+                for (int i = 0; i > river.Count; i++)
+                {
+                    for (int j = 0; j > this.Count; j++)
+                    {
+                        if (river[i].CardValue == this[j].CardValue)
+                        {
+                            foundAttackCard = true;
+                            playedCardIndex = j;
+                        }
+                            
+                    }
+                }
             }
+            //if a card was found to play
+            if (playedCardIndex != -1 && foundAttackCard == true)
+            {
+                //play the card
+                PlayCard(playedCardIndex, ref river);
+            } else
+            {
+                //called from base class(Player)
+                base.Pass(ref river);
+            }
+                
         }
 
-        private void PlayCard(int cardIndex)
+        private void PlayCard(int cardIndex, ref Deck river)
         {
-            GameplayLog.Log("P1 " + this.CurrentTurnStatus + " with " + this[cardIndex].ToString());
+            
+            GameplayLog.Log(this.ToString() + " " + this.CurrentTurnStatus + " with " + this[cardIndex].ToString());
+            river.RiverInsert(this[cardIndex]);
+            this.Remove(this[cardIndex]);
         }
 
     }
