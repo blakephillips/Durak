@@ -381,6 +381,10 @@ namespace DurakXtreme
                     //just in case it is a new card
                     deck[i].CardControl.Click -= Card_Clicked;
                     deck[i].CardControl.Click += Card_Clicked;
+                } else
+                {
+                    //if control isn't in players hand, it isn't clickable
+                    deck[i].CardControl.Click -= Card_Clicked;
                 }
                     
                 panel.Controls.Add(deck[i].CardControl);
