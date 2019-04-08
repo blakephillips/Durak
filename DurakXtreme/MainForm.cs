@@ -215,7 +215,7 @@ namespace DurakXtreme
         private void Card_Clicked(object sender, EventArgs e)
         {
             Console.WriteLine("Click: " + sender.ToString());
-            
+
             if (player1.CurrentTurnStatus == TurnStatus.Attacking)
             {
                 if (river.Count == 0)
@@ -245,7 +245,7 @@ namespace DurakXtreme
                     {
                         Console.WriteLine("That card is unplayable.");
                         // lblStatusUpdate.Text += ("Player 1: That card is unplayable.\n");
-                        tbStatusUpdate.AppendText("\n\rPlayer 1: That card is unplayable.");
+                        tbStatusUpdate.AppendText("Player 1: That card is unplayable." + Environment.NewLine);
                     }
                 }
 
@@ -269,7 +269,7 @@ namespace DurakXtreme
                     {
                         Console.WriteLine("That card is unplayable.");
                         //lblStatusUpdate.Text += ("Player 1: That card is unplayable.\n");
-                        tbStatusUpdate.AppendText("\n\rPlayer 1: That card is unplayable.");
+                        tbStatusUpdate.AppendText("Player 1: That card is unplayable." + Environment.NewLine);
                     }
                 }
             }
