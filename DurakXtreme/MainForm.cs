@@ -128,6 +128,7 @@ namespace DurakXtreme
                 
                 pnlPlayerOne.Controls.Add(player1[i].CardControl);
                 AlignCards(pnlPlayerOne);
+                player1[i].CardControl.Click += Card_Clicked;
                 player1[i].CardControl.MouseEnter += CardBox_MouseEnter;
                 player1[i].CardControl.MouseLeave += CardBox_MouseLeave;
             }
@@ -171,12 +172,12 @@ namespace DurakXtreme
         private void CardBox_MouseEnter(object sender, EventArgs e)
         {
             // Converting sender object to a CardBox
-            
+            CardBox aCardBox = sender as CardBox;
 
-            if ((sender as CardBox) != null)
+            if (aCardBox != null)
             {
-                (sender as CardBox).Size = new Size(cardSize.Width + POP, cardSize.Height + POP);
-                (sender as CardBox).Top = 0;
+                aCardBox.Size = new Size(cardSize.Width + POP, cardSize.Height + POP);
+                aCardBox.Top = 0;
             }
 
         }
@@ -184,12 +185,12 @@ namespace DurakXtreme
         private void CardBox_MouseLeave(object sender, EventArgs e)
         {
             // Converting sender object to a CardBox
-           
+            CardBox aCardBox = sender as CardBox;
 
-            if ((sender as CardBox) != null)
+            if (aCardBox != null)
             {
-                (sender as CardBox).Size = cardSize;
-                (sender as CardBox).Top = POP;
+                aCardBox.Size = cardSize;
+                aCardBox.Top = POP;
             }
 
         }
