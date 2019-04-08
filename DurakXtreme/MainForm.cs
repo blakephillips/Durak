@@ -68,7 +68,8 @@ namespace DurakXtreme
             trumpCard = cardPile.DrawCard().CardControl;
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
-            
+            tbStatusUpdate.AppendText(("Trump Card: " + trumpCard.ToString()) + Environment.NewLine);
+
             pbTrump.Controls.Add(trumpCard);
 
 
@@ -78,6 +79,8 @@ namespace DurakXtreme
             if (LowestTrumpCard(player1, trumpCard.Card, ref p1TrumpCard))
             {
                GameplayLog.Log ("P1 Trump Card: "+p1TrumpCard.ToString());
+               tbStatusUpdate.AppendText(("P1 Trump Card: " + p1TrumpCard.ToString()) + Environment.NewLine);
+
                 p1TrumpCardExist = true;
             }
 
@@ -87,6 +90,7 @@ namespace DurakXtreme
             if (LowestTrumpCard(player2, trumpCard.Card, ref p2TrumpCard))
             {
                 GameplayLog.Log("P2 Trump Card: " + p2TrumpCard.ToString());
+                tbStatusUpdate.AppendText(("P2 Trump Card: " + p2TrumpCard.ToString()) + Environment.NewLine);
                 p2TrumpCardExist = true;
             }
             //Decide who is attacking/defending
@@ -150,6 +154,7 @@ namespace DurakXtreme
         private void Player_Attacking(object sender, EventArgs e)
         {
             GameplayLog.Log(sender.ToString() + " is attacking.");
+            tbStatusUpdate.AppendText((sender.ToString() + " is attacking.") + Environment.NewLine);
             player2.CurrentTurnStatus = TurnStatus.Defending;
             btnTake.Hide();
             btnPass.Show();
@@ -163,6 +168,7 @@ namespace DurakXtreme
         private void Player_Defending(object sender, EventArgs e)
         {
             GameplayLog.Log(sender.ToString() + " is defending.");
+            tbStatusUpdate.AppendText((sender.ToString() + " is defending.") + Environment.NewLine);
             player2.CurrentTurnStatus = TurnStatus.Attacking;
             btnPass.Hide();
             btnTake.Show();
@@ -199,6 +205,7 @@ namespace DurakXtreme
         private void Computer_Take(object sender, EventArgs e)
         {
             GameplayLog.Log("Computer has taken the river.");
+            tbStatusUpdate.AppendText("Computer has taken the river." + Environment.NewLine);
             ReplenishCards();
             ReloadAllPanels();
         }
@@ -206,6 +213,8 @@ namespace DurakXtreme
         private void Computer_Pass(object sender, EventArgs e)
         {
             GameplayLog.Log("Computer has passed.");
+            tbStatusUpdate.AppendText("Computer has passed." + Environment.NewLine);
+
             player1.CurrentTurnStatus = TurnStatus.Attacking;
             ReplenishCards();
             ReloadAllPanels();
@@ -316,6 +325,7 @@ namespace DurakXtreme
                     PlayingCard card = deck.DrawCard();
                     cards.Add(card);
                     GameplayLog.Log(card.ToString() + " has been drawn to " + player.ToString());
+                    //tbStatusUpdate.AppendText((card.ToString() + " has been drawn to " + player.ToString()) + Environment.NewLine);
                 }
             } else if (deck.Count != 0)
             {
@@ -324,6 +334,7 @@ namespace DurakXtreme
                     PlayingCard card = deck.DrawCard();
                     cards.Add(card);
                     GameplayLog.Log(card.ToString() + " has been drawn to " + player.ToString());
+                    //tbStatusUpdate.AppendText((card.ToString() + " has been drawn to " + player.ToString()) + Environment.NewLine);
                 }
             }
             lblCardCount.Text = deck.Count().ToString();
