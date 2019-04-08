@@ -92,7 +92,7 @@
             // pbDeck
             // 
             this.pbDeck.BackColor = System.Drawing.Color.Transparent;
-            this.pbDeck.Location = new System.Drawing.Point(95, 245);
+            this.pbDeck.Location = new System.Drawing.Point(95, 159);
             this.pbDeck.Name = "pbDeck";
             this.pbDeck.Size = new System.Drawing.Size(75, 108);
             this.pbDeck.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -151,6 +151,7 @@
             // lblStatusUpdate
             // 
             this.lblStatusUpdate.BackColor = System.Drawing.Color.Transparent;
+            this.lblStatusUpdate.ForeColor = System.Drawing.Color.Snow;
             this.lblStatusUpdate.Location = new System.Drawing.Point(255, 165);
             this.lblStatusUpdate.Name = "lblStatusUpdate";
             this.lblStatusUpdate.Size = new System.Drawing.Size(529, 42);
@@ -162,7 +163,7 @@
             this.lblCardCount.BackColor = System.Drawing.Color.Transparent;
             this.lblCardCount.Font = new System.Drawing.Font("Courier New", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCardCount.ForeColor = System.Drawing.Color.Gray;
-            this.lblCardCount.Location = new System.Drawing.Point(108, 209);
+            this.lblCardCount.Location = new System.Drawing.Point(108, 123);
             this.lblCardCount.Name = "lblCardCount";
             this.lblCardCount.Size = new System.Drawing.Size(49, 33);
             this.lblCardCount.TabIndex = 10;
@@ -171,7 +172,7 @@
             // pbTrump
             // 
             this.pbTrump.BackColor = System.Drawing.Color.Transparent;
-            this.pbTrump.Location = new System.Drawing.Point(95, 359);
+            this.pbTrump.Location = new System.Drawing.Point(95, 273);
             this.pbTrump.Name = "pbTrump";
             this.pbTrump.Size = new System.Drawing.Size(75, 108);
             this.pbTrump.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -180,7 +181,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(82, 536);
+            this.btnReset.Location = new System.Drawing.Point(854, 595);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 12;
