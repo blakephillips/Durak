@@ -171,12 +171,12 @@ namespace DurakXtreme
         private void CardBox_MouseEnter(object sender, EventArgs e)
         {
             // Converting sender object to a CardBox
-            CardBox aCardBox = sender as CardBox;
+            
 
-            if (aCardBox != null)
+            if ((sender as CardBox) != null)
             {
-                aCardBox.Size = new Size(cardSize.Width + POP, cardSize.Height + POP);
-                aCardBox.Top = 0;
+                (sender as CardBox).Size = new Size(cardSize.Width + POP, cardSize.Height + POP);
+                (sender as CardBox).Top = 0;
             }
 
         }
@@ -184,12 +184,12 @@ namespace DurakXtreme
         private void CardBox_MouseLeave(object sender, EventArgs e)
         {
             // Converting sender object to a CardBox
-            CardBox aCardBox = sender as CardBox;
+           
 
-            if (aCardBox != null)
+            if ((sender as CardBox) != null)
             {
-                aCardBox.Size = cardSize;
-                aCardBox.Top = POP;
+                (sender as CardBox).Size = cardSize;
+                (sender as CardBox).Top = POP;
             }
 
         }
