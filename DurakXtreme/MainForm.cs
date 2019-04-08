@@ -244,7 +244,8 @@ namespace DurakXtreme
                     } else
                     {
                         Console.WriteLine("That card is unplayable.");
-                        lblStatusUpdate.Text += ("Player 1: That card is unplayable.\n");
+                        // lblStatusUpdate.Text += ("Player 1: That card is unplayable.\n");
+                        tbStatusUpdate.AppendText("\n\rPlayer 1: That card is unplayable.");
                     }
                 }
 
@@ -267,7 +268,8 @@ namespace DurakXtreme
                     } else
                     {
                         Console.WriteLine("That card is unplayable.");
-                        lblStatusUpdate.Text += ("Player 1: That card is unplayable.\n");
+                        //lblStatusUpdate.Text += ("Player 1: That card is unplayable.\n");
+                        tbStatusUpdate.AppendText("\n\rPlayer 1: That card is unplayable.");
                     }
                 }
             }
