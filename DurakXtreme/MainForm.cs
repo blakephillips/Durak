@@ -23,6 +23,8 @@ namespace DurakXtreme
 
         private const int POP = 25;
 
+        static private Size cardSize = new Size(75, 107);
+
         #endregion
 
         //Unused pile of cards
@@ -116,7 +118,8 @@ namespace DurakXtreme
                 
                 pnlPlayerOne.Controls.Add(player1[i].CardControl);
                 AlignCards(pnlPlayerOne);
-                player1[i].CardControl.Click += Card_Clicked;
+                player1[i].CardControl.MouseEnter += CardBox_MouseEnter;
+                player1[i].CardControl.MouseLeave += CardBox_MouseLeave;
             }
 
             for (int i = 0; i < player2.Count; i++)
@@ -152,6 +155,32 @@ namespace DurakXtreme
             player2.CurrentTurnStatus = TurnStatus.Attacking;
             btnPass.Hide();
             btnTake.Show();
+        }
+
+        private void CardBox_MouseEnter(object sender, EventArgs e)
+        {
+            // Converting sender object to a CardBox
+            CardBox aCardBox = sender as CardBox;
+
+            if (aCardBox != null)
+            {
+                aCardBox.Size = new Size(cardSize.Width + POP, cardSize.Height + POP);
+                aCardBox.Top = 0;
+            }
+
+        }
+
+        private void CardBox_MouseLeave(object sender, EventArgs e)
+        {
+            // Converting sender object to a CardBox
+            CardBox aCardBox = sender as CardBox;
+
+            if (aCardBox != null)
+            {
+                aCardBox.Size = cardSize;
+                aCardBox.Top = POP;
+            }
+
         }
 
         private void Card_Clicked(object sender, EventArgs e)
@@ -296,7 +325,7 @@ namespace DurakXtreme
                 }
 
                 playerPanel.Controls[cardCount - 1].Top = POP;
-                System.Diagnostics.Debug.Write(playerPanel.Controls[cardCount - 1].Top.ToString() + "\n");
+
                 playerPanel.Controls[cardCount - 1].Left = startPoint;
 
                 for (int index = cardCount - 2; index >= 0; index--)
@@ -310,7 +339,10 @@ namespace DurakXtreme
 
 
 
+        private void btnReset_Click(object sender, EventArgs e)
+        {
 
+        }
 
 
         #endregion
