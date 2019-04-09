@@ -43,6 +43,8 @@
             this.lblCardCount = new System.Windows.Forms.Label();
             this.pbTrump = new System.Windows.Forms.PictureBox();
             this.btnReset = new System.Windows.Forms.Button();
+            this.tbStatusUpdate = new System.Windows.Forms.TextBox();
+            this.cardBox1 = new CardLibrary.CardBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbTrump)).BeginInit();
             this.SuspendLayout();
@@ -189,6 +191,26 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // tbStatusUpdate
+            // 
+            this.tbStatusUpdate.Location = new System.Drawing.Point(4, 446);
+            this.tbStatusUpdate.Multiline = true;
+            this.tbStatusUpdate.Name = "tbStatusUpdate";
+            this.tbStatusUpdate.ReadOnly = true;
+            this.tbStatusUpdate.Size = new System.Drawing.Size(245, 156);
+            this.tbStatusUpdate.TabIndex = 13;
+            // 
+            // cardBox1
+            // 
+            this.cardBox1.FaceUp = false;
+            this.cardBox1.Location = new System.Drawing.Point(928, 437);
+            this.cardBox1.Name = "cardBox1";
+            this.cardBox1.orientation = System.Windows.Forms.Orientation.Vertical;
+            this.cardBox1.Rank = CardLibrary.CardRank.Ace;
+            this.cardBox1.Size = new System.Drawing.Size(8, 8);
+            this.cardBox1.Suit = CardLibrary.CardSuit.Hearts;
+            this.cardBox1.TabIndex = 14;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -196,6 +218,8 @@
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.BackgroundImage = global::DurakXtreme.Properties.Resources.texturedBackground;
             this.ClientSize = new System.Drawing.Size(962, 657);
+            this.Controls.Add(this.cardBox1);
+            this.Controls.Add(this.tbStatusUpdate);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.pbTrump);
             this.Controls.Add(this.lblCardCount);
@@ -240,6 +264,8 @@
         private System.Windows.Forms.Label lblCardCount;
         private System.Windows.Forms.PictureBox pbTrump;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.TextBox tbStatusUpdate;
+        private CardLibrary.CardBox cardBox1;
     }
 }
 
