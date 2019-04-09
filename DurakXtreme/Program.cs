@@ -16,7 +16,7 @@ namespace DurakXtreme
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DurakXtreme.frmMainMenu());
+            Application.Run(new DurakXtreme.MainForm());
         }
     }
 }

@@ -40,6 +40,16 @@ namespace DurakXtreme
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
 
             //Add event listeners for attacking/defending 
             player1.Attacking += Player_Attacking;
@@ -62,13 +72,13 @@ namespace DurakXtreme
             //Draw the first 6 cards to each player
             player1.AddRange(DrawCards(player1, ref cardPile, handAmount));
             player2.AddRange(DrawCards(player2, ref cardPile, handAmount));
-            
+            ;
 
             //Draw and initialize trumpCard control
             trumpCard = cardPile.DrawCard().CardControl;
             trumpCard.FaceUp = true;
             GameplayLog.Log("Trump Card: " + trumpCard.ToString());
-            
+
             pbTrump.Controls.Add(trumpCard);
 
 
@@ -77,7 +87,7 @@ namespace DurakXtreme
             bool p1TrumpCardExist = false;
             if (LowestTrumpCard(player1, trumpCard.Card, ref p1TrumpCard))
             {
-               GameplayLog.Log ("P1 Trump Card: "+p1TrumpCard.ToString());
+                GameplayLog.Log("P1 Trump Card: " + p1TrumpCard.ToString());
                 p1TrumpCardExist = true;
             }
 
@@ -95,50 +105,53 @@ namespace DurakXtreme
                 if (p1TrumpCard > p2TrumpCard)
                 {
                     player1.CurrentTurnStatus = TurnStatus.Attacking;
-                } else
+                }
+                else
                 {
                     player1.CurrentTurnStatus = TurnStatus.Defending;
-                    player2.PlayMove(ref river);
-                    ReloadAllPanels();
+                    player2.PlayMove(ref river, trumpCard.Card);
+                    
+
+
                 }
-            } else
+            }
+            else
             {
                 if (p1TrumpCardExist == true)
                 {
                     player1.CurrentTurnStatus = TurnStatus.Attacking;
-                } else
+                }
+                else
                 {
                     player1.CurrentTurnStatus = TurnStatus.Defending;
-                    player2.PlayMove(ref river);
-                    ReloadAllPanels();
+                    player2.PlayMove(ref river, trumpCard.Card);
+                    
                 }
             }
 
-        }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MainForm_Load(object sender, EventArgs e)
-        {
+
+
             for (int i = 0; i < player1.Count; i++)
             {
-                
                 pnlPlayerOne.Controls.Add(player1[i].CardControl);
-                AlignCards(pnlPlayerOne);
-                player1[i].CardControl.Click += Card_Clicked;
                 player1[i].CardControl.MouseEnter += CardBox_MouseEnter;
                 player1[i].CardControl.MouseLeave += CardBox_MouseLeave;
+
+                player1[i].CardControl.Click += Card_Clicked;
+
             }
 
             for (int i = 0; i < player2.Count; i++)
             {
                 pnlOpponent.Controls.Add(player2[i].CardControl);
-
-                AlignCards(pnlOpponent);
             }
+            AlignCards(pnlPlayArea);
+            AlignCards(pnlPlayerOne);
+            if (cardPile.Count > 0)
+                AddAlignCards(river, pnlPlayArea);
+
+            AlignCards(pnlOpponent);
         }
 
         //TODO: Change colours of attack/defend
@@ -211,7 +224,7 @@ namespace DurakXtreme
             ReloadAllPanels();
         }
 
-
+        //TODO: Move this logic into player class?
         private void Card_Clicked(object sender, EventArgs e)
         {
             Console.WriteLine("Click: " + sender.ToString());
@@ -220,10 +233,10 @@ namespace DurakXtreme
             {
                 if (river.Count == 0)
                 {
-                    river.RiverInsert(sender as CardBox);
                     player1.Remove((sender as CardBox).Card);
+                    river.RiverInsert(sender as CardBox);
                     GameplayLog.Log(player1.ToString() + " is playing " + sender.ToString());
-                    player2.PlayMove(ref river);
+                    player2.PlayMove(ref river, trumpCard.Card);
                     ReloadAllPanels();
                 } else
                 {
@@ -237,9 +250,9 @@ namespace DurakXtreme
                     }
                     if (isPlayable == true)
                     {
-                        river.RiverInsert(sender as CardBox);
                         player1.Remove((sender as CardBox).Card);
-                        player2.PlayMove(ref river);
+                        river.RiverInsert(sender as CardBox);
+                        player2.PlayMove(ref river, trumpCard.Card);
                         ReloadAllPanels();
                     } else
                     {
@@ -252,17 +265,17 @@ namespace DurakXtreme
             {
                 if ((sender as CardBox).Suit == trumpCard.Suit)
                 {
-                    river.RiverInsert(sender as CardBox);
                     player1.Remove((sender as CardBox).Card);
-                    player2.PlayMove(ref river);
+                    river.RiverInsert(sender as CardBox);
+                    player2.PlayMove(ref river, trumpCard.Card);
                     ReloadAllPanels();
                 } else
                 {
                     if ((sender as CardBox).Suit == river.LastCardInputted.Suit && (sender as CardBox).Card.CardValue > river.LastCardInputted.CardValue)
                     {
-                        river.RiverInsert(sender as CardBox);
                         player1.Remove((sender as CardBox).Card);
-                        player2.PlayMove(ref river);
+                        river.RiverInsert(sender as CardBox);
+                        player2.PlayMove(ref river, trumpCard.Card);
                         ReloadAllPanels();
                     } else
                     {
@@ -418,20 +431,27 @@ namespace DurakXtreme
                     deck[i].CardControl.Click -= Card_Clicked;
                     deck[i].CardControl.Click += Card_Clicked;
 
-                    player1[i].CardControl.MouseEnter -= CardBox_MouseEnter;
-                    player1[i].CardControl.MouseLeave -= CardBox_MouseLeave;
+                    deck[i].CardControl.MouseEnter -= CardBox_MouseEnter;
+                    deck[i].CardControl.MouseEnter += CardBox_MouseEnter;
 
-                    player1[i].CardControl.MouseEnter += CardBox_MouseEnter;
-                    player1[i].CardControl.MouseLeave += CardBox_MouseLeave;
+                    deck[i].CardControl.MouseLeave -= CardBox_MouseLeave;
+                    deck[i].CardControl.MouseLeave += CardBox_MouseLeave;
+
+                    //Console.WriteLine("Added events to " + deck[i].ToString());
 
                 } else if (panel == pnlPlayArea)
                 {
                     //if control isn't in players hand, it isn't clickable
                     deck[i].CardControl.Click -= Card_Clicked;
-                    player1[i].CardControl.MouseEnter -= CardBox_MouseEnter;
-                    player1[i].CardControl.MouseLeave -= CardBox_MouseLeave;
+                    deck[i].CardControl.MouseEnter -= CardBox_MouseEnter;
+                    deck[i].CardControl.MouseLeave -= CardBox_MouseLeave;
                 }
-                    
+
+                Size cardSize = new Size(75, 107);
+                if (deck[i].CardControl.Size != cardSize)
+                    deck[i].CardControl.Size =cardSize;
+
+
                 panel.Controls.Add(deck[i].CardControl);
             }
             AlignCards(panel);
@@ -489,7 +509,7 @@ namespace DurakXtreme
         private void btnTake_Click(object sender, EventArgs e)
         {
             player1.Take(ref river);
-            player2.PlayMove(ref river);
+            player2.PlayMove(ref river, trumpCard.Card);
             ReplenishCards();
             ReloadAllPanels();
         }
@@ -498,7 +518,7 @@ namespace DurakXtreme
         {
             player1.Pass(ref river);
             player1.CurrentTurnStatus = TurnStatus.Defending;
-            player2.PlayMove(ref river);
+            player2.PlayMove(ref river, trumpCard.Card);
             ReplenishCards();
             ReloadAllPanels();
         }

@@ -12,11 +12,14 @@ namespace DurakXtreme
         public ComputerPlayer(string pName) : base(pName)
         {   }
 
-
-        public void PlayMove(ref Deck playedCards)
+        /// <summary>
+        /// Computer plays an applicable move depending if it is attacking or defending
+        /// </summary>
+        /// <param name="playedCards"></param>
+        public void PlayMove(ref Deck playedCards, PlayingCard trumpCard)
         {
             if (base.CurrentTurnStatus == TurnStatus.Defending)
-                Defend(ref playedCards);
+                Defend(ref playedCards, trumpCard);
             if (base.CurrentTurnStatus == TurnStatus.Attacking)
                 Attack(ref playedCards);
         }
@@ -25,12 +28,16 @@ namespace DurakXtreme
         /// Logic for AI defending against the player
         /// </summary>
         /// <param name="river">Cards in river</param>
-        private void Defend(ref Deck river)
+        private void Defend(ref Deck river, PlayingCard trumpCard)
         {
+            //Index of card the computer wants to play
             int playedCardIndex = -1;
-
+            
+            int trumpIndex = -1;
+            
             for (int i = 0; i < this.Count; i++)
             {
+                //If the suit matched the last card
                 if (this[i].Suit == river.LastCardInputted.Suit && this[i].CardValue > river.LastCardInputted.CardValue)
                 {
                     if (playedCardIndex == -1)
@@ -41,14 +48,21 @@ namespace DurakXtreme
                     {
                         playedCardIndex = i;
                     }
+                } else if(this[i].Suit == trumpCard.Suit)
+                {
+                    trumpIndex = i;
                 }
             }
             if (playedCardIndex != -1)
             {
                 PlayCard(playedCardIndex, ref river);
-            } else
+            } else if (trumpIndex != -1)
             {
-                this.Take(ref river);
+                PlayCard(trumpIndex, ref river);
+            }
+            else
+            {
+                base.Take(ref river);
             }
             
 
@@ -107,9 +121,13 @@ namespace DurakXtreme
                 
         }
 
+        /// <summary>
+        /// AI plays a selected card to the river
+        /// </summary>
+        /// <param name="cardIndex">Index of card to be played</param>
+        /// <param name="river">River to play the card to</param>
         private void PlayCard(int cardIndex, ref Deck river)
         {
-            
             GameplayLog.Log(this.ToString() + " " + this.CurrentTurnStatus + " with " + this[cardIndex].ToString());
             river.RiverInsert(this[cardIndex]);
             this.Remove(this[cardIndex]);
