@@ -150,13 +150,13 @@ namespace CardLibrary
         /// <param name="e"></param>
         private void pbCard_MouseClick(object sender, MouseEventArgs e)
         {
-            if (Click != null)
-                Click(this,e);
+       
         }
 
         private void pbCard_Click(object sender, EventArgs e)
         {
-
+            if (Click != null)
+                Click(this, e);
         }
 
         /// <summary>
@@ -179,6 +179,11 @@ namespace CardLibrary
         {
             if (MouseLeave != null)
                 MouseLeave(this, e);
+        }
+
+        private void CardBox_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

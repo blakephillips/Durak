@@ -487,7 +487,7 @@ namespace DurakXtreme
                 }
 
                 panel.Controls[cardCount - 1].Top = POP;
-                System.Diagnostics.Debug.Write(panel.Controls[cardCount - 1].Top.ToString() + "\n");
+               // System.Diagnostics.Debug.Write(panel.Controls[cardCount - 1].Top.ToString() + "\n");
                 panel.Controls[cardCount - 1].Left = startPoint;
 
                 for (int index = cardCount - 2; index >= 0; index--)
