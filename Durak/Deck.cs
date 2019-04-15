@@ -8,58 +8,50 @@ namespace CardLibrary
 {
    public class Deck : List<PlayingCard>
     {
-        public Deck() { }
-
-
-        private PlayingCard lastCard= new PlayingCard();
-
-        public PlayingCard LastCardInputted
+        private static Random rng = new Random();
+        public Deck(int cards = 52, bool shuffle = false, bool jokersEnabled = false)
         {
-            get { return lastCard; }
+            int index = 0;
+            for (int suit = 1; suit < Enum.GetValues(typeof(CardSuit)).Length; suit++)
+            {
+                for (int rank = 1; rank < Enum.GetValues(typeof(CardRank)).Length && index < cards; rank++)
+                {
+                    if (jokersEnabled && index >= cards - 2)
+                    {
+                        this.Add(new PlayingCard(CardRank.Joker, CardSuit.Joker));
+                    } else
+                    {
+                        this.Add(new PlayingCard((CardRank)rank, (CardSuit)suit));
+                    }
+                    index++;
+                }
+            }
         }
 
-        public void RiverInsert(PlayingCard card)
-        {
-            lastCard = card;
-            this.Add(card);
-        }
-
-        public void RiverInsert(CardBox card)
-        {
-            RiverInsert(card.Card);
-        }
-
-
-        private static Random rand = new Random();
-        //TODO add IClonable
-        /// <summary>
-        /// Shuffles the deck using Fisher-Yates shuffle algorithm
-        /// </summary>
-        /// <see cref="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle"/>
         public void Shuffle()
         {
-
             int cardIndex = this.Count;
-            while (cardIndex > 1 )
+            while (cardIndex > 1)
             {
                 cardIndex--;
-                int randomCardIndex = rand.Next(cardIndex + 1);
+                int randomCardIndex = rng.Next(cardIndex + 1);
                 PlayingCard card = this[randomCardIndex];
                 this[randomCardIndex] = this[cardIndex];
                 this[cardIndex] = card;
             }
+            Console.WriteLine("Deck Shuffled!");
         }
-
-        
-
-        public PlayingCard DrawCard()
+        public PlayingCard DrawTopCard()
         {
-            PlayingCard card = this.First();
-            this.Remove(card);
-            return card;
+            PlayingCard topCard = null;
+            if (this.Count > 0)
+            {
+                topCard = this.Last();
+                this.Remove(this.Last());
+            }
+            return topCard;
         }
-
-        
 
     }
+
 }

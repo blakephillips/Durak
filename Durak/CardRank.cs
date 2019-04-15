@@ -8,7 +8,8 @@ namespace CardLibrary
 {
     public enum CardRank : byte
     {
-        Ace = 1,
+        Joker,
+        Ace,
         Two,
         Three,
         Four,
@@ -20,8 +21,6 @@ namespace CardLibrary
         Ten,
         Jack,
         Queen,
-        King,
-        Joker
-        
+        King
     }
 }

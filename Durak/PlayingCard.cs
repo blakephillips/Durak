@@ -6,147 +6,38 @@ using System.Threading.Tasks;
 using System.Drawing;
 namespace CardLibrary
 {
-    public class PlayingCard
+    public class PlayingCard : IComparable<PlayingCard>
     {
-        #region "Get/Set Methods"
-
-        private CardBox myCardBox;
-        public CardBox CardControl
-        {
-            get
-            {
-                if (myCardBox == null)
-                    IntializeCardBox();
-                return myCardBox;
-            }
-            set { myCardBox = value; }
-        }
-
-        protected CardSuit mySuit;
-        public CardSuit Suit
-        {
-            get { return mySuit; }
-            set { mySuit = value; }
-        }
-        protected CardRank myRank;
-        public CardRank Rank
-        {
-            get { return myRank; }
-            set { myRank = value; }
-        }
-
-        protected bool myFaceUp = false;
-        public bool FaceUp
-        {
-            get { return myFaceUp; }
-            set { myFaceUp = value; }
-        }
-
-        protected int myValue;
-        public int CardValue
-        {
-            get { return myValue; }
-            set { myValue = value; }
-        }
-        #endregion
-        #region "Constructors"
-
-        public PlayingCard(CardRank rank = CardRank.Ace, CardSuit suit = CardSuit.Hearts)
+        private bool _faceDown = false;
+        public PlayingCard(CardRank rank = CardRank.Ace, CardSuit suit = CardSuit.Spades, bool faceDown = false)
         {
             Rank = rank;
             Suit = suit;
-            CardValue = (int)Rank;
+            if (faceDown) FlipCard();
         }
-
-        #endregion
-        #region "Relational Operators"
-
-        public static bool operator ==(PlayingCard left, PlayingCard right)
+        public void Set(CardRank rank, CardSuit suit)
         {
-            return (left.CardValue == right.CardValue);
+            Rank = rank;
+            Suit = suit;
         }
+        public CardSuit Suit { get; set; }
+        public CardRank Rank { get; set; }
+        public bool IsFaceDown { get { return _faceDown; } }
+        public bool IsFaceUp { get { return !_faceDown; } }
 
-        public static bool operator !=(PlayingCard left, PlayingCard right)
+        public void FlipCard()
         {
-            return (left.CardValue != right.CardValue);
+            _faceDown = !_faceDown;
         }
-
-        public static bool operator <(PlayingCard left, PlayingCard right)
-        {
-            return (left.CardValue < right.CardValue);
-        }
-
-        public static bool operator >(PlayingCard left, PlayingCard right)
-        {
-            return (left.CardValue > right.CardValue);
-        }
-
-        public static bool operator <=(PlayingCard left, PlayingCard right)
-        {
-            return (left.CardValue <= right.CardValue);
-        }
-
-        public static bool operator >=(PlayingCard left, PlayingCard right)
-        {
-            return (left.CardValue >= right.CardValue);
-        }
-
-
-
-        #endregion
-
-        public override bool Equals(object obj)
-        {
-            return (this.CardValue == ((PlayingCard)obj).CardValue);
-        }
-
-        public override int GetHashCode()
-        {
-            return this.myValue * 100 + (int)this.mySuit * 10 + ((this.FaceUp) ? 1 : 0);
-        }
-
         public override string ToString()
         {
-            return Rank.ToString() + " of " + Suit.ToString();
+            return Rank == CardRank.Joker ? CardRank.Joker.ToString() : Rank + " of " + Suit;
         }
 
-        public Image GetCardImage()
+        public int CompareTo(PlayingCard that)
         {
-            string imageName;
-            Image cardImage;
-
-            if (!FaceUp)
-            {
-                imageName = "back";
-            }
-            else if (myRank == CardRank.Joker)
-            {
-                if (mySuit == CardSuit.Clubs || mySuit == CardSuit.Spades)
-                {
-                    imageName = "black_joker";
-                }
-                else
-                {
-                    imageName = "red_joker";
-                }
-            }
-            else
-            {
-                imageName = myRank.ToString().ToLower() + "_of_" + mySuit.ToString().ToLower();
-            }
-
-            cardImage = Properties.Resources.ResourceManager.GetObject(imageName) as Image;
-
-
-            return cardImage;
-
+            int returnValue = ((int)this.Rank > (int)that.Rank) ? 1 : -1;
+            return returnValue;
         }
-
-        private void IntializeCardBox()
-        {
-            myCardBox = new CardBox(this);
-        }
-
-
     }
 }
