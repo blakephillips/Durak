@@ -45,16 +45,18 @@ namespace DurakXtreme
         {
             this.pbTrump.Image = Image.FromFile(CardBox.GetImagePathFromCard(durak.TrumpCard));
             this.pbDeck.Load(CardBox.GetImagePathFromCard());
-            this.pbDeck.Refresh();
-            this.pbTrump.Refresh();
+            //this.pbDeck.Refresh();
+            //this.pbTrump.Refresh();
+            Refresh();
+
             lblDeckCount.Text = durak.deck.Count.ToString();
+
             SoundPlayer dealSound = new System.Media.SoundPlayer(resourcesPath + "deal.wav");
             dealSound.Play();
             for (int i = 0; i < DurakGame.STARTING_CARD_COUNT; i++)
             {
                 this.DealCardToPanel(this.pnlPlayerBottom, durak.Players[0].Cards[i]);
                 this.DealCardToPanel(this.pnlPlayerTop, durak.Players[1].Cards[i], true);
-                Wait(200);
             }
             this.txtMessages.Update();
             durak.TurnAttack();
@@ -89,7 +91,6 @@ namespace DurakXtreme
             CardBox pbCard = new CardBox(card, faceDown);
             panel.Controls.Add(pbCard);
             AlignCards(panel);
-            panel.Refresh();
         }
         void ResetColors(Panel panel)
         {
@@ -101,11 +102,11 @@ namespace DurakXtreme
         //GUI Methods
         void AlignCards(Panel panel)
         {
+            //panel.Update();
             int panelWidth = panel.Width;
             int panelHeight = panel.Height;
             int cardSpacing = cardSize.Width;
             int padding = 25;
-
             if (panel == pnlPlayerBottom || panel == pnlPlayerTop)
             {
                 bool isBottomPanel = panel == pnlPlayerBottom;
@@ -126,6 +127,7 @@ namespace DurakXtreme
                     int leftMargin = (panel.Width - expectedWidth) / 2;
                     panel.Controls[i].Location = new Point(leftMargin + (i * cardSpacing), isBottomPanel ? panelHeight - cardSize.Height : 0);
                 }
+                panel.Update();
             }
             else if (panel == pnlPlayArea)
             {
@@ -152,8 +154,10 @@ namespace DurakXtreme
                     {
                         panel.Controls[i].Location = new Point(leftMargin + (i * cardSpacing), alignBottom);
                     }
+                    panel.Controls[i].Update();
                 }
             }
+            //panel.Update();
         }
         void CardPop(object sender, EventArgs e)
         {
@@ -270,8 +274,9 @@ namespace DurakXtreme
             }
             return path;
         }
-        static void Wait(int ms)
+        public void Wait(int ms)
         {
+            Update();
             Task.Delay(ms).Wait();
         }
 

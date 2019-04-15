@@ -170,6 +170,8 @@ namespace DurakXtreme
                 int attackCardIndex = attack.Item2;
                 if (attackCardIndex == -1)
                 {
+                    
+                    gui.Wait(500);
                     TakeRiver(ai);
                 }
                 else
@@ -199,6 +201,7 @@ namespace DurakXtreme
                 int defendCardIndex = defence.Item2;
                 if (defendCardIndex == -1)
                 {
+                    gui.Wait(500);
                     TakeRiver(ai);
                 }
                 else
