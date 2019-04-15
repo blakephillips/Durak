@@ -21,7 +21,7 @@ namespace DurakXtreme
         //Create new DurakGame
         public DurakGame durak;
         public IPlayer Player;
-        public IPlayer Player2;
+        public IPlayer ComputerPlayer;
 
         //GUI config
         readonly Size cardSize = new Size(75, 110);
@@ -33,9 +33,8 @@ namespace DurakXtreme
             InitializeComponent();
 
             durak = new DurakGame(this);
-
             Player = durak.Players[0];
-            Player2 = durak.Players[1];
+            ComputerPlayer = durak.Players[1];
 
             this.Show();
             this.InitiateGame();
@@ -154,6 +153,7 @@ namespace DurakXtreme
                     else
                     {
                         panel.Controls[i].Location = new Point(leftMargin + (i * cardSpacing), alignBottom);
+
                     }
                     panel.Controls[i].Update();
                 }
@@ -178,7 +178,6 @@ namespace DurakXtreme
             }
         }
         //Event Methods
-        
         void EvaluateHand()
         {
             if (durak.River.Count > 0)
@@ -231,9 +230,8 @@ namespace DurakXtreme
 
             for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
             {
-                CardBox cb = (CardBox)pnlPlayArea.Controls[i];
-                pnlPlayArea.Controls.Remove(cb);
-                toPanel.Controls.Add(cb);
+                Console.WriteLine(i);
+                toPanel.Controls.Add(pnlPlayArea.Controls[i]);
             }
             AlignCards(toPanel);
             if (player.TurnStatus == TurnStatus.Attacking) durak.NextAttacker();
@@ -306,6 +304,7 @@ namespace DurakXtreme
                 control.MouseClick -= CardClick;
             }
         }
+        
         public bool CheckSync()
         {
             bool returnValue = true;

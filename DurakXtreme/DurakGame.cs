@@ -229,6 +229,8 @@ namespace DurakXtreme
             {
                 for (int i = River.Count - 1; i >= 0; i--)
                 {
+                    Console.WriteLine(i);
+                    
                     player.Cards.Add(River[i]);
                 }
                 Print(player.Name + " is taking the river, raising them to " + player.Cards.Count + " cards!");
@@ -333,6 +335,12 @@ namespace DurakXtreme
             }
             return defender;
         }
+
+        public void Sort()
+        {
+            //Players[0].Cards.Sort()
+        }
+
         public void ReplenishCards()
         {
             foreach (IPlayer player in Players)
