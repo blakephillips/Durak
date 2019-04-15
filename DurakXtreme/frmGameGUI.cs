@@ -20,7 +20,7 @@ namespace DurakXtreme
 
         //Create new DurakGame
         public DurakGame durak;
-        public IPlayer Player1;
+        public IPlayer Player;
         public IPlayer Player2;
 
         //GUI config
@@ -34,7 +34,7 @@ namespace DurakXtreme
 
             durak = new DurakGame(this);
 
-            Player1 = durak.Players[0];
+            Player = durak.Players[0];
             Player2 = durak.Players[1];
 
             this.Show();
@@ -63,20 +63,21 @@ namespace DurakXtreme
         }
         public void GetHumanResponse()
         {
-            // Get call stack
-            StackTrace stackTrace = new StackTrace();
-            // Get calling method name
-            Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name + " - GetHumanResponse()");
+            //// Get call stack
+            //StackTrace stackTrace = new StackTrace();
+            //// Get calling method name
+            //Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name + " - GetHumanResponse()");
+            if (Player.TurnStatus == TurnStatus.Attacking) btnTakePass.Text = "Pass";
+            if (Player.TurnStatus == TurnStatus.Defending) btnTakePass.Text = "Take";
             EnableCardClick();
             EvaluateHand();
         }
         public void EndHumanResponse()
         {
-            // Get call stack
-            StackTrace stackTrace = new StackTrace();
-            // Get calling method name
-            Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name + " - EndHumanResponse()");
-            Console.WriteLine();
+            //// get call stack
+            //stacktrace stacktrace = new stacktrace();
+            //// get calling method name
+            //console.writeline(stacktrace.getframe(1).getmethod().name + " - endhumanresponse()");
             DisableCardClick();
             foreach (Control card in pnlPlayerBottom.Controls)
             {
@@ -185,8 +186,8 @@ namespace DurakXtreme
                 for (int i = 0; i < durak.Players[0].Cards.Count; i++)
                 {
                     CardBox pb = pnlPlayerBottom.Controls[i] as CardBox;
-                    List<PlayingCard> cards = Player1.Cards;
-                    bool isValid = (Player1.TurnStatus == TurnStatus.Attacking ? durak.IsValidAttack(cards[i]) : durak.IsValidDefence(cards[i]));
+                    List<PlayingCard> cards = Player.Cards;
+                    bool isValid = (Player.TurnStatus == TurnStatus.Attacking ? durak.IsValidAttack(cards[i]) : durak.IsValidDefence(cards[i]));
                     if (!isValid)
                     {
                         pb.ToMonochrome2();
@@ -213,8 +214,8 @@ namespace DurakXtreme
         {
             
             CardBox cb = (CardBox)sender;
-            if (Player1.TurnStatus == TurnStatus.Attacking && durak.IsValidAttack(cb.Card)
-                || Player1.TurnStatus == TurnStatus.Defending && durak.IsValidDefence(cb.Card))
+            if (Player.TurnStatus == TurnStatus.Attacking && durak.IsValidAttack(cb.Card)
+                || Player.TurnStatus == TurnStatus.Defending && durak.IsValidDefence(cb.Card))
             {
                 durak.RecieveCard(cb.Card);
             }
@@ -283,7 +284,7 @@ namespace DurakXtreme
         private void btnTake_Click(object sender, EventArgs e)
         {
             EndHumanResponse();
-            durak.TakeRiver(Player1);
+            durak.TakeRiver(Player);
         }
 
         public void UpdateMessages(string message)

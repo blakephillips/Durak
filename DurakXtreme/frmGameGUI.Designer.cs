@@ -35,7 +35,7 @@
             this.pnlPlayerTop = new System.Windows.Forms.Panel();
             this.pnlPlayerBottom = new System.Windows.Forms.Panel();
             this.txtMessages = new System.Windows.Forms.TextBox();
-            this.btnTake = new System.Windows.Forms.Button();
+            this.btnTakePass = new System.Windows.Forms.Button();
             this.lblDeckCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbTrump)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).BeginInit();
@@ -112,15 +112,15 @@
             this.txtMessages.TabIndex = 17;
             this.txtMessages.TabStop = false;
             // 
-            // btnTake
+            // btnTakePass
             // 
-            this.btnTake.Location = new System.Drawing.Point(667, 392);
-            this.btnTake.Name = "btnTake";
-            this.btnTake.Size = new System.Drawing.Size(75, 34);
-            this.btnTake.TabIndex = 18;
-            this.btnTake.Text = "Take";
-            this.btnTake.UseVisualStyleBackColor = true;
-            this.btnTake.Click += new System.EventHandler(this.btnTake_Click);
+            this.btnTakePass.Location = new System.Drawing.Point(667, 392);
+            this.btnTakePass.Name = "btnTakePass";
+            this.btnTakePass.Size = new System.Drawing.Size(75, 34);
+            this.btnTakePass.TabIndex = 18;
+            this.btnTakePass.Text = "Take";
+            this.btnTakePass.UseVisualStyleBackColor = true;
+            this.btnTakePass.Click += new System.EventHandler(this.btnTake_Click);
             // 
             // lblDeckCount
             // 
@@ -141,7 +141,7 @@
             this.BackgroundImage = global::DurakXtreme.Properties.Resources.texturedBackground;
             this.ClientSize = new System.Drawing.Size(754, 542);
             this.Controls.Add(this.lblDeckCount);
-            this.Controls.Add(this.btnTake);
+            this.Controls.Add(this.btnTakePass);
             this.Controls.Add(this.txtMessages);
             this.Controls.Add(this.pnlPlayerBottom);
             this.Controls.Add(this.pnlPlayerTop);
@@ -172,7 +172,7 @@
         public System.Windows.Forms.Panel pnlPlayerTop;
         private System.Windows.Forms.TextBox txtMessages;
         public System.Windows.Forms.Panel pnlPlayerBottom;
-        private System.Windows.Forms.Button btnTake;
+        private System.Windows.Forms.Button btnTakePass;
         public System.Windows.Forms.Label lblDeckCount;
     }
 }
