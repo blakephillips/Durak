@@ -18,6 +18,7 @@ namespace DurakXtreme
         public Tuple<PlayingCard, int> Attack(List<PlayingCard> river = null)
         {
             PlayingCard bestViableCard = null;
+            int cardIndex;
             foreach (PlayingCard card in Cards)
             {
                 if (river == null || river.Count == 0)
@@ -38,12 +39,11 @@ namespace DurakXtreme
                     }
                 }
             }
+            cardIndex = Cards.IndexOf(bestViableCard);
             
-            int cardIndex = Cards.IndexOf(bestViableCard);
             if (bestViableCard != null)
             {
                 Cards.Remove(bestViableCard);
-                Console.WriteLine("AI Player made an attack:\r\n  Card: " + bestViableCard.ToString() + "  Index: " + cardIndex.ToString());
             }
             return Tuple.Create(bestViableCard, cardIndex);
         }
@@ -64,7 +64,6 @@ namespace DurakXtreme
             if (bestViableCard != null)
             {
                 Cards.Remove(bestViableCard);
-                Console.WriteLine("AI Player made a defense:\r\n  Card: " + bestViableCard.ToString() + "  Index: " +  cardIndex.ToString());
             }
 
             return Tuple.Create(bestViableCard, cardIndex);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,17 +14,22 @@ namespace DurakXtreme
 {
     public partial class frmGameGUI : Form
     {
+        const bool AI_CARDS_VISIBLE = false;
+        const int AI_ATTACK_DELAY = 300;
+        const int AI_YIELD_DELAY = 1000;
         //Path to resources folder
         public const string resourcesPath = "../../Resources/";
 
         //Create new DurakGame
         public DurakGame durak;
-        public IPlayer Player;
+        //Get players from game instance
+        public IPlayer HumanPlayer;
         public IPlayer ComputerPlayer;
 
         //GUI config
-        readonly Size cardSize = new Size(75, 110);
-        //Get players from game instance
+
+        Color defenseColor = Color.FromArgb(70, 50, 50);
+        Color attackColor = Color.FromArgb(50, 70, 50);
 
         //Base Constructor
         public frmGameGUI()
@@ -33,7 +37,7 @@ namespace DurakXtreme
             InitializeComponent();
 
             durak = new DurakGame(this);
-            Player = durak.Players[0];
+            HumanPlayer = durak.Players[0];
             ComputerPlayer = durak.Players[1];
 
             this.Show();
@@ -42,41 +46,46 @@ namespace DurakXtreme
         
         public void InitiateGame()
         {
-            this.pbTrump.Image = Image.FromFile(CardBox.GetImagePathFromCard(durak.TrumpCard));
-            this.pbDeck.Load(CardBox.GetImagePathFromCard());
-            //this.pbDeck.Refresh();
-            //this.pbTrump.Refresh();
+            CardBox.CARD_SIZE = new Size(60, 90);
+            pbTrump.Image = Image.FromFile(CardBox.GetImagePathFromCard(durak.TrumpCard));
+            pbDeck.Load(CardBox.GetImagePathFromCard());
             Refresh();
-
             lblDeckCount.Text = durak.deck.Count.ToString();
 
             SoundPlayer dealSound = new System.Media.SoundPlayer(resourcesPath + "deal.wav");
             dealSound.Play();
             for (int i = 0; i < DurakGame.STARTING_CARD_COUNT; i++)
             {
-                this.DealCardToPanel(this.pnlPlayerBottom, durak.Players[0].Cards[i]);
-                this.DealCardToPanel(this.pnlPlayerTop, durak.Players[1].Cards[i], true);
+                DealCardToPanel(this.pnlPlayerBottom, durak.Players[0].Cards[i]);
+                DealCardToPanel(this.pnlPlayerTop, durak.Players[1].Cards[i]);
             }
             this.txtMessages.Update();
             durak.TurnAttack();
         }
+
+
+
         public void GetHumanResponse()
         {
-            //// Get call stack
-            //StackTrace stackTrace = new StackTrace();
-            //// Get calling method name
-            //Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name + " - GetHumanResponse()");
-            if (Player.TurnStatus == TurnStatus.Attacking) btnTakePass.Text = "Pass";
-            if (Player.TurnStatus == TurnStatus.Defending) btnTakePass.Text = "Take";
+            if (HumanPlayer.TurnStatus == TurnStatus.Defending) {
+                btnTakePass.Text = "Take";
+                lblStatus.Text = "You are defending!";
+                pnlPlayerBottom.BackColor = defenseColor;
+                pnlPlayerTop.BackColor = attackColor;
+            }
+            if (HumanPlayer.TurnStatus == TurnStatus.Attacking)
+            {
+                btnTakePass.Text = "Pass";
+                lblStatus.Text = "You are attacking!";
+                pnlPlayerBottom.BackColor = attackColor;
+                pnlPlayerTop.BackColor = defenseColor;
+            }
+            if (durak.GameOver) btnTakePass.Text = "End";
             EnableCardClick();
             EvaluateHand();
         }
         public void EndHumanResponse()
         {
-            //// get call stack
-            //stacktrace stacktrace = new stacktrace();
-            //// get calling method name
-            //console.writeline(stacktrace.getframe(1).getmethod().name + " - endhumanresponse()");
             DisableCardClick();
             foreach (Control card in pnlPlayerBottom.Controls)
             {
@@ -86,9 +95,10 @@ namespace DurakXtreme
             ResetColors(pnlPlayerBottom);
         }
         //Dealer Methods
-        public void DealCardToPanel(Panel panel, PlayingCard card, bool faceDown = false)
+        public void DealCardToPanel(Panel panel, PlayingCard card)
         {
-            CardBox pbCard = new CardBox(card, faceDown);
+            CardBox pbCard = new CardBox(card);
+            if (panel == pnlPlayerTop && !AI_CARDS_VISIBLE) pbCard.FaceDown();
             panel.Controls.Add(pbCard);
             AlignCards(panel);
         }
@@ -96,7 +106,7 @@ namespace DurakXtreme
         {
             foreach (CardBox cb in panel.Controls)
             {
-                cb.SetCard(cb.Card);
+                cb.SetCardImage(cb.Card);
             }
         }
         //GUI Methods
@@ -105,7 +115,7 @@ namespace DurakXtreme
             //panel.Update();
             int panelWidth = panel.Width;
             int panelHeight = panel.Height;
-            int cardSpacing = cardSize.Width;
+            int cardSpacing = CardBox.CARD_SIZE.Width;
             int padding = 25;
             if (panel == pnlPlayerBottom || panel == pnlPlayerTop)
             {
@@ -118,31 +128,30 @@ namespace DurakXtreme
 
                     // Calculate expected width using card count and spacing
                     // Remember, last card is on top therefor full-width
-                    expectedWidth = (panel.Controls.Count - 1) * cardSpacing + cardSize.Width;
+                    expectedWidth = (panel.Controls.Count - 1) * cardSpacing + CardBox.CARD_SIZE.Width;
                 }
                 // Apply new locations to cards
                 for (int i = 0; i < panel.Controls.Count; i++)
                 {
                     // Initial x-position is half the remaining panel width
                     int leftMargin = (panel.Width - expectedWidth) / 2;
-                    panel.Controls[i].Location = new Point(leftMargin + (i * cardSpacing), isBottomPanel ? panelHeight - cardSize.Height : 0);
+                    panel.Controls[i].Location = new Point(leftMargin + (i * cardSpacing), isBottomPanel ? panelHeight - CardBox.CARD_SIZE.Height : 0);
                 }
                 panel.Update();
             }
             else if (panel == pnlPlayArea)
             {
-                cardSpacing = cardSize.Width / 2;
+                cardSpacing = CardBox.CARD_SIZE.Width / 2;
                 int duoSpacing = 50;
                 int duoCount = ((panel.Controls.Count - 1) / 2 > 0) ? (panel.Controls.Count - 1) / 2 : 0;
 
-                int expectedWidth = (panel.Controls.Count - 1) * cardSpacing + (duoCount * duoSpacing) + cardSize.Width;
+                int expectedWidth = (panel.Controls.Count - 1) * cardSpacing + (duoCount * duoSpacing) + CardBox.CARD_SIZE.Width;
                 int leftMargin = (panelWidth - expectedWidth) / 2;
-                int alignBottom = panel.Height - cardSize.Height;
+                int alignBottom = panel.Height - CardBox.CARD_SIZE.Height;
                 for (int i = 0; i < panel.Controls.Count; i++)
                 {
                     if (i > 0 && i % 2 == 0)
                     {
-                        Console.WriteLine("Margin Boost");
                         leftMargin += duoSpacing;
                     }
                     int aiSide = Convert.ToInt32(durak.GetAttacker().GetType() == typeof(Player));
@@ -158,23 +167,22 @@ namespace DurakXtreme
                     panel.Controls[i].Update();
                 }
             }
-            //panel.Update();
         }
         void CardPop(object sender, EventArgs e)
         {
             float popRatio = 1.2f;
-            int newWidth = (int)(cardSize.Width * popRatio);
-            int newHeight = (int)(cardSize.Height * popRatio);
+            int newWidth = (int)(CardBox.CARD_SIZE.Width * popRatio);
+            int newHeight = (int)(CardBox.CARD_SIZE.Height * popRatio);
             PictureBox card = sender as PictureBox;
-            if (card.Size == cardSize)
+            if (card.Size == CardBox.CARD_SIZE)
             {
                 card.Size = new Size(newWidth, newHeight);
-                card.Location = new Point(card.Location.X - (newWidth - cardSize.Width) / 2, card.Location.Y - (newHeight - cardSize.Height));
+                card.Location = new Point(card.Location.X - (newWidth - CardBox.CARD_SIZE.Width) / 2, card.Location.Y - (newHeight - CardBox.CARD_SIZE.Height));
             }
             else
             {
-                card.Size = new Size(cardSize.Width, cardSize.Height);
-                card.Location = new Point(card.Location.X + (newWidth - cardSize.Width) / 2, card.Location.Y + (newHeight - cardSize.Height));
+                card.Size = new Size(CardBox.CARD_SIZE.Width, CardBox.CARD_SIZE.Height);
+                card.Location = new Point(card.Location.X + (newWidth - CardBox.CARD_SIZE.Width) / 2, card.Location.Y + (newHeight - CardBox.CARD_SIZE.Height));
             }
         }
         //Event Methods
@@ -185,11 +193,11 @@ namespace DurakXtreme
                 for (int i = 0; i < durak.Players[0].Cards.Count; i++)
                 {
                     CardBox pb = pnlPlayerBottom.Controls[i] as CardBox;
-                    List<PlayingCard> cards = Player.Cards;
-                    bool isValid = (Player.TurnStatus == TurnStatus.Attacking ? durak.IsValidAttack(cards[i]) : durak.IsValidDefence(cards[i]));
+                    List<PlayingCard> cards = HumanPlayer.Cards;
+                    bool isValid = (HumanPlayer.TurnStatus == TurnStatus.Attacking ? durak.IsValidAttack(cards[i]) : durak.IsValidDefence(cards[i]));
                     if (!isValid)
                     {
-                        pb.ToMonochrome2();
+                        pb.SetToMonochrome();
                     }
                     else
                     {
@@ -213,8 +221,8 @@ namespace DurakXtreme
         {
             
             CardBox cb = (CardBox)sender;
-            if (Player.TurnStatus == TurnStatus.Attacking && durak.IsValidAttack(cb.Card)
-                || Player.TurnStatus == TurnStatus.Defending && durak.IsValidDefence(cb.Card))
+            if (HumanPlayer.TurnStatus == TurnStatus.Attacking && durak.IsValidAttack(cb.Card)
+                || HumanPlayer.TurnStatus == TurnStatus.Defending && durak.IsValidDefence(cb.Card))
             {
                 durak.RecieveCard(cb.Card);
             }
@@ -226,36 +234,67 @@ namespace DurakXtreme
         
         public void TakeRiver(IPlayer player)
         {
-            Panel toPanel = (player.GetType() == typeof(Player)) ? pnlPlayerBottom : pnlPlayerTop;
-
-            for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
-            {
-                Console.WriteLine(i);
-                toPanel.Controls.Add(pnlPlayArea.Controls[i]);
+            Panel toPanel = null;
+            bool faceDown = false;
+            if (player.GetType() == typeof(Player)) {
+                toPanel = pnlPlayerBottom;
             }
-            AlignCards(toPanel);
+            else if (player.GetType() == typeof(ComputerPlayer))
+            {
+                toPanel = pnlPlayerTop;
+                faceDown = true;
+                lblAiMessage.Text = player.TurnStatus == TurnStatus.Attacking
+                    ? "I yield!"
+                    : "You win!";
+                    lblAiMessage.Visible = true;
+                    Wait(AI_YIELD_DELAY);
+                    lblAiMessage.Visible = false;
+            }
+            for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--) {
+                CardBox cb = pnlPlayArea.Controls[i] as CardBox;
+                if (!faceDown || AI_CARDS_VISIBLE) cb.FaceUp();
+                    else cb.FaceDown();
+                Console.WriteLine(cb.Card.ToString());
+                toPanel.Controls.Add(cb);
+                AlignCards(toPanel);
+                Wait(100);
+            }
             if (player.TurnStatus == TurnStatus.Attacking) durak.NextAttacker();
-            //durak.TurnAttack();
         }
         public void DiscardCards()
         {
-            Console.WriteLine(pbDiscard.Image);
+            for (int slide = 0; slide < 20; slide++)
+            {
+                for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
+                {
+                    CardBox cb = (CardBox)pnlPlayArea.Controls[i];
+                    cb.Left += slide;
+                }
+                Wait(3);
+            }
             for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
             {
                 CardBox cb = (CardBox)pnlPlayArea.Controls[i];
                 pnlPlayArea.Controls.Remove(cb);
             }
+
         }
 
         public void PlayCardAt(int cardIndex, int playerIndex)
         {
-            if (playerIndex == 0) EndHumanResponse();
-
             Panel panel = (playerIndex == 0 ? pnlPlayerBottom : pnlPlayerTop);
-            Control card = panel.Controls[cardIndex];
-            
-            card.Size = cardSize;
-            pnlPlayArea.Controls.Add(card);
+            CardBox cb = panel.Controls[cardIndex] as CardBox;
+            if (playerIndex == 0)
+            {
+                EndHumanResponse();
+            }
+            else
+            {
+                Wait(AI_ATTACK_DELAY);
+                cb.FaceUp();
+            }
+            cb.Size = CardBox.CARD_SIZE;
+            pnlPlayArea.Controls.Add(cb);
             AlignCards(panel);
             AlignCards(pnlPlayArea);
         }
@@ -282,7 +321,7 @@ namespace DurakXtreme
         private void btnTake_Click(object sender, EventArgs e)
         {
             EndHumanResponse();
-            durak.TakeRiver(Player);
+            durak.TakeRiver(HumanPlayer);
         }
 
         public void UpdateMessages(string message)
@@ -318,9 +357,13 @@ namespace DurakXtreme
             }
             return returnValue;
         }
-        private void frmGameGUI_Load(object sender, EventArgs e)
+        public void End()
         {
-
+            foreach (Control c in this.Controls)
+            {
+                c.Hide();
+            }
+            this.Update();
         }
     }
 }

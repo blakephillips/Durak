@@ -32,6 +32,7 @@ namespace DurakXtreme
         public const int STARTING_CARD_COUNT = 6;
         public const int MINIMUM_CARD_COUNT = 6;
         public const int NUMBER_OF_PLAYERS = 2;
+        public const int DECK_SIZE = 36;
 
         //Players
         public List<IPlayer> Players = new List<IPlayer>();
@@ -39,11 +40,15 @@ namespace DurakXtreme
         //Class events
         //new public EventHandler PassEvent;
 
-        public Deck deck = new Deck(36);
+        public Deck deck = new Deck(DECK_SIZE);
 
         //Trump card
         private PlayingCard trumpCard;
         public PlayingCard TrumpCard { get { return trumpCard; } }
+
+        public bool GameOver { get; set; }
+        private bool outOfCards;
+
         //Turn variables
         public List<PlayingCard> River = new List<PlayingCard>();
 
@@ -78,7 +83,7 @@ namespace DurakXtreme
             {
                 foreach (CardRank rank in ranks)
                 {
-                    deck[index].Set(rank, (CardSuit)suit);
+                    if (index < DECK_SIZE) deck[index].Set(rank, (CardSuit)suit);
                     index++;
                 }
             }
@@ -159,34 +164,38 @@ namespace DurakXtreme
         }
         public void TurnAttack()
         {
-            Console.WriteLine("GUI Synced " + gui.CheckSync());
-            IPlayer attacker = GetAttacker();
-            IPlayer defender = GetDefender();
-            if (attacker.GetType() == typeof(ComputerPlayer))
+            if (!GameOver)
             {
-                ComputerPlayer ai = attacker as ComputerPlayer;
-                Tuple<PlayingCard, int> attack = ai.Attack(River);
-                PlayingCard attackCard = attack.Item1;
-                int attackCardIndex = attack.Item2;
-                if (attackCardIndex == -1)
+                IPlayer attacker = GetAttacker();
+                IPlayer defender = GetDefender();
+                if (attacker.GetType() == typeof(ComputerPlayer))
                 {
-                    
-                    gui.Wait(500);
-                    TakeRiver(ai);
+                    ComputerPlayer ai = attacker as ComputerPlayer;
+                    Tuple<PlayingCard, int> attack = ai.Attack(River);
+                    PlayingCard attackCard = attack.Item1;
+                    int attackCardIndex = attack.Item2;
+                    if (attackCardIndex == -1)
+                    {
+                        TakeRiver(ai);
+                    }
+                    else
+                    {
+                        Print(attacker.Name + " is attacking " + defender.Name + " with a " + attackCard.ToString() + "!");
+                        River.Add(attackCard);
+                        gui.PlayCardAt(attackCardIndex, Players.IndexOf(attacker));
+                        gui.GetHumanResponse();
+                    }
                 }
-                else
+                if (attacker.GetType() == typeof(Player))
                 {
-                    Print(attacker.Name + " is attacking " + defender.Name + " with a " + attackCard.ToString() + "!");
-                    River.Add(attackCard);
-                    gui.PlayCardAt(attackCardIndex, Players.IndexOf(attacker));
                     gui.GetHumanResponse();
                 }
             }
-            if (attacker.GetType() == typeof(Player))
+            else
             {
-                Console.WriteLine("Awaiting user attack response");
-                gui.GetHumanResponse();
+                gui.End();
             }
+            
         }
         public void TurnDefence()
         {
@@ -201,7 +210,6 @@ namespace DurakXtreme
                 int defendCardIndex = defence.Item2;
                 if (defendCardIndex == -1)
                 {
-                    gui.Wait(500);
                     TakeRiver(ai);
                 }
                 else
@@ -229,8 +237,6 @@ namespace DurakXtreme
             {
                 for (int i = River.Count - 1; i >= 0; i--)
                 {
-                    Console.WriteLine(i);
-                    
                     player.Cards.Add(River[i]);
                 }
                 Print(player.Name + " is taking the river, raising them to " + player.Cards.Count + " cards!");
@@ -243,7 +249,8 @@ namespace DurakXtreme
                 NextAttacker();
             }
             River.Clear();
-            ReplenishCards();
+            if (!outOfCards) ReplenishCards();
+            else if (Players[0].Cards.Count == 0 || Players[1].Cards.Count == 0) GameOver = true;
             TurnAttack();
         }
         static public int GetDurakRank(CardRank rank)
@@ -347,17 +354,25 @@ namespace DurakXtreme
             {
                 while (player.Cards.Count < MINIMUM_CARD_COUNT && deck.Count >= 0)
                 {
-                    if (deck.Count == 0)
+                    if (deck.Count >= 0)
                     {
-                        deck.Add(TrumpCard);
+                        if (deck.Count == 0 && !deck.Contains(TrumpCard)) {
+                            deck.Add(TrumpCard);
+                            gui.Controls.Remove(gui.pbDeck);}
+                        if (deck.Contains(TrumpCard))
+                        {
+                            outOfCards = true;
+                            gui.Controls.Remove(gui.pbTrump);
+                        }
+                        player.Cards.Add(deck.DrawTopCard());
+
+                        if (player.GetType() == typeof(Player))
+                            gui.DealCardToPanel(gui.pnlPlayerBottom, player.Cards.Last());
+                        if (player.GetType() == typeof(ComputerPlayer))
+                            gui.DealCardToPanel(gui.pnlPlayerTop, player.Cards.Last());
+                        gui.lblDeckCount.Text = deck.Count.ToString();
+                        gui.Wait(150);
                     }
-                    player.Cards.Add(deck.DrawTopCard());
-                    //Players[0].Cards.Sort();
-                    if (player.GetType() == typeof(Player))
-                        gui.DealCardToPanel(gui.pnlPlayerBottom, player.Cards.Last());
-                    if (player.GetType() == typeof(ComputerPlayer))
-                        gui.DealCardToPanel(gui.pnlPlayerTop, player.Cards.Last());
-                    gui.lblDeckCount.Text = deck.Count.ToString();
                 }
             }
         }

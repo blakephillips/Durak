@@ -8,12 +8,11 @@ namespace CardLibrary
 {
     public class PlayingCard : IComparable<PlayingCard>
     {
-        private bool _faceDown = false;
         public PlayingCard(CardRank rank = CardRank.Ace, CardSuit suit = CardSuit.Spades, bool faceDown = false)
         {
             Rank = rank;
             Suit = suit;
-            if (faceDown) FlipCard();
+            FaceDown = faceDown;
         }
         public void Set(CardRank rank, CardSuit suit)
         {
@@ -22,12 +21,11 @@ namespace CardLibrary
         }
         public CardSuit Suit { get; set; }
         public CardRank Rank { get; set; }
-        public bool IsFaceDown { get { return _faceDown; } }
-        public bool IsFaceUp { get { return !_faceDown; } }
+        public bool FaceDown { get; set; }
 
         public void FlipCard()
         {
-            _faceDown = !_faceDown;
+            FaceDown = !FaceDown;
         }
         public override string ToString()
         {
