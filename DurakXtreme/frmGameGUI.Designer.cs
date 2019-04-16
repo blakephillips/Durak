@@ -47,7 +47,7 @@
             // pbTrump
             // 
             this.pbTrump.BackColor = System.Drawing.Color.Transparent;
-            this.pbTrump.Location = new System.Drawing.Point(14, 188);
+            this.pbTrump.Location = new System.Drawing.Point(14, 200);
             this.pbTrump.Name = "pbTrump";
             this.pbTrump.Size = new System.Drawing.Size(75, 110);
             this.pbTrump.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -58,7 +58,7 @@
             // 
             this.pbDeck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(27)))), ((int)(((byte)(32)))));
             this.pbDeck.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbDeck.Location = new System.Drawing.Point(14, 138);
+            this.pbDeck.Location = new System.Drawing.Point(14, 150);
             this.pbDeck.Name = "pbDeck";
             this.pbDeck.Size = new System.Drawing.Size(75, 110);
             this.pbDeck.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -68,7 +68,7 @@
             // pnlPlayArea
             // 
             this.pnlPlayArea.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(12)))), ((int)(((byte)(27)))));
-            this.pnlPlayArea.Location = new System.Drawing.Point(101, 138);
+            this.pnlPlayArea.Location = new System.Drawing.Point(101, 150);
             this.pnlPlayArea.Name = "pnlPlayArea";
             this.pnlPlayArea.Size = new System.Drawing.Size(553, 160);
             this.pnlPlayArea.TabIndex = 14;
@@ -76,7 +76,7 @@
             // pbDiscard
             // 
             this.pbDiscard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(21)))), ((int)(((byte)(27)))), ((int)(((byte)(32)))));
-            this.pbDiscard.Location = new System.Drawing.Point(667, 160);
+            this.pbDiscard.Location = new System.Drawing.Point(667, 175);
             this.pbDiscard.Name = "pbDiscard";
             this.pbDiscard.Size = new System.Drawing.Size(75, 110);
             this.pbDiscard.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -89,15 +89,15 @@
             this.pnlPlayerTop.Enabled = false;
             this.pnlPlayerTop.Location = new System.Drawing.Point(101, 6);
             this.pnlPlayerTop.Name = "pnlPlayerTop";
-            this.pnlPlayerTop.Size = new System.Drawing.Size(553, 125);
+            this.pnlPlayerTop.Size = new System.Drawing.Size(553, 140);
             this.pnlPlayerTop.TabIndex = 15;
             // 
             // pnlPlayerBottom
             // 
             this.pnlPlayerBottom.BackColor = System.Drawing.Color.Transparent;
-            this.pnlPlayerBottom.Location = new System.Drawing.Point(101, 305);
+            this.pnlPlayerBottom.Location = new System.Drawing.Point(101, 314);
             this.pnlPlayerBottom.Name = "pnlPlayerBottom";
-            this.pnlPlayerBottom.Size = new System.Drawing.Size(553, 125);
+            this.pnlPlayerBottom.Size = new System.Drawing.Size(553, 140);
             this.pnlPlayerBottom.TabIndex = 16;
             // 
             // txtMessages
@@ -107,7 +107,7 @@
             this.txtMessages.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtMessages.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMessages.ForeColor = System.Drawing.Color.White;
-            this.txtMessages.Location = new System.Drawing.Point(0, 462);
+            this.txtMessages.Location = new System.Drawing.Point(0, 487);
             this.txtMessages.Multiline = true;
             this.txtMessages.Name = "txtMessages";
             this.txtMessages.ReadOnly = true;
@@ -156,7 +156,7 @@
             this.lblStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lblStatus.Location = new System.Drawing.Point(0, 437);
+            this.lblStatus.Location = new System.Drawing.Point(0, 462);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(754, 25);
             this.lblStatus.TabIndex = 21;
@@ -167,7 +167,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::DurakXtreme.Properties.Resources.texturedBackground;
-            this.ClientSize = new System.Drawing.Size(754, 577);
+            this.ClientSize = new System.Drawing.Size(754, 602);
             this.Controls.Add(this.lblAiMessage);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblDeckCount);
@@ -197,7 +197,6 @@
         public System.Windows.Forms.PictureBox pbTrump;
         public System.Windows.Forms.PictureBox pbDeck;
         private System.Windows.Forms.Panel pnlPlayArea;
-        private System.Windows.Forms.PictureBox pbDiscard;
         public System.Windows.Forms.Panel pnlPlayerTop;
         private System.Windows.Forms.TextBox txtMessages;
         public System.Windows.Forms.Panel pnlPlayerBottom;
@@ -205,5 +204,6 @@
         public System.Windows.Forms.Label lblDeckCount;
         public System.Windows.Forms.Label lblAiMessage;
         private System.Windows.Forms.Label lblStatus;
+        public System.Windows.Forms.PictureBox pbDiscard;
     }
 }

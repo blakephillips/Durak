@@ -46,7 +46,6 @@ namespace DurakXtreme
         
         public void InitiateGame()
         {
-            CardBox.CARD_SIZE = new Size(60, 90);
             pbTrump.Image = Image.FromFile(CardBox.GetImagePathFromCard(durak.TrumpCard));
             pbDeck.Load(CardBox.GetImagePathFromCard());
             Refresh();
@@ -263,6 +262,7 @@ namespace DurakXtreme
         }
         public void DiscardCards()
         {
+            if (pbDiscard.Image == null) pbDiscard.Load(CardBox.GetImagePathFromCard());
             for (int slide = 0; slide < 20; slide++)
             {
                 for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
