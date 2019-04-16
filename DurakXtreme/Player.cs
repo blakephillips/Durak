@@ -13,7 +13,7 @@ namespace DurakXtreme
         public string Name { get; set; }
         public List<PlayingCard> Cards { get; set; } = new List<PlayingCard>();
         public TurnStatus TurnStatus { get; set; } = TurnStatus.Defending;
-
+        
         private static int count = 1;
         public Player()
         {

@@ -15,17 +15,20 @@ namespace DurakXtreme
         {
             Name += "(AI)";
         }
+        public CardSuit TrumpSuit { get; set; }
         public Tuple<PlayingCard, int> Attack(List<PlayingCard> river = null)
         {
             PlayingCard bestViableCard = null;
-            int cardIndex;
+            PlayingCard lowestTrumpCard = null;
             foreach (PlayingCard card in Cards)
             {
-                if (river == null || river.Count == 0)
+                if (river.Count == 0)
                 {
-                    if (bestViableCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(bestViableCard.Rank))
-                    {
-                        bestViableCard = card;
+                    if (card.Suit == TrumpSuit) {
+                        if (lowestTrumpCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(lowestTrumpCard.Rank)) lowestTrumpCard = card;
+                    }
+                    else if (card.Suit != TrumpSuit) { 
+                        if (bestViableCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(bestViableCard.Rank)) bestViableCard = card;
                     }
                 }
                 else
@@ -34,13 +37,23 @@ namespace DurakXtreme
                     {
                         if (riverCard.Rank == card.Rank)
                         {
-                            bestViableCard = card;
+                            if (card.Suit == TrumpSuit)
+                            {
+                                if (lowestTrumpCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(lowestTrumpCard.Rank)) lowestTrumpCard = card;
+                            }
+                            else if (card.Suit != TrumpSuit)
+                            {
+                                if (bestViableCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(bestViableCard.Rank)) bestViableCard = card;
+                            }
                         }
                     }
                 }
             }
-            cardIndex = Cards.IndexOf(bestViableCard);
-            
+            if (bestViableCard == null && lowestTrumpCard != null && river.Count > 3)
+            {
+                bestViableCard = lowestTrumpCard;
+            }
+            int cardIndex = Cards.IndexOf(bestViableCard);
             if (bestViableCard != null)
             {
                 Cards.Remove(bestViableCard);
@@ -50,9 +63,17 @@ namespace DurakXtreme
         public Tuple<PlayingCard, int> Defend(List<PlayingCard> river)
         {
             PlayingCard bestViableCard = null;
+            PlayingCard lowestTrumpCard = null;
             foreach (PlayingCard card in Cards)
             {
-                if (card.Suit == river.Last().Suit && DurakGame.GetDurakRank(card.Rank) > DurakGame.GetDurakRank(river.Last().Rank))
+                if (river.Last().Suit != TrumpSuit && card.Suit == TrumpSuit)
+                {
+                    if (lowestTrumpCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(lowestTrumpCard.Rank))
+                    {
+                        lowestTrumpCard = card;
+                    }
+                }
+                else if ((card.Suit == river.Last().Suit) && DurakGame.GetDurakRank(card.Rank) > DurakGame.GetDurakRank(river.Last().Rank))
                 {
                     if (bestViableCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(bestViableCard.Rank))
                     {
@@ -60,12 +81,15 @@ namespace DurakXtreme
                     }
                 }
             }
+            if (bestViableCard == null && lowestTrumpCard != null)
+            {
+                bestViableCard = lowestTrumpCard;
+            }
             int cardIndex = Cards.IndexOf(bestViableCard);
             if (bestViableCard != null)
             {
                 Cards.Remove(bestViableCard);
             }
-
             return Tuple.Create(bestViableCard, cardIndex);
         }
     }

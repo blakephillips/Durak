@@ -47,6 +47,7 @@ namespace DurakXtreme
         public void InitiateGame()
         {
             pbTrump.Image = Image.FromFile(CardBox.GetImagePathFromCard(durak.TrumpCard));
+            //
             pbDeck.Load(CardBox.GetImagePathFromCard());
             Refresh();
             lblDeckCount.Text = durak.deck.Count.ToString();
@@ -79,7 +80,7 @@ namespace DurakXtreme
                 pnlPlayerBottom.BackColor = attackColor;
                 pnlPlayerTop.BackColor = defenseColor;
             }
-            if (durak.GameOver) btnTakePass.Text = "End";
+            if (durak.Winner != null) btnTakePass.Text = "End";
             EnableCardClick();
             EvaluateHand();
         }
@@ -235,6 +236,8 @@ namespace DurakXtreme
         {
             Panel toPanel = null;
             bool faceDown = false;
+            lblStatus.Text = player.Name + " takes the river!";
+            Wait(200);
             if (player.GetType() == typeof(Player)) {
                 toPanel = pnlPlayerBottom;
             }
@@ -242,13 +245,8 @@ namespace DurakXtreme
             {
                 toPanel = pnlPlayerTop;
                 faceDown = true;
-                lblAiMessage.Text = player.TurnStatus == TurnStatus.Attacking
-                    ? "I yield!"
-                    : "You win!";
-                    lblAiMessage.Visible = true;
-                    Wait(AI_YIELD_DELAY);
-                    lblAiMessage.Visible = false;
             }
+
             for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--) {
                 CardBox cb = pnlPlayArea.Controls[i] as CardBox;
                 if (!faceDown || AI_CARDS_VISIBLE) cb.FaceUp();
@@ -262,6 +260,8 @@ namespace DurakXtreme
         }
         public void DiscardCards()
         {
+            lblStatus.Text = durak.GetAttacker().Name + " gives up attacking!";
+            Wait(200);
             if (pbDiscard.Image == null) pbDiscard.Load(CardBox.GetImagePathFromCard());
             for (int slide = 0; slide < 20; slide++)
             {
@@ -270,14 +270,13 @@ namespace DurakXtreme
                     CardBox cb = (CardBox)pnlPlayArea.Controls[i];
                     cb.Left += slide;
                 }
-                Wait(3);
+                Wait(5);
             }
             for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
             {
                 CardBox cb = (CardBox)pnlPlayArea.Controls[i];
                 pnlPlayArea.Controls.Remove(cb);
             }
-
         }
 
         public void PlayCardAt(int cardIndex, int playerIndex)
@@ -355,14 +354,31 @@ namespace DurakXtreme
                     if (((CardBox)c).Card != durak.Players[0].Cards[i]) returnValue = false;
                 }
             }
+            for (int i = 0; i < pnlPlayerTop.Controls.Count; i++)
+            {
+                Control c = (Control)pnlPlayerTop.Controls[i];
+                if (c is CardBox)
+                {
+                    if (((CardBox)c).Card != durak.Players[1].Cards[i]) returnValue = false;
+                }
+            }
             return returnValue;
         }
-        public void End()
+        public void End(IPlayer winner, IPlayer loser)
         {
             foreach (Control c in this.Controls)
             {
                 c.Hide();
             }
+            Label endPrompt = new Label();
+            endPrompt.Text = winner.Name + "won!\n" + loser.Name + " is the Durak!";
+            endPrompt.AutoSize = false;
+            endPrompt.Width = this.Width;
+            endPrompt.Height = this.Height;
+            endPrompt.TextAlign = ContentAlignment.MiddleCenter;
+            endPrompt.Left = 0;
+            endPrompt.Font = new Font("Arial", 30f);
+            this.Controls.Add(endPrompt);
             this.Update();
         }
     }
