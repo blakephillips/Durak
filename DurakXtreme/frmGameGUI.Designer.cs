@@ -69,7 +69,7 @@
             this.pnlPlayArea.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(12)))), ((int)(((byte)(27)))));
             this.pnlPlayArea.Location = new System.Drawing.Point(101, 150);
             this.pnlPlayArea.Name = "pnlPlayArea";
-            this.pnlPlayArea.Size = new System.Drawing.Size(669, 160);
+            this.pnlPlayArea.Size = new System.Drawing.Size(669, 165);
             this.pnlPlayArea.TabIndex = 14;
             // 
             // pbDiscard
@@ -86,17 +86,17 @@
             // 
             this.pnlPlayerTop.BackColor = System.Drawing.Color.Transparent;
             this.pnlPlayerTop.Enabled = false;
-            this.pnlPlayerTop.Location = new System.Drawing.Point(101, 6);
+            this.pnlPlayerTop.Location = new System.Drawing.Point(101, 0);
             this.pnlPlayerTop.Name = "pnlPlayerTop";
-            this.pnlPlayerTop.Size = new System.Drawing.Size(669, 140);
+            this.pnlPlayerTop.Size = new System.Drawing.Size(669, 150);
             this.pnlPlayerTop.TabIndex = 15;
             // 
             // pnlPlayerBottom
             // 
             this.pnlPlayerBottom.BackColor = System.Drawing.Color.Transparent;
-            this.pnlPlayerBottom.Location = new System.Drawing.Point(101, 314);
+            this.pnlPlayerBottom.Location = new System.Drawing.Point(101, 315);
             this.pnlPlayerBottom.Name = "pnlPlayerBottom";
-            this.pnlPlayerBottom.Size = new System.Drawing.Size(669, 140);
+            this.pnlPlayerBottom.Size = new System.Drawing.Size(669, 150);
             this.pnlPlayerBottom.TabIndex = 16;
             // 
             // txtMessages
@@ -106,7 +106,7 @@
             this.txtMessages.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtMessages.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMessages.ForeColor = System.Drawing.Color.White;
-            this.txtMessages.Location = new System.Drawing.Point(0, 487);
+            this.txtMessages.Location = new System.Drawing.Point(0, 491);
             this.txtMessages.Multiline = true;
             this.txtMessages.Name = "txtMessages";
             this.txtMessages.ReadOnly = true;
@@ -119,9 +119,9 @@
             this.btnTakePass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(18)))), ((int)(((byte)(29)))));
             this.btnTakePass.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTakePass.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(248)))), ((int)(((byte)(250)))));
-            this.btnTakePass.Location = new System.Drawing.Point(781, 355);
+            this.btnTakePass.Location = new System.Drawing.Point(781, 341);
             this.btnTakePass.Name = "btnTakePass";
-            this.btnTakePass.Size = new System.Drawing.Size(75, 54);
+            this.btnTakePass.Size = new System.Drawing.Size(75, 90);
             this.btnTakePass.TabIndex = 18;
             this.btnTakePass.Text = "&Take";
             this.btnTakePass.UseVisualStyleBackColor = false;
@@ -144,7 +144,7 @@
             this.lblStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lblStatus.Location = new System.Drawing.Point(0, 462);
+            this.lblStatus.Location = new System.Drawing.Point(0, 466);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(868, 25);
             this.lblStatus.TabIndex = 21;
@@ -155,7 +155,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::DurakXtreme.Properties.Resources.texturedBackground;
-            this.ClientSize = new System.Drawing.Size(868, 602);
+            this.ClientSize = new System.Drawing.Size(868, 606);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblDeckCount);
             this.Controls.Add(this.btnTakePass);
@@ -163,9 +163,9 @@
             this.Controls.Add(this.pnlPlayerBottom);
             this.Controls.Add(this.pnlPlayerTop);
             this.Controls.Add(this.pbDiscard);
-            this.Controls.Add(this.pnlPlayArea);
             this.Controls.Add(this.pbDeck);
             this.Controls.Add(this.pbTrump);
+            this.Controls.Add(this.pnlPlayArea);
             this.DoubleBuffered = true;
             this.Name = "frmGameGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

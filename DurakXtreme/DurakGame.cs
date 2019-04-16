@@ -350,11 +350,6 @@ namespace DurakXtreme
             }
             return defender;
         }
-
-        public void Sort()
-        {
-            //Players[0].Cards.Sort()
-        }
         bool trumpMovedtoDeck = false;
         public void ReplenishCards()
         {

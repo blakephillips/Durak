@@ -371,7 +371,7 @@ namespace DurakXtreme
                 c.Hide();
             }
             Label endPrompt = new Label();
-            endPrompt.Text = winner.Name + "won!\n" + loser.Name + " is the Durak!";
+            endPrompt.Text = winner.Name + " won!\n" + loser.Name + " is the Durak!";
             endPrompt.AutoSize = false;
             endPrompt.Width = this.Width;
             endPrompt.Height = this.Height;
