@@ -44,12 +44,17 @@ namespace DurakXtreme
         public IPlayer HumanPlayer;
         public IPlayer ComputerPlayer;
 
+        public string HumanPlayerName;
+        public string ComputerPlayerName;
+
         // GUI configuration variables
         private Color defenseColor = Color.FromArgb(70, 50, 50);
         private Color attackColor = Color.FromArgb(50, 70, 50);
 
+       
+
         // frmGameGUI
-        public frmGameGUI()
+        public frmGameGUI(frmMainMenu mainMenu)
         {
             InitializeComponent();
             this.Show();
@@ -64,12 +69,25 @@ namespace DurakXtreme
             durakGame.OnPuttingDown += PuttingDown;
             durakGame.PuttingDownComplete += PuttingDownComplete;
 
+            HumanPlayerName = mainMenu.player1Name;
+            ComputerPlayerName = mainMenu.player2Name;
+
+            durakGame.Players[0].Name = HumanPlayerName;
+            durakGame.Players[1].Name = ComputerPlayerName;
+
             // Capture players from DurakGame
             HumanPlayer = durakGame.Players[0];
             ComputerPlayer = durakGame.Players[1];
 
+            
+
+
+            lblAIName.Text = ComputerPlayer.Name;
+            lblPlayerName.Text = HumanPlayer.Name;
+
             this.InitiateGame();
         }
+
 
         public void InitiateGame()
         {

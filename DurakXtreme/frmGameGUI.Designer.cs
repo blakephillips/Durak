@@ -39,6 +39,8 @@
             this.btnTakePass = new System.Windows.Forms.Button();
             this.lblDeckCount = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.lblAIName = new System.Windows.Forms.Label();
+            this.lblPlayerName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbTrump)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDiscard)).BeginInit();
@@ -151,12 +153,34 @@
             this.lblStatus.TabIndex = 21;
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lblAIName
+            // 
+            this.lblAIName.AutoSize = true;
+            this.lblAIName.BackColor = System.Drawing.Color.Transparent;
+            this.lblAIName.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblAIName.Location = new System.Drawing.Point(777, 13);
+            this.lblAIName.Name = "lblAIName";
+            this.lblAIName.Size = new System.Drawing.Size(0, 13);
+            this.lblAIName.TabIndex = 22;
+            // 
+            // lblPlayerName
+            // 
+            this.lblPlayerName.AutoSize = true;
+            this.lblPlayerName.BackColor = System.Drawing.Color.Transparent;
+            this.lblPlayerName.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblPlayerName.Location = new System.Drawing.Point(11, 433);
+            this.lblPlayerName.Name = "lblPlayerName";
+            this.lblPlayerName.Size = new System.Drawing.Size(0, 13);
+            this.lblPlayerName.TabIndex = 23;
+            // 
             // frmGameGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::DurakXtreme.Properties.Resources.texturedBackground;
             this.ClientSize = new System.Drawing.Size(868, 606);
+            this.Controls.Add(this.lblPlayerName);
+            this.Controls.Add(this.lblAIName);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblDeckCount);
             this.Controls.Add(this.btnTakePass);
@@ -195,5 +219,7 @@
         public System.Windows.Forms.Label lblDeckCount;
         private System.Windows.Forms.Label lblStatus;
         public System.Windows.Forms.PictureBox pbDiscard;
+        private System.Windows.Forms.Label lblAIName;
+        private System.Windows.Forms.Label lblPlayerName;
     }
 }

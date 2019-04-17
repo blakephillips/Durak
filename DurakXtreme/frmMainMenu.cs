@@ -16,7 +16,12 @@ namespace DurakXtreme
         //Size of the button pop on hover (added to both width/height)
         int buttonPop = 20;
 
+        public string player1Name = "Player 1";
+        public string player2Name = "Player 2(AI)";
+
+
         static public frmGameGUI gameForm;
+        static public frmSettings formSettings;
         public frmMainMenu()
         {
             InitializeComponent();
@@ -88,7 +93,13 @@ namespace DurakXtreme
         private void btnPlay_Click(object sender, EventArgs e)
         {
             this.Hide();
-            gameForm = new frmGameGUI();
+            gameForm = new frmGameGUI(this);
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            formSettings = new frmSettings(this);
+            formSettings.ShowDialog();
         }
     }
 }
