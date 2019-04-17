@@ -88,7 +88,8 @@
             this.Controls.Add(this.lblSecondPlayer);
             this.Controls.Add(this.lblFirstPlayer);
             this.Name = "frmSettings";
-            this.Text = "frmSettings";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Settings";
             this.Load += new System.EventHandler(this.frmSettings_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
