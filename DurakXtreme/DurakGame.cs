@@ -185,20 +185,21 @@ namespace DurakXtreme
                 TurnAttack();
             }
         }
-        public void TakeRiver(IPlayer player)
+        public void TakeRiver(IPlayer loser)
         {
-            if (player.TurnStatus == TurnStatus.Defending)
+
+            if (loser.TurnStatus == TurnStatus.Defending)
             {
                 for (int i = River.Count - 1; i >= 0; i--)
                 {
-                    player.Cards.Add(River[i]);
+                    loser.Cards.Add(River[i]);
                 }
-                Print(player.Name + " is taking the river, raising them to " + player.Cards.Count + " cards!");
-                gui.TakeRiver(player);
+                Print(loser.Name + " is taking the river, raising them to " + loser.Cards.Count + " cards!");
+                gui.GiveRiver(loser);
             }
             else
             {
-                Print(player.Name + " yields. River is discarded and " + GetDefender().Name + " is now attacker.");
+                Print(loser.Name + " yields. River is discarded and " + GetDefender().Name + " is now attacker.");
                 gui.DiscardCards();
                 NextAttacker();
             }
@@ -274,8 +275,6 @@ namespace DurakXtreme
             }
             else
             {
-                //if (card.Suit == TrumpCard.Suit) valid = true;
-                //else
                 foreach (PlayingCard riverCard in River)
                 {
                     if (riverCard.Rank == card.Rank)
@@ -326,12 +325,6 @@ namespace DurakXtreme
             
             if (gui is frmGameGUI) gui.UpdateMessages(message);
         }
-        //public string GetMessages()
-        //{
-        //    string str = string.Join("\r\n", messages);
-        //    messages.Clear();
-        //    return str;
-        //}
 
         // Returns the player currently attacking
         public IPlayer GetAttacker()

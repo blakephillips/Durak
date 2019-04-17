@@ -31,7 +31,7 @@ namespace DurakXtreme
         // triggering new events.
 
         // Constants
-        const bool AI_CARDS_VISIBLE = true;
+        const bool AI_CARDS_VISIBLE = false;
         const int AI_ATTACK_DELAY = 300;
         const int AI_YIELD_DELAY = 1000;
         // Path to resources folder
@@ -293,7 +293,7 @@ namespace DurakXtreme
             }
         }
 
-        public void TakeRiver(IPlayer player)
+        public void GiveRiver(IPlayer player)
         {
             Panel toPanel = null;
             bool faceDown = false;
