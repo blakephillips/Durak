@@ -407,6 +407,7 @@ namespace DurakXtreme
         }
         public void End(IPlayer winner, IPlayer loser)
         {
+            Wait(1000);
             foreach (Control c in this.Controls)
             {
                 c.Hide();

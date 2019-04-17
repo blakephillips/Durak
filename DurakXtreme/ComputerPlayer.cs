@@ -61,7 +61,7 @@ namespace DurakXtreme
             }
             return Tuple.Create(bestViableCard, cardIndex);
         }
-        public Tuple<PlayingCard, int> Defend(List<PlayingCard> river)
+        public Tuple<PlayingCard, int> Defend(List<PlayingCard> river, List<PlayingCard> deck = null)
         {
             PlayingCard bestViableCard = null;
             PlayingCard lowestTrumpCard = null;
@@ -84,7 +84,7 @@ namespace DurakXtreme
             }
             if (bestViableCard == null && lowestTrumpCard != null)
             {
-                bestViableCard = lowestTrumpCard;
+                if (river.Count > 4 || deck.Count < 5) bestViableCard = lowestTrumpCard;
             }
             int cardIndex = Cards.IndexOf(bestViableCard);
             if (bestViableCard != null)

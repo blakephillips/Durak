@@ -134,7 +134,7 @@ namespace DurakXtreme
                 if (defender.GetType() == typeof(ComputerPlayer))
                     {
                     ComputerPlayer ai = defender as ComputerPlayer;
-                    Tuple<PlayingCard, int> defence = ai.Defend(River);
+                    Tuple<PlayingCard, int> defence = ai.Defend(River, deck);
                     PlayingCard defendCard = defence.Item1;
                     int defendCardIndex = defence.Item2;
                     if (defendCardIndex == -1)
