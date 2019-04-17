@@ -136,7 +136,10 @@ namespace DurakXtreme
             }
             else if (HumanPlayer.TurnStatus == TurnStatus.Attacking && HumanPlayer.PuttingDown == true)
             {
-                lblStatus.Text = "You are putting down!";
+                btnTakePass.Text = "Finish";
+                lblStatus.Text = "You are putting down extra cards!";
+                pnlPlayerBottom.BackColor = attackColor;
+                pnlPlayerTop.BackColor = defenseColor;
             }
             if (durakGame.Winner != null) btnTakePass.Text = "End";
             EnableCardClick();
