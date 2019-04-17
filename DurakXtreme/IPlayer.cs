@@ -12,5 +12,11 @@ namespace DurakXtreme
         List<PlayingCard> Cards { get; set; }
         string Name { get; set; }
         TurnStatus TurnStatus { get; set; }
+
+        /// <summary>
+        /// Is the player in a condition where they can put down cards. 
+        /// (End of an attack)
+        /// </summary>
+        bool PuttingDown { get; set; }
     }
 }
