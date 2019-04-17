@@ -242,9 +242,24 @@ namespace DurakXtreme
                 Console.WriteLine(tabbing + card.ToString());
             }
         }
-        public void Print(string message, bool toConsole = true, bool toGame = true)
+
+
+
+        /// <summary>
+        /// Logs gameplay messages to the console and log text file if applicable
+        /// </summary>
+        /// <param name="message">Message to write to Console</param>
+        /// <param name="log">True if the message is to be written to the log file</param>
+        public void Print(string message, bool log = true)
         {
-            Console.WriteLine(message);
+            if (log == true)
+            {
+                GameplayLog.Log(message);
+            } else
+            {
+                Console.WriteLine(message);
+            }
+            
             if (gui is frmGameGUI) gui.UpdateMessages(message);
         }
         //public string GetMessages()
