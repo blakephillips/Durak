@@ -32,41 +32,51 @@ namespace DurakXtreme
         public const int MINIMUM_CARD_COUNT = 6;
         public const int NUMBER_OF_PLAYERS = 2;
         public const int DECK_SIZE = 36;
+
         private List<string> messages = new List<string>();
+        private bool outOfCards;
 
-        //Players
+        public Deck deck = new Deck(DECK_SIZE); // Card deck
+        public List<PlayingCard> River = new List<PlayingCard>();
+
+        // Player list
         public List<IPlayer> Players = new List<IPlayer>();
-
-        //Class events
-        //new public EventHandler PassEvent;
-
-        public Deck deck = new Deck(DECK_SIZE);
-
-        //Trump card
+        
+        // Trump card
         private PlayingCard trumpCard;
         public PlayingCard TrumpCard { get { return trumpCard; } }
 
         public IPlayer Winner { get; set; }
-        private bool outOfCards;
-
-        //Turn variables
-        public List<PlayingCard> River = new List<PlayingCard>();
-
-        frmGameGUI gui = null;
+        public IPlayer Loser { get; set; }
+        
+        // A form GUI to be attatched to the game
+        frmGameGUI gui;
 
         public DurakGame(frmGameGUI guiSubscriber = null)
         {
+            // Assign form passed in constructor to class-scope variable
             if (guiSubscriber is frmGameGUI)
             {
                 gui = guiSubscriber;
             }
+
+            // Set PlayingCard values and shuffle deck
             InitializeDeck();
+            // Add players to player list
             InitializePlayers();
+            // Deal cards from the deck to the player hands,
+            // sorting them once by rank before sending to the GUI
             DealCards();
+            // TODO - add hand sorting by Durak rank, syncing with the GUI
+
+            // Reveal and assign the trump card
             RevealTrump();
+            // Set first attacker to the player with the lowest trump card
+            // (Defaults to Player 1 if no player has a trump card)
             SetFirstAttacker();
 
 
+            // Log
             Console.WriteLine("DURAK INITIALIZATION COMPLETE");
             Console.WriteLine(" Deck Contents:");
             PrintListOfCards(deck, "    ");
@@ -74,22 +84,282 @@ namespace DurakXtreme
             PrintListOfCards(Players[0].Cards, "    ");
             Console.WriteLine(" " + Players[1].Name + "'s Hand:");
             PrintListOfCards(Players[1].Cards, "    ");
-            
         }
+
+
+        public void TurnAttack()
+        {
+            // Verify that the GUI is synced
+            if (gui is frmGameGUI) gui.CheckSync();
+
+            CheckForWinner();
+            IPlayer attacker = GetAttacker();
+            IPlayer defender = GetDefender();
+            if (Winner == null)
+            {
+                if (attacker.GetType() == typeof(ComputerPlayer))
+                {
+                    ComputerPlayer ai = attacker as ComputerPlayer;
+                    Tuple<PlayingCard, int> attack = ai.Attack(River, deck);
+                    PlayingCard attackCard = attack.Item1;
+                    int attackCardIndex = attack.Item2;
+                    if (attackCardIndex == -1)
+                    {
+                        TakeRiver(ai);
+                    }
+                    else
+                    {
+                        Print(attacker.Name + " is attacking " + defender.Name + " with a " + attackCard.ToString() + "!");
+                        River.Add(attackCard);
+                        gui.PlayCardAt(attackCardIndex, Players.IndexOf(attacker));
+                        gui.GetHumanResponse();
+                    }
+                }
+                if (attacker.GetType() == typeof(Player))
+                {
+                    gui.GetHumanResponse();
+                }
+            }
+        }
+        public void TurnDefence()
+        {
+            // Verify that the GUI is synced
+            if (gui is frmGameGUI) gui.CheckSync();
+
+            CheckForWinner();
+            IPlayer attacker = GetAttacker();
+            IPlayer defender = GetDefender();
+            if (Winner == null)
+            {
+                if (defender.GetType() == typeof(ComputerPlayer))
+                    {
+                    ComputerPlayer ai = defender as ComputerPlayer;
+                    Tuple<PlayingCard, int> defence = ai.Defend(River);
+                    PlayingCard defendCard = defence.Item1;
+                    int defendCardIndex = defence.Item2;
+                    if (defendCardIndex == -1)
+                    {
+                        TakeRiver(ai);
+                    }
+                    else
+                    {
+                        Print(defender.Name + " is defending against " + attacker.Name + "'s " + River.Last().ToString() + " with a " + defendCard.ToString() + "!");
+                        River.Add(defendCard);
+                        gui.PlayCardAt(defendCardIndex, Players.IndexOf(defender));
+                    
+                        gui.GetHumanResponse();
+                    }
+                }
+                if (defender.GetType() == typeof(Player))
+                {
+                    if (gui is frmGameGUI)
+                    {
+                        Console.WriteLine("Awaiting user defence response");
+                        gui.GetHumanResponse();
+                    }
+                }
+            }
+        }
+        public void RecieveCard(PlayingCard card)
+        {
+            int attackCardIndex = Players[0].Cards.IndexOf(card);
+            string msg = Players[0].Name + " is " + (Players[0].TurnStatus == TurnStatus.Attacking ? "attacking" : "defending against");
+            msg += " " + Players[1].Name + (Players[0].TurnStatus == TurnStatus.Attacking ? "" : "'s " + River.Last().ToString()) + " with a " + card.ToString() + "!";
+            Print(msg);
+            River.Add(((Player)Players[0]).Attack(card));
+
+            gui.PlayCardAt(attackCardIndex, 0);
+
+            if (Players[0].TurnStatus == TurnStatus.Attacking)
+            {
+                TurnDefence();
+            }
+            else
+            {
+                TurnAttack();
+            }
+        }
+        public void TakeRiver(IPlayer player)
+        {
+            if (player.TurnStatus == TurnStatus.Defending)
+            {
+                for (int i = River.Count - 1; i >= 0; i--)
+                {
+                    player.Cards.Add(River[i]);
+                }
+                Print(player.Name + " is taking the river, raising them to " + player.Cards.Count + " cards!");
+                gui.TakeRiver(player);
+            }
+            else
+            {
+                Print(player.Name + " yields. River is discarded and " + GetDefender().Name + " is now attacker.");
+                gui.DiscardCards();
+                NextAttacker();
+            }
+            River.Clear();
+            if (!outOfCards) ReplenishCards();
+            
+            TurnAttack();
+        }
+        public bool IsValidAttack(PlayingCard card)
+        {
+            bool valid = false;
+            if (River.Count == 0)
+            {
+                valid = true;
+            }
+            else
+            {
+                //if (card.Suit == TrumpCard.Suit) valid = true;
+                //else
+                foreach (PlayingCard riverCard in River)
+                {
+                    if (riverCard.Rank == card.Rank)
+                    {
+                        valid = true;
+                    }
+                }
+            }
+            return valid;
+        }
+        public bool IsValidDefence(PlayingCard card)
+        {
+            bool valid = false;
+            if (River.Last().Suit != TrumpCard.Suit && card.Suit == TrumpCard.Suit)
+            {
+                valid = true;
+            }
+            if ((card.Suit == River.Last().Suit) && GetDurakRank(card.Rank) > GetDurakRank(River.Last().Rank))
+            {
+                valid = true;
+            }
+            return valid;
+        }
+        public static void PrintListOfCards(List<PlayingCard> list, string tabbing = "")
+        {
+            foreach (PlayingCard card in list)
+            {
+                Console.WriteLine(tabbing + card.ToString());
+            }
+        }
+        public void Print(string message, bool toConsole = true, bool toGame = true)
+        {
+            Console.WriteLine(message);
+            if (gui is frmGameGUI) gui.UpdateMessages(message);
+        }
+        //public string GetMessages()
+        //{
+        //    string str = string.Join("\r\n", messages);
+        //    messages.Clear();
+        //    return str;
+        //}
+
+        // Returns the player currently attacking
+        public IPlayer GetAttacker()
+        {
+            IPlayer attacker = null;
+            foreach (IPlayer player in Players)
+            {
+                if (player.TurnStatus == TurnStatus.Attacking) attacker = player;
+            }
+            return attacker;
+        }
+        // Returns the player currently defending
+        public IPlayer GetDefender()
+        {
+            IPlayer defender = null;
+            for (int i = 0; i < Players.Count; i++)
+            {
+                if (Players[i].TurnStatus == TurnStatus.Attacking)
+                {
+                    if (i == Players.Count - 1)
+                    {
+                        defender = Players[0];
+                    }
+                    else
+                    {
+                        defender = Players[i + 1];
+                    }
+                }
+            }
+            return defender;
+        }
+        // Moves the attacker one position to the left
+        public void NextAttacker()
+        {
+            IPlayer attacker = GetAttacker();
+            IPlayer defender = GetDefender();
+            defender.TurnStatus = TurnStatus.Attacking;
+            attacker.TurnStatus = TurnStatus.Defending;
+            Console.WriteLine(attacker.Name + " is now " + attacker.TurnStatus);
+            Console.WriteLine(defender.Name + " is now " + defender.TurnStatus);
+        }
+
+        // Replenishes players hands if still still contains cards
+        // --Called each time the river is cleared
+        bool trumpMovedtoDeck = false;
+        public void ReplenishCards()
+        {
+            foreach (IPlayer player in Players)
+            {
+                while (player.Cards.Count < MINIMUM_CARD_COUNT && !outOfCards)
+                {
+                    if (deck.Count > 0)
+                    {
+                        if (deck.Count == 1) gui.Controls.Remove(gui.pbDeck);
+                        player.Cards.Add(deck.DrawTopCard());
+
+                        if (player.GetType() == typeof(Player))
+                            gui.DealCardToPanel(gui.pnlPlayerBottom, player.Cards.Last());
+                        if (player.GetType() == typeof(ComputerPlayer))
+                            gui.DealCardToPanel(gui.pnlPlayerTop, player.Cards.Last());
+                        gui.lblDeckCount.Text = deck.Count.ToString();
+                        gui.Wait(150);
+                        
+                    }
+                    else
+                    {
+                        if (!trumpMovedtoDeck)
+                        {
+                            deck.Add(TrumpCard);
+                            gui.Controls.Remove(gui.pbTrump);
+                            trumpMovedtoDeck = true;
+                        }
+                        else
+                        {
+                            outOfCards = true;
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+        // Returns an integer indicating a cards rank in Durak
+        static public int GetDurakRank(CardRank rank)
+        {
+            return Array.IndexOf(DurakGame.ranks, rank);
+        }
+
+        // Initialization Methods
         void InitializeDeck()
         {
             Console.WriteLine("Initializing Deck...");
 
             int index = 0;
+            // Iterate through each suit
             for (int suit = (int)CardSuit.Spades; suit < Enum.GetValues(typeof(CardSuit)).Length; suit++)
             {
+                // Iterate through each rank used in Durak
                 foreach (CardRank rank in ranks)
                 {
+                    // Assign each card to a deck index
                     if (index < DECK_SIZE) deck[index].Set(rank, (CardSuit)suit);
                     index++;
                 }
             }
-            this.deck.Shuffle();
+            // Shuffle the Deck
+            deck.Shuffle();
             Console.WriteLine("Deck of " + index + " Cards Initialized!");
         }
         void InitializePlayers()
@@ -146,245 +416,22 @@ namespace DurakXtreme
             startingPlayer.TurnStatus = TurnStatus.Attacking;
 
         }
-        public void RecieveCard(PlayingCard card)
+        // Sets the Winner and Loser if a winner is detected
+        public void CheckForWinner()
         {
-            int attackCardIndex = Players[0].Cards.IndexOf(card);
-            string msg = Players[0].Name + " is " + (Players[0].TurnStatus == TurnStatus.Attacking ? "attacking" : "defending against");
-            msg += " " + Players[1].Name + (Players[0].TurnStatus == TurnStatus.Attacking ? "" : "'s " + River.Last().ToString()) + " with a " + card.ToString() + "!";
-            Print(msg);
-            River.Add(((Player)Players[0]).Attack(card));
-
-            gui.PlayCardAt(attackCardIndex, 0);
-
-            if (Players[0].TurnStatus == TurnStatus.Attacking)
+            if (outOfCards)
             {
-                TurnDefence();
-            }
-            else
-            {
-                TurnAttack();
-            }
-        }
-        public void TurnAttack()
-        {
-            IPlayer attacker = GetAttacker();
-            IPlayer defender = GetDefender();
-            if (Winner == null)
-            {
-                if (attacker.GetType() == typeof(ComputerPlayer))
+                if (Players[0].Cards.Count == 0)
                 {
-                    ComputerPlayer ai = attacker as ComputerPlayer;
-                    Tuple<PlayingCard, int> attack = ai.Attack(River);
-                    PlayingCard attackCard = attack.Item1;
-                    int attackCardIndex = attack.Item2;
-                    if (attackCardIndex == -1)
-                    {
-                        TakeRiver(ai);
-                    }
-                    else
-                    {
-                        Print(attacker.Name + " is attacking " + defender.Name + " with a " + attackCard.ToString() + "!");
-                        River.Add(attackCard);
-                        gui.PlayCardAt(attackCardIndex, Players.IndexOf(attacker));
-                        gui.GetHumanResponse();
-                    }
+                    Winner = Players[0];
+                    Loser = Players[1];
                 }
-                if (attacker.GetType() == typeof(Player))
+                else if (Players[1].Cards.Count == 0)
                 {
-                    gui.GetHumanResponse();
+                    Winner = Players[1];
+                    Loser = Players[0];
                 }
-            }
-            else
-            {
-                gui.End(attacker, defender);
-            }
-            
-        }
-        public void TurnDefence()
-        {
-            Console.WriteLine("GUI Synced " + gui.CheckSync());
-            IPlayer attacker = GetAttacker();
-            IPlayer defender = GetDefender();
-            if (defender.GetType() == typeof(ComputerPlayer))
-            {
-                ComputerPlayer ai = defender as ComputerPlayer;
-                Tuple<PlayingCard, int> defence = ai.Defend(River);
-                PlayingCard defendCard = defence.Item1;
-                int defendCardIndex = defence.Item2;
-                if (defendCardIndex == -1)
-                {
-                    TakeRiver(ai);
-                }
-                else
-                {
-                    Print(defender.Name + " is defending against " + attacker.Name + "'s " + River.Last().ToString() + " with a " + defendCard.ToString() + "!");
-                    River.Add(defendCard);
-                    gui.PlayCardAt(defendCardIndex, Players.IndexOf(defender));
-                    
-                    gui.GetHumanResponse();
-                }
-            }
-            if (defender.GetType() == typeof(Player))
-            {
-                if (gui is frmGameGUI)
-                {
-                    Console.WriteLine("Awaiting user defence response");
-                    gui.GetHumanResponse();
-                }
-            }
-        }
-
-        public void TakeRiver(IPlayer player)
-        {
-            if (player.TurnStatus == TurnStatus.Defending)
-            {
-                for (int i = River.Count - 1; i >= 0; i--)
-                {
-                    player.Cards.Add(River[i]);
-                }
-                Print(player.Name + " is taking the river, raising them to " + player.Cards.Count + " cards!");
-                gui.TakeRiver(player);
-            }
-            else
-            {
-                Print(player.Name + " yields. River is discarded and " + GetDefender().Name + " is now attacker.");
-                gui.DiscardCards();
-                NextAttacker();
-            }
-            River.Clear();
-            if (!outOfCards) ReplenishCards();
-            else if (Players[0].Cards.Count == 0 || Players[1].Cards.Count == 0) Winner = player;
-            TurnAttack();
-        }
-        static public int GetDurakRank(CardRank rank)
-        {
-            return Array.IndexOf(DurakGame.ranks, rank);
-        }
-        public bool IsValidAttack(PlayingCard card)
-        {
-            bool valid = false;
-            if (River.Count == 0)
-            {
-                valid = true;
-            }
-            else
-            {
-                //if (card.Suit == TrumpCard.Suit) valid = true;
-                //else
-                foreach (PlayingCard riverCard in River)
-                {
-                    if (riverCard.Rank == card.Rank)
-                    {
-                        valid = true;
-                    }
-                }
-            }
-            return valid;
-        }
-        public bool IsValidDefence(PlayingCard card)
-        {
-            bool valid = false;
-            if (River.Last().Suit != TrumpCard.Suit && card.Suit == TrumpCard.Suit)
-            {
-                valid = true;
-            }
-            if ((card.Suit == River.Last().Suit) && GetDurakRank(card.Rank) > GetDurakRank(River.Last().Rank))
-            {
-                valid = true;
-            }
-            return valid;
-        }
-        public static void PrintListOfCards(List<PlayingCard> list, string tabbing = "")
-        {
-            foreach (PlayingCard card in list)
-            {
-                Console.WriteLine(tabbing + card.ToString());
-            }
-        }
-        public void Print(string message, bool toConsole = true, bool toGame = true)
-        {
-            Console.WriteLine(message);
-            messages.Add(message);
-            gui.UpdateMessages(GetMessages());
-        }
-        public string GetMessages()
-        {
-            string str = string.Join("\r\n", messages);
-            messages.Clear();
-            return str;
-        }
-        public void NextAttacker()
-        {
-            IPlayer attacker = GetAttacker();
-            IPlayer defender = GetDefender();
-            defender.TurnStatus = TurnStatus.Attacking;
-            attacker.TurnStatus = TurnStatus.Defending;
-            Console.WriteLine(attacker.Name + " is now " + attacker.TurnStatus);
-            Console.WriteLine(defender.Name + " is now " + defender.TurnStatus);
-        }
-        public IPlayer GetAttacker()
-        {
-            IPlayer attacker = null;
-            foreach (IPlayer player in Players)
-            {
-                if (player.TurnStatus == TurnStatus.Attacking) attacker = player;
-            }
-            return attacker;
-        }
-        public IPlayer GetDefender()
-        {
-            IPlayer defender = null;
-            for (int i = 0; i < Players.Count; i++)
-            {
-                if (Players[i].TurnStatus == TurnStatus.Attacking)
-                {
-                    if (i == Players.Count - 1)
-                    {
-                        defender = Players[0];
-                    }
-                    else
-                    {
-                        defender = Players[i + 1];
-                    }
-                }
-            }
-            return defender;
-        }
-        bool trumpMovedtoDeck = false;
-        public void ReplenishCards()
-        {
-            foreach (IPlayer player in Players)
-            {
-                while (player.Cards.Count < MINIMUM_CARD_COUNT && !outOfCards)
-                {
-                    if (deck.Count > 0)
-                    {
-                        if (deck.Count == 1) gui.Controls.Remove(gui.pbDeck);
-                        player.Cards.Add(deck.DrawTopCard());
-
-                        if (player.GetType() == typeof(Player))
-                            gui.DealCardToPanel(gui.pnlPlayerBottom, player.Cards.Last());
-                        if (player.GetType() == typeof(ComputerPlayer))
-                            gui.DealCardToPanel(gui.pnlPlayerTop, player.Cards.Last());
-                        gui.lblDeckCount.Text = deck.Count.ToString();
-                        gui.Wait(150);
-                        
-                    }
-                    else
-                    {
-                        if (!trumpMovedtoDeck)
-                        {
-                            deck.Add(TrumpCard);
-                            gui.Controls.Remove(gui.pbTrump);
-                            trumpMovedtoDeck = true;
-                        }
-                        else
-                        {
-                            outOfCards = true;
-                        }
-                    }
-                    
-                }
+                if (Winner != null) gui.End(Winner, Loser);
             }
         }
     }

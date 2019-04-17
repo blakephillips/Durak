@@ -16,7 +16,7 @@ namespace DurakXtreme
             Name += "(AI)";
         }
         public CardSuit TrumpSuit { get; set; }
-        public Tuple<PlayingCard, int> Attack(List<PlayingCard> river = null)
+        public Tuple<PlayingCard, int> Attack(List<PlayingCard> river = null, List<PlayingCard> deck = null)
         {
             PlayingCard bestViableCard = null;
             PlayingCard lowestTrumpCard = null;
@@ -49,9 +49,10 @@ namespace DurakXtreme
                     }
                 }
             }
-            if (bestViableCard == null && lowestTrumpCard != null && river.Count > 3)
+            // If AI has a playable trump card and no alternative plays
+            if (bestViableCard == null && lowestTrumpCard != null)
             {
-                bestViableCard = lowestTrumpCard;
+                if (river.Count > 4 || (deck.Count + Cards.Count < 12)) bestViableCard = lowestTrumpCard;
             }
             int cardIndex = Cards.IndexOf(bestViableCard);
             if (bestViableCard != null)

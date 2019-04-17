@@ -11,7 +11,7 @@ namespace DurakXtreme
 {
     public class CardBox : PictureBox
     {
-        private const string CARDS_FOLDER = frmGameGUI.resourcesPath + "cards/";
+        private const string CARDS_FOLDER = frmGameGUI.RESOURCES_PATH + "cards/";
         public static Size CARD_SIZE = new Size(75, 110);
         private PlayingCard card;
 
