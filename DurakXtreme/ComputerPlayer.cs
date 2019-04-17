@@ -52,7 +52,7 @@ namespace DurakXtreme
             // If AI has a playable trump card and no alternative plays
             if (bestViableCard == null && lowestTrumpCard != null)
             {
-                if (river.Count > 4 || (deck.Count + Cards.Count < 12)) bestViableCard = lowestTrumpCard;
+                if (river.Count > 2 || (deck.Count + Cards.Count < 12)) bestViableCard = lowestTrumpCard;
             }
             int cardIndex = Cards.IndexOf(bestViableCard);
             if (bestViableCard != null)
@@ -84,7 +84,7 @@ namespace DurakXtreme
             }
             if (bestViableCard == null && lowestTrumpCard != null)
             {
-                if (river.Count > 4 || deck.Count < 5) bestViableCard = lowestTrumpCard;
+                if (river.Count > 2 || (deck.Count + Cards.Count < 12)) bestViableCard = lowestTrumpCard;
             }
             int cardIndex = Cards.IndexOf(bestViableCard);
             if (bestViableCard != null)

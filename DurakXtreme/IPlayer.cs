@@ -11,8 +11,6 @@ namespace DurakXtreme
     {
         List<PlayingCard> Cards { get; set; }
         string Name { get; set; }
-        PlayingCard Attack();
-        //PlayingCard Defend();
         TurnStatus TurnStatus { get; set; }
     }
 }
