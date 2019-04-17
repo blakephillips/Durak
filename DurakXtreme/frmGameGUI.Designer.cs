@@ -175,7 +175,6 @@
             this.Name = "frmGameGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Durak Xtreme";
-            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.pbTrump)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDiscard)).EndInit();

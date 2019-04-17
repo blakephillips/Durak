@@ -61,6 +61,8 @@ namespace DurakXtreme
             // By passing this form as a parameter, it can receive data from
             // the game and have GUI events triggered by it
             durakGame = new DurakGame(this);
+            durakGame.OnPuttingDown += PuttingDown;
+            durakGame.PuttingDownComplete += PuttingDownComplete;
 
             // Capture players from DurakGame
             HumanPlayer = durakGame.Players[0];
@@ -89,6 +91,30 @@ namespace DurakXtreme
             durakGame.TurnAttack();
         }
 
+        public void PuttingDown(object sender, EventArgs e)
+        {
+            if (sender.GetType() == typeof(Player))
+            {
+                HumanPlayer.PuttingDown = true;
+            }
+            else if (sender.GetType() == typeof(ComputerPlayer))
+            {
+                ComputerPlayer.PuttingDown = true;
+            }
+        }
+
+        public void PuttingDownComplete(object sender, EventArgs e)
+        {
+            if (sender.GetType() == typeof(ComputerPlayer))
+            {
+                ComputerPlayer.PuttingDown = false;
+                durakGame.TakeRiver(HumanPlayer);
+            } else if (sender.GetType() == typeof(Player))
+            {
+                HumanPlayer.PuttingDown = false;
+                durakGame.TakeRiver(ComputerPlayer);
+            }
+        }
 
 
         public void GetHumanResponse()
@@ -101,12 +127,16 @@ namespace DurakXtreme
                 pnlPlayerBottom.BackColor = defenseColor;
                 pnlPlayerTop.BackColor = attackColor;
             }
-            if (HumanPlayer.TurnStatus == TurnStatus.Attacking)
+            if (HumanPlayer.TurnStatus == TurnStatus.Attacking && HumanPlayer.PuttingDown == false)
             {
                 btnTakePass.Text = "Pass";
                 lblStatus.Text = "You are attacking!";
                 pnlPlayerBottom.BackColor = attackColor;
                 pnlPlayerTop.BackColor = defenseColor;
+            }
+            else if (HumanPlayer.TurnStatus == TurnStatus.Attacking && HumanPlayer.PuttingDown == true)
+            {
+                lblStatus.Text = "You are putting down!";
             }
             if (durakGame.Winner != null) btnTakePass.Text = "End";
             EnableCardClick();
@@ -360,7 +390,22 @@ namespace DurakXtreme
         private void btnTake_Click(object sender, EventArgs e)
         {
             EndHumanResponse();
-            durakGame.TakeRiver(HumanPlayer);
+            if (HumanPlayer.TurnStatus == TurnStatus.Defending)
+            {
+                durakGame.PutDown();
+            } else
+            {
+                if (HumanPlayer.PuttingDown == true)
+                {
+                    HumanPlayer.PuttingDown = false;
+                    durakGame.TakeRiver(ComputerPlayer);
+                } else
+                {
+                    durakGame.TakeRiver(HumanPlayer);
+                }
+                
+            }
+            
         }
 
         public void UpdateMessages(string message)

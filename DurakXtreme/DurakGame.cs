@@ -14,6 +14,12 @@ namespace DurakXtreme
         {
             return null;
         }
+
+        /// <summary>
+        /// If a putting down event is triggered
+        /// </summary>
+        new public EventHandler OnPuttingDown;
+        new public EventHandler PuttingDownComplete;
         new public EventHandler OnDealingComplete;
         public static CardRank[] ranks = {
             CardRank.Six,
@@ -129,7 +135,7 @@ namespace DurakXtreme
             CheckForWinner();
             IPlayer attacker = GetAttacker();
             IPlayer defender = GetDefender();
-            if (Winner == null)
+            if (Winner == null && attacker.PuttingDown == false)
             {
                 if (defender.GetType() == typeof(ComputerPlayer))
                     {
@@ -139,7 +145,7 @@ namespace DurakXtreme
                     int defendCardIndex = defence.Item2;
                     if (defendCardIndex == -1)
                     {
-                        TakeRiver(ai);
+                        PutDown();
                     }
                     else
                     {
@@ -201,6 +207,64 @@ namespace DurakXtreme
             
             TurnAttack();
         }
+
+        public void PutDown()
+        {
+            IPlayer attacker = GetAttacker();
+            IPlayer defender = GetDefender();
+
+            if (OnPuttingDown != null)
+                OnPuttingDown(attacker, new EventArgs());
+
+            if (attacker.GetType() == typeof(ComputerPlayer))
+            {
+                if (attacker.PuttingDown)
+                {
+                    ComputerPlayer ai = attacker as ComputerPlayer;
+                    Tuple<PlayingCard, int> attack = ai.Attack(River, deck);
+                    PlayingCard attackCard = attack.Item1;
+                    int attackCardIndex = attack.Item2;
+                    if (attackCardIndex == -1)
+                    {
+                        if (PuttingDownComplete != null)
+                            PuttingDownComplete(attacker, new EventArgs());
+                    }
+                    else
+                    {
+                        Print(attacker.Name + " is attacking " + defender.Name + " with a " + attackCard.ToString() + "!");
+                        River.Add(attackCard);
+                        gui.PlayCardAt(attackCardIndex, Players.IndexOf(attacker));
+                        PutDown();
+                    }
+                } else
+                {
+                    TakeRiver(defender);
+                    if (defender.GetType() == typeof(Player))
+                    {
+                        gui.GetHumanResponse();
+                    }
+                }
+
+
+            }
+            else if (attacker.GetType() == typeof(Player))
+            {
+                if (attacker.PuttingDown)
+                {
+                    gui.GetHumanResponse();
+                } else
+                {
+                    if (PuttingDownComplete != null)
+                        PuttingDownComplete(attacker, new EventArgs());
+                }
+                    
+                
+            }
+
+
+        }
+
+
         public bool IsValidAttack(PlayingCard card)
         {
             bool valid = false;

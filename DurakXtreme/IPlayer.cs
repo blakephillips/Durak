@@ -14,5 +14,11 @@ namespace DurakXtreme
         PlayingCard Attack();
         //PlayingCard Defend();
         TurnStatus TurnStatus { get; set; }
+
+        /// <summary>
+        /// Is the player in a condition where they can put down cards. 
+        /// (End of an attack)
+        /// </summary>
+        bool PuttingDown { get; set; }
     }
 }
