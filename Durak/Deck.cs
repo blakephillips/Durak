@@ -9,6 +9,12 @@ namespace CardLibrary
    public class Deck : List<PlayingCard>
     {
         private static Random rng = new Random();
+        /// <summary>
+        /// Constructor for deck
+        /// </summary>
+        /// <param name="cards">Amount of cards</param>
+        /// <param name="shuffle">Should a shuffle be performed</param>
+        /// <param name="jokersEnabled">Are there jokers in the deck</param>
         public Deck(int cards = 52, bool shuffle = false, bool jokersEnabled = false)
         {
             int index = 0;
@@ -28,6 +34,9 @@ namespace CardLibrary
             }
         }
 
+        /// <summary>
+        /// Shuffles the deck of cards
+        /// </summary>
         public void Shuffle()
         {
             int cardIndex = this.Count;
@@ -41,6 +50,11 @@ namespace CardLibrary
             }
             Console.WriteLine("Deck Shuffled!");
         }
+
+        /// <summary>
+        /// Draws the top most card from the deck
+        /// </summary>
+        /// <returns>PlayingCard at the top of the deck</returns>
         public PlayingCard DrawTopCard()
         {
             PlayingCard topCard = null;
