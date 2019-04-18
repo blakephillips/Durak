@@ -42,9 +42,9 @@
             this.btnExit.BackColor = System.Drawing.Color.LightCoral;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnExit.Location = new System.Drawing.Point(744, 396);
+            this.btnExit.Location = new System.Drawing.Point(406, 317);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(44, 42);
+            this.btnExit.Size = new System.Drawing.Size(72, 42);
             this.btnExit.TabIndex = 0;
             this.btnExit.Text = "E&xit";
             this.btnExit.UseVisualStyleBackColor = false;
@@ -54,24 +54,24 @@
             // 
             // lblTitle
             // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblTitle.Font = new System.Drawing.Font("Lucida Console", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.ForeColor = System.Drawing.Color.OldLace;
-            this.lblTitle.Location = new System.Drawing.Point(12, 9);
+            this.lblTitle.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.lblTitle.Font = new System.Drawing.Font("Lucida Console", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.Lime;
+            this.lblTitle.Location = new System.Drawing.Point(258, 65);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(255, 34);
+            this.lblTitle.Size = new System.Drawing.Size(285, 89);
             this.lblTitle.TabIndex = 1;
             this.lblTitle.Text = "Durak Xtreme";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnAbout
             // 
             this.btnAbout.BackColor = System.Drawing.Color.Lavender;
             this.btnAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAbout.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAbout.Location = new System.Drawing.Point(616, 396);
+            this.btnAbout.Location = new System.Drawing.Point(323, 317);
             this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(105, 42);
+            this.btnAbout.Size = new System.Drawing.Size(72, 42);
             this.btnAbout.TabIndex = 2;
             this.btnAbout.Text = "About";
             this.btnAbout.UseVisualStyleBackColor = false;
@@ -83,11 +83,11 @@
             // 
             this.btnPlay.BackColor = System.Drawing.Color.Lavender;
             this.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPlay.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPlay.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnPlay.Location = new System.Drawing.Point(18, 87);
+            this.btnPlay.Location = new System.Drawing.Point(258, 158);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(249, 56);
+            this.btnPlay.Size = new System.Drawing.Size(285, 56);
             this.btnPlay.TabIndex = 3;
             this.btnPlay.Text = "&Play";
             this.btnPlay.UseVisualStyleBackColor = false;
@@ -99,11 +99,11 @@
             // 
             this.btnSettings.BackColor = System.Drawing.Color.Lavender;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSettings.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSettings.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSettings.Location = new System.Drawing.Point(18, 160);
+            this.btnSettings.Location = new System.Drawing.Point(258, 218);
             this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(249, 56);
+            this.btnSettings.Size = new System.Drawing.Size(140, 58);
             this.btnSettings.TabIndex = 4;
             this.btnSettings.Text = "&Settings";
             this.btnSettings.UseVisualStyleBackColor = false;
@@ -113,11 +113,11 @@
             // 
             this.btnStatistics.BackColor = System.Drawing.Color.Lavender;
             this.btnStatistics.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStatistics.Font = new System.Drawing.Font("Microsoft YaHei", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStatistics.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnStatistics.Location = new System.Drawing.Point(18, 233);
+            this.btnStatistics.Location = new System.Drawing.Point(403, 218);
             this.btnStatistics.Name = "btnStatistics";
-            this.btnStatistics.Size = new System.Drawing.Size(249, 56);
+            this.btnStatistics.Size = new System.Drawing.Size(140, 58);
             this.btnStatistics.TabIndex = 5;
             this.btnStatistics.Text = "S&tatistics";
             this.btnStatistics.UseVisualStyleBackColor = false;
@@ -138,12 +138,12 @@
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmMainMenu";
+            this.Opacity = 0.9D;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.frmMainMenu_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

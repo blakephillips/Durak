@@ -43,10 +43,10 @@ namespace DurakXtreme
 
         //Get players from game instance
         public IPlayer HumanPlayer;
-        public IPlayer ComputerPlayer;
+        public IPlayer AiPlayer;
 
-        public string HumanPlayerName;
-        public string ComputerPlayerName;
+        public string HumanName;
+        public string AiName;
 
         public GameStatistics gameStats = new GameStatistics();
 
@@ -62,34 +62,35 @@ namespace DurakXtreme
             menuForm = mainMenu;
             InitializeComponent();
             this.Show();
-           
+
+            // Read config file
+            TextReader tr = new StreamReader("./DurakConfiguration");
+            HumanName = tr.ReadLine();
+            AiName = tr.ReadLine();
+            aiCardsVisible = bool.Parse(tr.ReadLine());
+            tr.Close();
+
             // The DurakGame constructor creates a game instance
             // with one human and one AI player, and deals hands out to
             // both of them.
             // By passing this form as a parameter, it can receive data from
             // the game and have GUI events triggered by it
             durakGame = new DurakGame(this);
-
+            // Capture players from DurakGame
+            HumanPlayer = durakGame.Players[0];
+            AiPlayer = durakGame.Players[1];
+            // Set Names
+            if (!String.IsNullOrEmpty(HumanName)) HumanPlayer.Name = HumanName;
+            if (!String.IsNullOrEmpty(AiName)) AiPlayer.Name = AiName;
+            lblPlayerName.Text = HumanPlayer.Name;
+            lblAIName.Text = AiPlayer.Name;
             //Throw In events
             durakGame.OnPuttingDown += PuttingDown;
             durakGame.PuttingDownComplete += PuttingDownComplete;
 
-            // Capture players from DurakGame
-            HumanPlayer = durakGame.Players[0];
-            ComputerPlayer = durakGame.Players[1];
+            
 
-            // Read config file
-            TextReader tr = new StreamReader("./DurakConfiguration");
-            string player1_name = tr.ReadLine();
-            string player2_name = tr.ReadLine();
-            string aiCardsVisible = tr.ReadLine();
-            tr.Close();
-
-            if (!String.IsNullOrEmpty(player1_name)) HumanPlayer.Name = player1_name;
-            if (!String.IsNullOrEmpty(player2_name)) ComputerPlayer.Name = player2_name;
-            if (bool.Parse(aiCardsVisible)) this.aiCardsVisible = bool.Parse(aiCardsVisible);
-
-
+            
 
             gameStats.InitializeStatistics();
 
@@ -127,7 +128,7 @@ namespace DurakXtreme
             }
             else if (sender.GetType() == typeof(ComputerPlayer))
             {
-                ComputerPlayer.PuttingDown = true;
+                AiPlayer.PuttingDown = true;
             }
         }
 
@@ -135,12 +136,12 @@ namespace DurakXtreme
         {
             if (sender.GetType() == typeof(ComputerPlayer))
             {
-                ComputerPlayer.PuttingDown = false;
+                AiPlayer.PuttingDown = false;
                 durakGame.TakeRiver(HumanPlayer);
             } else if (sender.GetType() == typeof(Player))
             {
                 HumanPlayer.PuttingDown = false;
-                durakGame.TakeRiver(ComputerPlayer);
+                durakGame.TakeRiver(AiPlayer);
             }
         }
 
@@ -432,7 +433,7 @@ namespace DurakXtreme
                 {
                     gameStats.attacksWon++;
                     HumanPlayer.PuttingDown = false;
-                    durakGame.TakeRiver(ComputerPlayer);
+                    durakGame.TakeRiver(AiPlayer);
                 } else
                 {
                     durakGame.TakeRiver(HumanPlayer);
