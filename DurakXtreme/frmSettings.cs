@@ -15,8 +15,15 @@ namespace DurakXtreme
         }
         private void frmSettings_Load(object sender, EventArgs e)
         {
-            txtPlayerOne.Text = "Player 1";
-            txtPlayerTwo.Text = "Player 2 (AI)";
+            // Read config file
+            TextReader tr = new StreamReader("./DurakConfiguration");
+            string player1_name = tr.ReadLine();
+            string player2_name = tr.ReadLine();
+            bool aiCardsVisible = bool.Parse(tr.ReadLine());
+            txtPlayerOne.Text = player1_name;
+            txtPlayerTwo.Text = player2_name;
+            cbAiCardsVisible.Checked = aiCardsVisible;
+            tr.Close();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
