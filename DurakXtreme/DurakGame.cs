@@ -178,7 +178,13 @@ namespace DurakXtreme
 
             if (Players[0].TurnStatus == TurnStatus.Attacking)
             {
-                TurnDefence();
+                if (Players[0].PuttingDown == true)
+                {
+                    TurnAttack();
+                } else
+                {
+                    TurnDefence();
+                }
             }
             else
             {
