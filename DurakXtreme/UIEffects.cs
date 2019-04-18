@@ -16,7 +16,7 @@ namespace DurakXtreme
         /// <param name="btn">Button to pop</param>
         /// <param name="isEntering">True if mouse is entering, false otherwise</param>
         /// <param name="popSize">Amount to add to width and height</param>
-        public static void btnPop(Button btn, bool isEntering = true, int popSize = 20)
+        public static void controlPop(Control btn, bool isEntering = true, int popSize = 3)
         {
             if (isEntering == true)
             {

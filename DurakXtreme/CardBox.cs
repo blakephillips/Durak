@@ -27,10 +27,12 @@ namespace DurakXtreme
         }
         public void FaceUp()
         {
+            Card.FaceUp = true;
             SetCardImage(Card);
         }
         public void FaceDown()
         {
+            Card.FaceUp = false;
             SetCardImage();
         }
 
@@ -50,7 +52,7 @@ namespace DurakXtreme
 
         public void SetCardImage(PlayingCard card = null)
         {
-            if (card == null || card.FaceDown == true)
+            if (card == null || card.FaceUp == false)
             {
                 this.Image = Image.FromFile(GetImagePathFromCard());
             }

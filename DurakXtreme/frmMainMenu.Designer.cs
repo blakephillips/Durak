@@ -49,8 +49,8 @@
             this.btnExit.Text = "E&xit";
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            this.btnExit.MouseEnter += new System.EventHandler(this.btnExit_MouseEnter);
-            this.btnExit.MouseLeave += new System.EventHandler(this.btnExit_MouseLeave);
+            this.btnExit.MouseEnter += new System.EventHandler(this.btn_MouseEnter);
+            this.btnExit.MouseLeave += new System.EventHandler(this.btn_MouseLeave);
             // 
             // lblTitle
             // 
@@ -76,8 +76,8 @@
             this.btnAbout.Text = "About";
             this.btnAbout.UseVisualStyleBackColor = false;
             this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
-            this.btnAbout.MouseEnter += new System.EventHandler(this.btnAbout_MouseEnter);
-            this.btnAbout.MouseLeave += new System.EventHandler(this.btnAbout_MouseLeave);
+            this.btnAbout.MouseEnter += new System.EventHandler(this.btn_MouseEnter);
+            this.btnAbout.MouseLeave += new System.EventHandler(this.btn_MouseLeave);
             // 
             // btnPlay
             // 
@@ -92,8 +92,8 @@
             this.btnPlay.Text = "&Play";
             this.btnPlay.UseVisualStyleBackColor = false;
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
-            this.btnPlay.MouseEnter += new System.EventHandler(this.btnPlay_MouseEnter);
-            this.btnPlay.MouseLeave += new System.EventHandler(this.btnPlay_MouseLeave);
+            this.btnPlay.MouseEnter += new System.EventHandler(this.btn_MouseEnter);
+            this.btnPlay.MouseLeave += new System.EventHandler(this.btn_MouseLeave);
             // 
             // btnSettings
             // 
@@ -108,6 +108,8 @@
             this.btnSettings.Text = "&Settings";
             this.btnSettings.UseVisualStyleBackColor = false;
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            this.btnSettings.MouseEnter += new System.EventHandler(this.btn_MouseEnter);
+            this.btnSettings.MouseLeave += new System.EventHandler(this.btn_MouseLeave);
             // 
             // btnStatistics
             // 
@@ -122,6 +124,8 @@
             this.btnStatistics.Text = "S&tatistics";
             this.btnStatistics.UseVisualStyleBackColor = false;
             this.btnStatistics.Click += new System.EventHandler(this.btnStatistics_Click);
+            this.btnStatistics.MouseEnter += new System.EventHandler(this.btn_MouseEnter);
+            this.btnStatistics.MouseLeave += new System.EventHandler(this.btn_MouseLeave);
             // 
             // frmMainMenu
             // 
@@ -142,7 +146,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.frmMainMenu_Load);
             this.ResumeLayout(false);
 
         }

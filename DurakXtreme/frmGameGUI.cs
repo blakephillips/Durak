@@ -88,15 +88,10 @@ namespace DurakXtreme
             durakGame.OnPuttingDown += PuttingDown;
             durakGame.PuttingDownComplete += PuttingDownComplete;
 
-            
-
-            
-
             gameStats.InitializeStatistics();
 
             this.InitiateGame();
         }
-
 
         public void InitiateGame()
         {
@@ -190,7 +185,8 @@ namespace DurakXtreme
         public void DealCardToPanel(Panel panel, PlayingCard card)
         {
             CardBox pbCard = new CardBox(card);
-            if (panel == pnlPlayerTop && !aiCardsVisible) pbCard.FaceDown();
+            pbCard.FaceDown();
+            if (panel == pnlPlayerBottom || aiCardsVisible) pbCard.FaceUp();
             panel.Controls.Add(pbCard);
             AlignCards(panel);
         }
@@ -327,7 +323,7 @@ namespace DurakXtreme
         public void GiveRiver(IPlayer player)
         {
             Panel toPanel = null;
-            bool faceDown = false;
+            bool putFaceDown = false;
             lblStatus.Text = player.Name + " takes the river!";
             Wait(200);
             if (player.GetType() == typeof(Player))
@@ -337,7 +333,7 @@ namespace DurakXtreme
             else if (player.GetType() == typeof(ComputerPlayer))
             {
                 toPanel = pnlPlayerTop;
-                faceDown = true;
+                putFaceDown = true;
             }
 
             for (int slide = 0; slide < 20; slide++)
@@ -352,7 +348,7 @@ namespace DurakXtreme
             for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
             {
                 CardBox cb = (CardBox)pnlPlayArea.Controls[i];
-                if (!faceDown || aiCardsVisible) cb.FaceUp();
+                if (!putFaceDown || aiCardsVisible) cb.FaceUp();
                 else cb.FaceDown();
                 toPanel.Controls.Add(cb);
                 AlignCards(toPanel);
