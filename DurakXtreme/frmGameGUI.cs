@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: frmGameGUI.cs
+ * 
+ * Description: Reflects changes in the gamestate to the user in a visual manner
+ * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -64,10 +73,19 @@ namespace DurakXtreme
             this.Show();
 
             // Read config file
+            if (!File.Exists("./DurakConfiguration"))
+            {
+              File.Create("./DurakConfiguration").Dispose();
+            }
             TextReader tr = new StreamReader("./DurakConfiguration");
             HumanName = tr.ReadLine();
             AiName = tr.ReadLine();
-            aiCardsVisible = bool.Parse(tr.ReadLine());
+            String isCardVisible = tr.ReadLine();
+            if (!String.IsNullOrEmpty(isCardVisible))
+            {
+                aiCardsVisible = bool.Parse(isCardVisible);
+            }
+            
             tr.Close();
 
             // The DurakGame constructor creates a game instance
@@ -93,17 +111,25 @@ namespace DurakXtreme
             this.InitiateGame();
         }
 
+        /// <summary>
+        /// Initializes game, draws cards
+        /// </summary>
         public void InitiateGame()
         {
             pbTrump.Image = Image.FromFile(CardBox.GetImagePathFromCard(durakGame.TrumpCard));
-            //
+            //Load card image
             pbDeck.Load(CardBox.GetImagePathFromCard());
+
             Refresh();
+            //Initialize card deck count amount
             lblDeckCount.Text = durakGame.deck.Count.ToString();
 
+            //Play super cool sound
+            //source : https://freesound.org/people/mickmon/sounds/176862/
             SoundPlayer dealSound = new System.Media.SoundPlayer(RESOURCES_PATH + "deal.wav");
             dealSound.Play();
 
+            //Deal cards
             gameStats.cardsDrawn = gameStats.cardsDrawn + DurakGame.STARTING_CARD_COUNT;
             for (int i = 0; i < DurakGame.STARTING_CARD_COUNT; i++)
             {
@@ -115,6 +141,12 @@ namespace DurakXtreme
             durakGame.TurnAttack();
         }
 
+        /// <summary>
+        /// When a player start a 'put down' event
+        /// set respective players PuttingDown attribute to true
+        /// </summary>
+        /// <param name="sender">Whichever player triggered the event</param>
+        /// <param name="e"></param>
         public void PuttingDown(object sender, EventArgs e)
         {
             if (sender.GetType() == typeof(Player))
@@ -127,6 +159,11 @@ namespace DurakXtreme
             }
         }
 
+        /// <summary>
+        /// On completion of puttingDown state, take the river, turn off PuttingDown value in senders player class
+        /// </summary>
+        /// <param name="sender">Senders player object</param>
+        /// <param name="e"></param>
         public void PuttingDownComplete(object sender, EventArgs e)
         {
             if (sender.GetType() == typeof(ComputerPlayer))
@@ -140,7 +177,9 @@ namespace DurakXtreme
             }
         }
 
-
+        /// <summary>
+        /// Allow for user to make their response, and update related form controls
+        /// </summary>
         public void GetHumanResponse()
         {
             durakGame.CheckForWinner();
@@ -170,7 +209,9 @@ namespace DurakXtreme
             EvaluateHand();
         }
 
-        //
+        /// <summary>
+        /// Diable card controls, reset the players panelColor
+        /// </summary>
         public void EndHumanResponse()
         {
             DisableCardClick();
@@ -319,7 +360,10 @@ namespace DurakXtreme
                 durakGame.Print("\r" + cb.Card.ToString() + " is not a valid play!");
             }
         }
-
+        /// <summary>
+        /// Give river to a players hand
+        /// </summary>
+        /// <param name="player">Player to give river to</param>
         public void GiveRiver(IPlayer player)
         {
             Panel toPanel = null;
@@ -357,6 +401,9 @@ namespace DurakXtreme
 
             if (player.TurnStatus == TurnStatus.Attacking) durakGame.NextAttacker();
         }
+        /// <summary>
+        /// Discard the river
+        /// </summary>
         public void DiscardCards()
         {
             lblStatus.Text = durakGame.GetAttacker().Name + " gives up attacking!";
@@ -378,7 +425,11 @@ namespace DurakXtreme
                 pnlPlayArea.Controls.Remove(cb);
             }
         }
-
+        /// <summary>
+        /// Play a players card
+        /// </summary>
+        /// <param name="cardIndex">Index of card to play</param>
+        /// <param name="playerIndex">Index of player</param>
         public void PlayCardAt(int cardIndex, int playerIndex)
         {
             Panel panel = (playerIndex == 0 ? pnlPlayerBottom : pnlPlayerTop);
@@ -398,6 +449,12 @@ namespace DurakXtreme
             AlignCards(pnlPlayArea);
         }
         //Utility Methods
+        /// <summary>
+        /// Get image to populate card
+        /// </summary>
+        /// <param name="card">Card to get image of</param>
+        /// <param name="extension">Extension of images</param>
+        /// <returns></returns>
         string GetImagePathFromCard(PlayingCard card = null, string extension = ".png")
         {
             string path = RESOURCES_PATH;
@@ -411,12 +468,22 @@ namespace DurakXtreme
             }
             return path;
         }
+        /// <summary>
+        /// Pause for a time in ms
+        /// </summary>
+        /// <param name="ms">Time to pause</param>
         public void Wait(int ms)
         {
             Update();
             Task.Delay(ms).Wait();
         }
 
+        /// <summary>
+        /// When the contextual pass/take/finish button is pressed
+        /// do something depending on what state the game is in.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnTake_Click(object sender, EventArgs e)
         {
             EndHumanResponse();
@@ -444,6 +511,9 @@ namespace DurakXtreme
             this.txtMessages.AppendText(message + "\r\n"); //Print game messages
         }
 
+        /// <summary>
+        /// Enable card clickability
+        /// </summary>
         void EnableCardClick()
         {
             foreach (Control control in pnlPlayerBottom.Controls)
@@ -451,6 +521,9 @@ namespace DurakXtreme
                 control.MouseClick += CardClick;
             }
         }
+        /// <summary>
+        /// Disable card clickability
+        /// </summary>
         void DisableCardClick()
         {
             foreach (Control control in pnlPlayerBottom.Controls)
@@ -458,7 +531,10 @@ namespace DurakXtreme
                 control.MouseClick -= CardClick;
             }
         }
-
+        /// <summary>
+        /// Make sure UI and memory are in sync
+        /// </summary>
+        /// <returns></returns>
         public bool CheckSync()
         {
             bool returnValue = true;
@@ -481,6 +557,11 @@ namespace DurakXtreme
             Console.WriteLine("GUI Sync: " + returnValue);
             return returnValue;
         }
+        /// <summary>
+        /// End game
+        /// </summary>
+        /// <param name="winner"></param>
+        /// <param name="loser"></param>
         public void End(IPlayer winner, IPlayer loser)
         {
             Wait(1000);
@@ -500,6 +581,12 @@ namespace DurakXtreme
             this.Update();
         }
 
+        /// <summary>
+        /// On form closing, serialize(save) statistic data.
+        /// Show the menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmGameGUI_FormClosing(object sender, FormClosingEventArgs e)
         {
             gameStats.SerializeFile();

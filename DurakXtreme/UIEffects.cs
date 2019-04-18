@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: UIEffects.cs
+ * 
+ * Description: Controls the effects that are seen on the main menu
+ * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

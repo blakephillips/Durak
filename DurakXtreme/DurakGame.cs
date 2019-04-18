@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: DurakGame.cs
+ * 
+ * Description: Controls the game-flow and game-state
+ * 
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

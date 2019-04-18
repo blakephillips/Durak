@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: ComputerPlayer.cs
+ * 
+ * Description: Controls AI logic for responding to various gameplay events
+ * 
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +23,25 @@ namespace DurakXtreme
         {
             Name += "(AI)";
         }
+        /// <summary>
+        /// The suit of the trump card
+        /// </summary>
         public CardSuit TrumpSuit { get; set; }
+
+
+        /// <summary>
+        /// AI Attack logic
+        /// </summary>
+        /// <param name="river">Cards in river</param>
+        /// <param name="deck">Unplayed cards</param>
+        /// <returns>The card played, and the index of the card</returns>
         public Tuple<PlayingCard, int> Attack(List<PlayingCard> river = null, List<PlayingCard> deck = null)
         {
             PlayingCard bestViableCard = null;
             PlayingCard lowestTrumpCard = null;
             foreach (PlayingCard card in Cards)
             {
+                //if theres no cards in the river
                 if (river.Count == 0)
                 {
                     if (card.Suit == TrumpSuit) {
@@ -61,6 +81,13 @@ namespace DurakXtreme
             }
             return Tuple.Create(bestViableCard, cardIndex);
         }
+        
+        /// <summary>
+        /// AI Defend Logic
+        /// </summary>
+        /// <param name="river">River cards</param>
+        /// <param name="deck">Deck cards</param>
+        /// <returns>The card played, and the index of the card</returns>
         public Tuple<PlayingCard, int> Defend(List<PlayingCard> river, List<PlayingCard> deck = null)
         {
             PlayingCard bestViableCard = null;
