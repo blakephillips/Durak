@@ -64,10 +64,19 @@ namespace DurakXtreme
             this.Show();
 
             // Read config file
+            if (!File.Exists("./DurakConfiguration"))
+            {
+              File.Create("./DurakConfiguration").Dispose();
+            }
             TextReader tr = new StreamReader("./DurakConfiguration");
             HumanName = tr.ReadLine();
             AiName = tr.ReadLine();
-            aiCardsVisible = bool.Parse(tr.ReadLine());
+            String isCardVisible = tr.ReadLine();
+            if (!String.IsNullOrEmpty(isCardVisible))
+            {
+                aiCardsVisible = bool.Parse(isCardVisible);
+            }
+            
             tr.Close();
 
             // The DurakGame constructor creates a game instance

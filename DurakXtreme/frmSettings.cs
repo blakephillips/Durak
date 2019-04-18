@@ -15,6 +15,10 @@ namespace DurakXtreme
         }
         private void frmSettings_Load(object sender, EventArgs e)
         {
+            if (!File.Exists("./DurakConfiguration"))
+            {
+                File.Create("./DurakConfiguration").Dispose();
+            }
             TextReader tr = new StreamReader("./DurakConfiguration");
             string player1_name = tr.ReadLine();
             string player2_name = tr.ReadLine();
@@ -37,7 +41,7 @@ namespace DurakXtreme
                 txtPlayerTwo.Text = "Player 2";
             }
             bool isVisibleCards = false;
-            if (bool.Parse(aiCardsVisible))
+            if (!String.IsNullOrEmpty(aiCardsVisible))
             {
                 isVisibleCards = bool.Parse(aiCardsVisible);
                 cbAiCardsVisible.Checked = isVisibleCards;
