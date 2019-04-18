@@ -67,26 +67,28 @@ namespace DurakXtreme
             TextReader tr = new StreamReader("./DurakConfiguration");
             string player1_name = tr.ReadLine();
             string player2_name = tr.ReadLine();
-            string aiCardsVisible = tr.ReadLine();
+            aiCardsVisible = bool.Parse(tr.ReadLine());
             tr.Close();
 
-            
-            if (bool.Parse(aiCardsVisible)) this.aiCardsVisible = bool.Parse(aiCardsVisible);
             // The DurakGame constructor creates a game instance
             // with one human and one AI player, and deals hands out to
             // both of them.
             // By passing this form as a parameter, it can receive data from
             // the game and have GUI events triggered by it
             durakGame = new DurakGame(this);
-            if (!String.IsNullOrEmpty(player1_name)) durakGame.Players[0].Name = player1_name;
-            if (!String.IsNullOrEmpty(player2_name)) durakGame.Players[1].Name = player2_name;
+            // Capture players from DurakGame
+            HumanPlayer = durakGame.Players[0];
+            ComputerPlayer = durakGame.Players[1];
+            // Set Names
+            if (!String.IsNullOrEmpty(player1_name)) HumanPlayer.Name = player1_name;
+            if (!String.IsNullOrEmpty(player2_name)) ComputerPlayer.Name = player2_name;
+            lblPlayerName.Text = HumanPlayer.Name;
+            lblAIName.Text = ComputerPlayer.Name;
             //Throw In events
             durakGame.OnPuttingDown += PuttingDown;
             durakGame.PuttingDownComplete += PuttingDownComplete;
 
-            // Capture players from DurakGame
-            HumanPlayer = durakGame.Players[0];
-            ComputerPlayer = durakGame.Players[1];
+            
 
             
 
