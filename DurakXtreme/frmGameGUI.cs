@@ -142,7 +142,7 @@ namespace DurakXtreme
         }
 
         /// <summary>
-        /// When a player start a 'put down' event
+        /// When a player starts a 'put down' event
         /// set respective players PuttingDown attribute to true
         /// </summary>
         /// <param name="sender">Whichever player triggered the event</param>
@@ -183,27 +183,7 @@ namespace DurakXtreme
         public void GetHumanResponse()
         {
             durakGame.CheckForWinner();
-            if (HumanPlayer.TurnStatus == TurnStatus.Defending)
-            {
-                btnTakePass.Text = "Take";
-                lblStatus.Text = "You are defending!";
-                pnlPlayerBottom.BackColor = defenseColor;
-                pnlPlayerTop.BackColor = attackColor;
-            }
-            if (HumanPlayer.TurnStatus == TurnStatus.Attacking && HumanPlayer.PuttingDown == false)
-            {
-                btnTakePass.Text = "Pass";
-                lblStatus.Text = "You are attacking!";
-                pnlPlayerBottom.BackColor = attackColor;
-                pnlPlayerTop.BackColor = defenseColor;
-            }
-            else if (HumanPlayer.TurnStatus == TurnStatus.Attacking && HumanPlayer.PuttingDown == true)
-            {
-                btnTakePass.Text = "Finish";
-                lblStatus.Text = "You are putting down extra cards!";
-                pnlPlayerBottom.BackColor = attackColor;
-                pnlPlayerTop.BackColor = defenseColor;
-            }
+            UpdateUIStyles();
             if (durakGame.Winner != null) btnTakePass.Text = "End";
             EnableCardClick();
             EvaluateHand();
@@ -214,6 +194,7 @@ namespace DurakXtreme
         /// </summary>
         public void EndHumanResponse()
         {
+            // Remove all events from cards
             DisableCardClick();
             foreach (Control card in pnlPlayerBottom.Controls)
             {
@@ -505,10 +486,34 @@ namespace DurakXtreme
             }
             
         }
-
         public void UpdateMessages(string message)
         {
             this.txtMessages.AppendText(message + "\r\n"); //Print game messages
+        }
+
+        public void UpdateUIStyles()
+        {
+            if (HumanPlayer.TurnStatus == TurnStatus.Defending)
+            {
+                btnTakePass.Text = "Take";
+                lblStatus.Text = "You are defending!";
+                pnlPlayerBottom.BackColor = defenseColor;
+                pnlPlayerTop.BackColor = attackColor;
+            }
+            if (HumanPlayer.TurnStatus == TurnStatus.Attacking && HumanPlayer.PuttingDown == false)
+            {
+                btnTakePass.Text = "Pass";
+                lblStatus.Text = "You are attacking!";
+                pnlPlayerBottom.BackColor = attackColor;
+                pnlPlayerTop.BackColor = defenseColor;
+            }
+            else if (HumanPlayer.TurnStatus == TurnStatus.Attacking && HumanPlayer.PuttingDown == true)
+            {
+                btnTakePass.Text = "Finish";
+                lblStatus.Text = "You are putting down extra cards!";
+                pnlPlayerBottom.BackColor = attackColor;
+                pnlPlayerTop.BackColor = defenseColor;
+            }
         }
 
         /// <summary>

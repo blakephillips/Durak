@@ -5,7 +5,6 @@
  * 
  * 
  */
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -286,8 +285,6 @@ namespace DurakXtreme
                         gui.GetHumanResponse();
                     }
                 }
-
-
             }
             else if (attacker.GetType() == typeof(Player))
             {
@@ -299,13 +296,8 @@ namespace DurakXtreme
                     if (PuttingDownComplete != null)
                         PuttingDownComplete(attacker, new EventArgs());
                 }
-                    
-                
             }
-
-
         }
-
         /// <summary>
         /// IsValidAttack(PlayingCard card)
         ///         Tests a card against the river to check that
@@ -359,9 +351,6 @@ namespace DurakXtreme
                 Console.WriteLine(tabbing + card.ToString());
             }
         }
-
-
-
         /// <summary>
         /// Logs gameplay messages to the console and log text file if applicable
         /// </summary>
@@ -379,7 +368,6 @@ namespace DurakXtreme
             
             if (gui is frmGameGUI) gui.UpdateMessages(message);
         }
-
         // Returns the player currently attacking
         public IPlayer GetAttacker()
         {
@@ -410,7 +398,10 @@ namespace DurakXtreme
             }
             return defender;
         }
-        // Moves the attacker one position to the left
+        /// <summary>
+        /// NextAttacker()
+        ///         Moves the attacker on position to the left
+        /// </summary>
         public void NextAttacker()
         {
             IPlayer attacker = GetAttacker();
@@ -421,20 +412,28 @@ namespace DurakXtreme
             Console.WriteLine(defender.Name + " is now " + defender.TurnStatus);
         }
 
-        // Replenishes players hands if still still contains cards
-        // --Called each time the river is cleared
+        /// <summary>
+        /// ReplenishCards()
+        ///         Called before a new round, deals cards to players who
+        ///         have less than the minimum required cards
+        /// </summary>
         bool trumpMovedtoDeck = false;
         public void ReplenishCards()
         {
+            //Each player takes turns replenishing cards
             foreach (IPlayer player in Players)
             {
+                // While the player still reuqires cards and the outOfCards flag is not set
                 while (player.Cards.Count < MINIMUM_CARD_COUNT && !outOfCards)
                 {
+                    // Deck contains cards
                     if (deck.Count > 0)
                     {
+                        // Remove the image from the deck CardBox when the last card is taken
                         if (deck.Count == 1) gui.Controls.Remove(gui.pbDeck);
                         player.Cards.Add(deck.DrawTopCard());
 
+                        // Deal card to appropriate plater
                         if (player.GetType() == typeof(Player))
                         {
                             gui.DealCardToPanel(gui.pnlPlayerBottom, player.Cards.Last());
@@ -443,12 +442,15 @@ namespace DurakXtreme
                            
                         if (player.GetType() == typeof(ComputerPlayer))
                             gui.DealCardToPanel(gui.pnlPlayerTop, player.Cards.Last());
+
+                        // Update deck count label
                         gui.lblDeckCount.Text = deck.Count.ToString();
                         gui.Wait(150);
                         
                     }
-                    else
+                    else // Deck does not contain cards
                     {
+                        // If, trump card has not yet been moved to the deck, move it
                         if (!trumpMovedtoDeck)
                         {
                             deck.Add(TrumpCard);
@@ -457,7 +459,7 @@ namespace DurakXtreme
                         }
                         else
                         {
-                            outOfCards = true;
+                            outOfCards = true; // Set outOfCards bool to true
                         }
                     }
                     
@@ -465,7 +467,11 @@ namespace DurakXtreme
             }
         }
 
-        // Returns an integer indicating a cards rank in Durak
+        /// <summary>
+        /// GetDurakRank(CardRank rank)
+        ///         Gets an integer value representing a cards Durak rank
+        /// </summary>
+        /// <returns>An integer representing the card's Durak rank</returns>
         static public int GetDurakRank(CardRank rank)
         {
             return Array.IndexOf(DurakGame.ranks, rank);
@@ -492,6 +498,10 @@ namespace DurakXtreme
             deck.Shuffle();
             Console.WriteLine("Deck of " + index + " Cards Initialized!");
         }
+        /// <summary>
+        /// InitializePlayers()
+        ///         Create the Human and AI players and set their names
+        /// </summary>
         void InitializePlayers()
         {
             Players.Add(new Player());
@@ -499,6 +509,10 @@ namespace DurakXtreme
             Players[0].Name = gui.HumanName;
             Players[0].Name = gui.AiName;
         }
+        /// <summary>
+        /// DealCards()
+        ///         Deal cards from the deck to the player hands
+        /// </summary>
         void DealCards()
         {
             for (int cardsToDeal = STARTING_CARD_COUNT; cardsToDeal > 0; cardsToDeal--)
@@ -511,12 +525,21 @@ namespace DurakXtreme
             Players[0].Cards.Sort();
             Players[1].Cards.Sort();
         }
+        /// <summary>
+        /// RevealTrump()
+        ///         Reveal the trump card
+        /// </summary>
         void RevealTrump()
         {
             trumpCard = deck.DrawTopCard();
             ((ComputerPlayer)Players[1]).TrumpSuit = TrumpCard.Suit;
             Print("Cards dealt! The trump card is the " + trumpCard.ToString() + "!");
         }
+        /// <summary>
+        /// SetFirstAttacker()
+        ///         Sets the games' first attacker based on which
+        ///         player has the lowest trump card.
+        /// </summary>
         void SetFirstAttacker()
         {
             int currentLowestTrump = -1;
@@ -546,9 +569,11 @@ namespace DurakXtreme
                 Print(startingPlayer.Name + " has the lowest trump card, and will make the first attack.");
             }
             startingPlayer.TurnStatus = TurnStatus.Attacking;
-
         }
-        // Sets the Winner and Loser if a winner is detected
+        /// <summary>
+        /// CheckForWinner()
+        ///         Checks if the game has a winner
+        /// </summary>
         public void CheckForWinner()
         {
             if (outOfCards)
@@ -576,8 +601,6 @@ namespace DurakXtreme
 
                     gui.End(Winner, Loser);
                 }
-
-
             }
         }
     }
