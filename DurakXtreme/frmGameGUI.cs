@@ -43,10 +43,10 @@ namespace DurakXtreme
 
         //Get players from game instance
         public IPlayer HumanPlayer;
-        public IPlayer ComputerPlayer;
+        public IPlayer AiPlayer;
 
-        public string HumanPlayerName;
-        public string ComputerPlayerName;
+        public string HumanName;
+        public string AiName;
 
         public GameStatistics gameStats = new GameStatistics();
 
@@ -65,8 +65,8 @@ namespace DurakXtreme
 
             // Read config file
             TextReader tr = new StreamReader("./DurakConfiguration");
-            string player1_name = tr.ReadLine();
-            string player2_name = tr.ReadLine();
+            HumanName = tr.ReadLine();
+            AiName = tr.ReadLine();
             aiCardsVisible = bool.Parse(tr.ReadLine());
             tr.Close();
 
@@ -78,12 +78,12 @@ namespace DurakXtreme
             durakGame = new DurakGame(this);
             // Capture players from DurakGame
             HumanPlayer = durakGame.Players[0];
-            ComputerPlayer = durakGame.Players[1];
+            AiPlayer = durakGame.Players[1];
             // Set Names
-            if (!String.IsNullOrEmpty(player1_name)) HumanPlayer.Name = player1_name;
-            if (!String.IsNullOrEmpty(player2_name)) ComputerPlayer.Name = player2_name;
+            if (!String.IsNullOrEmpty(HumanName)) HumanPlayer.Name = HumanName;
+            if (!String.IsNullOrEmpty(AiName)) AiPlayer.Name = AiName;
             lblPlayerName.Text = HumanPlayer.Name;
-            lblAIName.Text = ComputerPlayer.Name;
+            lblAIName.Text = AiPlayer.Name;
             //Throw In events
             durakGame.OnPuttingDown += PuttingDown;
             durakGame.PuttingDownComplete += PuttingDownComplete;
@@ -128,7 +128,7 @@ namespace DurakXtreme
             }
             else if (sender.GetType() == typeof(ComputerPlayer))
             {
-                ComputerPlayer.PuttingDown = true;
+                AiPlayer.PuttingDown = true;
             }
         }
 
@@ -136,12 +136,12 @@ namespace DurakXtreme
         {
             if (sender.GetType() == typeof(ComputerPlayer))
             {
-                ComputerPlayer.PuttingDown = false;
+                AiPlayer.PuttingDown = false;
                 durakGame.TakeRiver(HumanPlayer);
             } else if (sender.GetType() == typeof(Player))
             {
                 HumanPlayer.PuttingDown = false;
-                durakGame.TakeRiver(ComputerPlayer);
+                durakGame.TakeRiver(AiPlayer);
             }
         }
 
@@ -433,7 +433,7 @@ namespace DurakXtreme
                 {
                     gameStats.attacksWon++;
                     HumanPlayer.PuttingDown = false;
-                    durakGame.TakeRiver(ComputerPlayer);
+                    durakGame.TakeRiver(AiPlayer);
                 } else
                 {
                     durakGame.TakeRiver(HumanPlayer);

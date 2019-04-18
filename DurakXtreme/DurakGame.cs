@@ -454,6 +454,8 @@ namespace DurakXtreme
         {
             Players.Add(new Player());
             Players.Add(new ComputerPlayer());
+            Players[0].Name = gui.HumanName;
+            Players[0].Name = gui.AiName;
         }
         void DealCards()
         {
