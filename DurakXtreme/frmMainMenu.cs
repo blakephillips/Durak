@@ -100,7 +100,7 @@ namespace DurakXtreme
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            formSettings = new frmSettings(this);
+            formSettings = new frmSettings();
             formSettings.ShowDialog();
         }
 

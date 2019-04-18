@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Media;
 using CardLibrary;
 using System.Diagnostics;
+using System.IO;
 
 namespace DurakXtreme
 {
@@ -31,9 +32,9 @@ namespace DurakXtreme
         // triggering new events.
 
         // Constants
-        const bool AI_CARDS_VISIBLE = false;
         const int AI_ATTACK_DELAY = 300;
         const int AI_YIELD_DELAY = 1000;
+        bool aiCardsVisible = false;
         // Path to resources folder
         public const string RESOURCES_PATH = "../../Resources/";
 
@@ -58,37 +59,39 @@ namespace DurakXtreme
         // frmGameGUI
         public frmGameGUI(frmMainMenu mainMenu)
         {
+            menuForm = mainMenu;
             InitializeComponent();
             this.Show();
-
+           
             // The DurakGame constructor creates a game instance
             // with one human and one AI player, and deals hands out to
             // both of them.
-
             // By passing this form as a parameter, it can receive data from
             // the game and have GUI events triggered by it
             durakGame = new DurakGame(this);
+
+            //Throw In events
             durakGame.OnPuttingDown += PuttingDown;
             durakGame.PuttingDownComplete += PuttingDownComplete;
-
-            HumanPlayerName = mainMenu.player1Name;
-            ComputerPlayerName = mainMenu.player2Name;
-
-            menuForm = mainMenu;
-
-            durakGame.Players[0].Name = HumanPlayerName;
-            durakGame.Players[1].Name = ComputerPlayerName;
 
             // Capture players from DurakGame
             HumanPlayer = durakGame.Players[0];
             ComputerPlayer = durakGame.Players[1];
 
-            
+            // Read config file
+            TextReader tr = new StreamReader("./DurakConfiguration");
+            string player1_name = tr.ReadLine();
+            string player2_name = tr.ReadLine();
+            string aiCardsVisible = tr.ReadLine();
+            tr.Close();
+
+            if (!String.IsNullOrEmpty(player1_name)) HumanPlayer.Name = player1_name;
+            if (!String.IsNullOrEmpty(player2_name)) ComputerPlayer.Name = player2_name;
+            if (bool.Parse(aiCardsVisible)) this.aiCardsVisible = bool.Parse(aiCardsVisible);
+
+
+
             gameStats.InitializeStatistics();
-
-
-            lblAIName.Text = ComputerPlayer.Name;
-            lblPlayerName.Text = HumanPlayer.Name;
 
             this.InitiateGame();
         }
@@ -170,6 +173,8 @@ namespace DurakXtreme
             EnableCardClick();
             EvaluateHand();
         }
+
+        //
         public void EndHumanResponse()
         {
             DisableCardClick();
@@ -184,7 +189,7 @@ namespace DurakXtreme
         public void DealCardToPanel(Panel panel, PlayingCard card)
         {
             CardBox pbCard = new CardBox(card);
-            if (panel == pnlPlayerTop && !AI_CARDS_VISIBLE) pbCard.FaceDown();
+            if (panel == pnlPlayerTop && !aiCardsVisible) pbCard.FaceDown();
             panel.Controls.Add(pbCard);
             AlignCards(panel);
         }
@@ -346,7 +351,7 @@ namespace DurakXtreme
             for (int i = pnlPlayArea.Controls.Count - 1; i >= 0; i--)
             {
                 CardBox cb = (CardBox)pnlPlayArea.Controls[i];
-                if (!faceDown || AI_CARDS_VISIBLE) cb.FaceUp();
+                if (!faceDown || aiCardsVisible) cb.FaceUp();
                 else cb.FaceDown();
                 toPanel.Controls.Add(cb);
                 AlignCards(toPanel);
@@ -504,5 +509,6 @@ namespace DurakXtreme
             menuForm.Show();
             
         }
+
     }
 }

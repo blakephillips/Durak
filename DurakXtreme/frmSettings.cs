@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace DurakXtreme
 {
     public partial class frmSettings : Form
     {
-        frmMainMenu menu;
-        public frmSettings(frmMainMenu mainMenu)
+        public frmSettings()
         {
             InitializeComponent();
-            menu = mainMenu;
         }
-
         private void frmSettings_Load(object sender, EventArgs e)
         {
-            txtPlayerOne.Text = menu.player1Name;
-            txtPlayerTwo.Text = menu.player2Name;
+            txtPlayerOne.Text = "Player 1";
+            txtPlayerTwo.Text = "Player 2 (AI)";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            menu.player1Name = txtPlayerOne.Text;
-            menu.player2Name = txtPlayerTwo.Text;
+
+            TextWriter tw = new StreamWriter("./DurakConfiguration");
+            tw.WriteLine(txtPlayerOne.Text);
+            tw.WriteLine(txtPlayerTwo.Text);
+            tw.WriteLine(cbAiCardsVisible.Checked);
+            tw.Close();
 
             this.Close();
         }

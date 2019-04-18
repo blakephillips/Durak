@@ -33,55 +33,67 @@
             this.txtPlayerOne = new System.Windows.Forms.TextBox();
             this.txtPlayerTwo = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
+            this.cbAiCardsVisible = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblFirstPlayer
             // 
-            this.lblFirstPlayer.AutoSize = true;
-            this.lblFirstPlayer.Location = new System.Drawing.Point(31, 34);
+            this.lblFirstPlayer.Location = new System.Drawing.Point(30, 12);
             this.lblFirstPlayer.Name = "lblFirstPlayer";
-            this.lblFirstPlayer.Size = new System.Drawing.Size(97, 13);
+            this.lblFirstPlayer.Size = new System.Drawing.Size(97, 20);
             this.lblFirstPlayer.TabIndex = 0;
             this.lblFirstPlayer.Text = "First Players Name:";
+            this.lblFirstPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblSecondPlayer
             // 
-            this.lblSecondPlayer.AutoSize = true;
-            this.lblSecondPlayer.Location = new System.Drawing.Point(13, 70);
+            this.lblSecondPlayer.Location = new System.Drawing.Point(12, 48);
             this.lblSecondPlayer.Name = "lblSecondPlayer";
-            this.lblSecondPlayer.Size = new System.Drawing.Size(115, 13);
-            this.lblSecondPlayer.TabIndex = 1;
+            this.lblSecondPlayer.Size = new System.Drawing.Size(115, 20);
+            this.lblSecondPlayer.TabIndex = 2;
             this.lblSecondPlayer.Text = "Second Players Name:";
+            this.lblSecondPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtPlayerOne
             // 
-            this.txtPlayerOne.Location = new System.Drawing.Point(135, 34);
+            this.txtPlayerOne.Location = new System.Drawing.Point(133, 12);
             this.txtPlayerOne.Name = "txtPlayerOne";
-            this.txtPlayerOne.Size = new System.Drawing.Size(140, 20);
-            this.txtPlayerOne.TabIndex = 2;
+            this.txtPlayerOne.Size = new System.Drawing.Size(111, 20);
+            this.txtPlayerOne.TabIndex = 1;
             // 
             // txtPlayerTwo
             // 
-            this.txtPlayerTwo.Location = new System.Drawing.Point(134, 70);
+            this.txtPlayerTwo.Location = new System.Drawing.Point(133, 48);
             this.txtPlayerTwo.Name = "txtPlayerTwo";
-            this.txtPlayerTwo.Size = new System.Drawing.Size(140, 20);
+            this.txtPlayerTwo.Size = new System.Drawing.Size(111, 20);
             this.txtPlayerTwo.TabIndex = 3;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(16, 134);
+            this.btnSave.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnSave.Location = new System.Drawing.Point(16, 116);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(436, 23);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 5;
             this.btnSave.Text = "&Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // cbAiCardsVisible
+            // 
+            this.cbAiCardsVisible.Location = new System.Drawing.Point(308, 13);
+            this.cbAiCardsVisible.Name = "cbAiCardsVisible";
+            this.cbAiCardsVisible.Size = new System.Drawing.Size(104, 20);
+            this.cbAiCardsVisible.TabIndex = 4;
+            this.cbAiCardsVisible.Text = "AI Cards Visible";
+            this.cbAiCardsVisible.UseVisualStyleBackColor = true;
             // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 169);
+            this.ClientSize = new System.Drawing.Size(464, 151);
+            this.Controls.Add(this.cbAiCardsVisible);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtPlayerTwo);
             this.Controls.Add(this.txtPlayerOne);
@@ -103,5 +115,6 @@
         private System.Windows.Forms.TextBox txtPlayerOne;
         private System.Windows.Forms.TextBox txtPlayerTwo;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.CheckBox cbAiCardsVisible;
     }
 }
