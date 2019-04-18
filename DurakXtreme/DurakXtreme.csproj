@@ -49,30 +49,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ComputerPlayer.cs" />
+    <Compile Include="DurakGame.cs" />
+    <Compile Include="frmSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.cs">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmStatistics.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStatistics.Designer.cs">
+      <DependentUpon>frmStatistics.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameplayLog.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="frmGameGUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="frmGameGUI.Designer.cs">
+      <DependentUpon>frmGameGUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainMenu.cs">
+    <Compile Include="frmMainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainMenu.Designer.cs">
-      <DependentUpon>MainMenu.cs</DependentUpon>
+    <Compile Include="frmMainMenu.Designer.cs">
+      <DependentUpon>frmMainMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameStatistics.cs" />
+    <Compile Include="IPlayer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TurnStatus.cs" />
     <Compile Include="UIEffects.cs" />
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="frmGameGUI.resx">
+      <DependentUpon>frmGameGUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainMenu.resx">
-      <DependentUpon>MainMenu.cs</DependentUpon>
+    <EmbeddedResource Include="frmMainMenu.resx">
+      <DependentUpon>frmMainMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resx">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStatistics.resx">
+      <DependentUpon>frmStatistics.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -98,16 +121,183 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\texturedBackground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\menu_background.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Durak\CardLib.csproj">
       <Project>{1bca90dc-2587-42b5-865a-d614aca8ea59}</Project>
       <Name>CardLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\cards\ace_of_clubs.png" />
+    <Content Include="Resources\cards\ace_of_diamonds.png" />
+    <Content Include="Resources\cards\ace_of_hearts.png" />
+    <Content Include="Resources\cards\ace_of_spades.png" />
+    <Content Include="Resources\cards\back.png" />
+    <Content Include="Resources\cards\black_joker.png" />
+    <Content Include="Resources\cards\eight_of_clubs.png" />
+    <Content Include="Resources\cards\eight_of_diamonds.png" />
+    <Content Include="Resources\cards\eight_of_hearts.png" />
+    <Content Include="Resources\cards\eight_of_spades.png" />
+    <Content Include="Resources\cards\five_of_clubs.png" />
+    <Content Include="Resources\cards\five_of_diamonds.png" />
+    <Content Include="Resources\cards\five_of_hearts.png" />
+    <Content Include="Resources\cards\five_of_spades.png" />
+    <Content Include="Resources\cards\four_of_clubs.png" />
+    <Content Include="Resources\cards\four_of_diamonds.png" />
+    <Content Include="Resources\cards\four_of_hearts.png" />
+    <Content Include="Resources\cards\four_of_spades.png" />
+    <Content Include="Resources\cards\jack_of_clubs.png" />
+    <Content Include="Resources\cards\jack_of_diamonds.png" />
+    <Content Include="Resources\cards\jack_of_hearts.png" />
+    <Content Include="Resources\cards\jack_of_spades.png" />
+    <Content Include="Resources\cards\king_of_clubs.png" />
+    <Content Include="Resources\cards\king_of_diamonds.png" />
+    <Content Include="Resources\cards\king_of_hearts.png" />
+    <Content Include="Resources\cards\king_of_spades.png" />
+    <Content Include="Resources\cards\nine_of_clubs.png" />
+    <Content Include="Resources\cards\nine_of_diamonds.png" />
+    <Content Include="Resources\cards\nine_of_hearts.png" />
+    <Content Include="Resources\cards\nine_of_spades.png" />
+    <Content Include="Resources\cards\queen_of_clubs.png" />
+    <Content Include="Resources\cards\queen_of_diamonds.png" />
+    <Content Include="Resources\cards\queen_of_hearts.png" />
+    <Content Include="Resources\cards\queen_of_spades.png" />
+    <Content Include="Resources\cards\red_joker.png" />
+    <Content Include="Resources\cards\resize\ace_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\ace_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\ace_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\ace_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\back.jpg" />
+    <Content Include="Resources\cards\resize\black_joker.jpg" />
+    <Content Include="Resources\cards\resize\bw\ace_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\ace_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\ace_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\ace_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\back.jpg" />
+    <Content Include="Resources\cards\resize\bw\black_joker.jpg" />
+    <Content Include="Resources\cards\resize\bw\eight_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\eight_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\eight_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\eight_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\five_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\five_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\five_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\five_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\four_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\four_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\four_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\four_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\jack_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\jack_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\jack_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\jack_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\king_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\king_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\king_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\king_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\nine_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\nine_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\nine_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\nine_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\queen_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\queen_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\queen_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\queen_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\red_joker.jpg" />
+    <Content Include="Resources\cards\resize\bw\seven_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\seven_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\seven_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\seven_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\six_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\six_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\six_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\six_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\ten_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\ten_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\ten_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\ten_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\three_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\three_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\three_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\three_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\bw\two_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\bw\two_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\bw\two_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\bw\two_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\eight_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\eight_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\eight_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\eight_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\five_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\five_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\five_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\five_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\four_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\four_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\four_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\four_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\jack_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\jack_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\jack_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\jack_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\king_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\king_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\king_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\king_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\nine_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\nine_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\nine_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\nine_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\queen_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\queen_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\queen_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\queen_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\red_joker.jpg" />
+    <Content Include="Resources\cards\resize\seven_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\seven_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\seven_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\seven_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\six_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\six_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\six_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\six_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\ten_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\ten_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\ten_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\ten_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\three_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\three_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\three_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\three_of_spades.jpg" />
+    <Content Include="Resources\cards\resize\two_of_clubs.jpg" />
+    <Content Include="Resources\cards\resize\two_of_diamonds.jpg" />
+    <Content Include="Resources\cards\resize\two_of_hearts.jpg" />
+    <Content Include="Resources\cards\resize\two_of_spades.jpg" />
+    <Content Include="Resources\cards\seven_of_clubs.png" />
+    <Content Include="Resources\cards\seven_of_diamonds.png" />
+    <Content Include="Resources\cards\seven_of_hearts.png" />
+    <Content Include="Resources\cards\seven_of_spades.png" />
+    <Content Include="Resources\cards\six_of_clubs.png" />
+    <Content Include="Resources\cards\six_of_diamonds.png" />
+    <Content Include="Resources\cards\six_of_hearts.png" />
+    <Content Include="Resources\cards\six_of_spades.png" />
+    <Content Include="Resources\cards\ten_of_clubs.png" />
+    <Content Include="Resources\cards\ten_of_diamonds.png" />
+    <Content Include="Resources\cards\ten_of_hearts.png" />
+    <Content Include="Resources\cards\ten_of_spades.png" />
+    <Content Include="Resources\cards\three_of_clubs.png" />
+    <Content Include="Resources\cards\three_of_diamonds.png" />
+    <Content Include="Resources\cards\three_of_hearts.png" />
+    <Content Include="Resources\cards\three_of_spades.png" />
+    <Content Include="Resources\cards\two_of_clubs.png" />
+    <Content Include="Resources\cards\two_of_diamonds.png" />
+    <Content Include="Resources\cards\two_of_hearts.png" />
+    <Content Include="Resources\cards\two_of_spades.png" />
+    <Content Include="Resources\deal.wav" />
+    <Content Include="Resources\menu_background.png" />
+    <Content Include="Resources\texturedBackground.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

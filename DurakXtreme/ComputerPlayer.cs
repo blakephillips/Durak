@@ -1,137 +1,124 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: ComputerPlayer.cs
+ * 
+ * Description: Controls AI logic for responding to various gameplay events
+ * 
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CardLibrary;
+using DurakXtreme;
 
 namespace DurakXtreme
 {
+    
     public class ComputerPlayer : Player
     {
-        public ComputerPlayer(string pName) : base(pName)
-        {   }
-
-        /// <summary>
-        /// Computer plays an applicable move depending if it is attacking or defending
-        /// </summary>
-        /// <param name="playedCards"></param>
-        public void PlayMove(ref Deck playedCards, PlayingCard trumpCard)
+        public ComputerPlayer() : base()
         {
-            if (base.CurrentTurnStatus == TurnStatus.Defending)
-                Defend(ref playedCards, trumpCard);
-            if (base.CurrentTurnStatus == TurnStatus.Attacking)
-                Attack(ref playedCards);
+            Name += "(AI)";
         }
+        /// <summary>
+        /// The suit of the trump card
+        /// </summary>
+        public CardSuit TrumpSuit { get; set; }
+
 
         /// <summary>
-        /// Logic for AI defending against the player
+        /// AI Attack logic
         /// </summary>
         /// <param name="river">Cards in river</param>
-        private void Defend(ref Deck river, PlayingCard trumpCard)
+        /// <param name="deck">Unplayed cards</param>
+        /// <returns>The card played, and the index of the card</returns>
+        public Tuple<PlayingCard, int> Attack(List<PlayingCard> river = null, List<PlayingCard> deck = null)
         {
-            //Index of card the computer wants to play
-            int playedCardIndex = -1;
-            
-            int trumpIndex = -1;
-            
-            for (int i = 0; i < this.Count; i++)
+            PlayingCard bestViableCard = null;
+            PlayingCard lowestTrumpCard = null;
+            foreach (PlayingCard card in Cards)
             {
-                //If the suit matched the last card
-                if (this[i].Suit == river.LastCardInputted.Suit && this[i].CardValue > river.LastCardInputted.CardValue)
+                //if theres no cards in the river
+                if (river.Count == 0)
                 {
-                    if (playedCardIndex == -1)
-                    {
-                        playedCardIndex = i;
+                    if (card.Suit == TrumpSuit) {
+                        if (lowestTrumpCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(lowestTrumpCard.Rank)) lowestTrumpCard = card;
                     }
-                    else if (this[playedCardIndex].CardValue > this[i].CardValue)
-                    {
-                        playedCardIndex = i;
-                    }
-                } else if(this[i].Suit == trumpCard.Suit)
-                {
-                    trumpIndex = i;
-                }
-            }
-            if (playedCardIndex != -1)
-            {
-                PlayCard(playedCardIndex, ref river);
-            } else if (trumpIndex != -1)
-            {
-                PlayCard(trumpIndex, ref river);
-            }
-            else
-            {
-                base.Take(ref river);
-            }
-            
-
-        }
-
-        /// <summary>
-        /// Logic for AI attacking the player.
-        /// </summary>
-        /// <param name="river"></param>
-        private void Attack(ref Deck river)
-        {
-            bool foundAttackCard = false;
-            //index of the card to be played
-            int playedCardIndex = 0;
-            //if there is 0 cards in t
-            if (river.Count == 0)
-            {
-                
-               //Get lowest card in hand and set the played card to it 
-                for (int i = 0; i < this.Count; i++)
-                {
-                    if (this[i].CardValue <= this[playedCardIndex].CardValue)
-                    {
-                        foundAttackCard = true;
-                        playedCardIndex = i;
+                    else if (card.Suit != TrumpSuit) { 
+                        if (bestViableCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(bestViableCard.Rank)) bestViableCard = card;
                     }
                 }
-                
-           //if there are cards on the table
-            } else if (river.Count > 0)
-            {
-                //play the first cardValue that is equal to one on the table
-                for (int i = 0; i > river.Count; i++)
+                else
                 {
-                    for (int j = 0; j > this.Count; j++)
+                    foreach (PlayingCard riverCard in river)
                     {
-                        if (river[i].CardValue == this[j].CardValue)
+                        if (riverCard.Rank == card.Rank)
                         {
-                            foundAttackCard = true;
-                            playedCardIndex = j;
+                            if (card.Suit == TrumpSuit)
+                            {
+                                if (lowestTrumpCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(lowestTrumpCard.Rank)) lowestTrumpCard = card;
+                            }
+                            else if (card.Suit != TrumpSuit)
+                            {
+                                if (bestViableCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(bestViableCard.Rank)) bestViableCard = card;
+                            }
                         }
-                            
                     }
                 }
             }
-            //if a card was found to play
-            if (playedCardIndex != -1 && foundAttackCard == true)
+            // If AI has a playable trump card and no alternative plays
+            if (bestViableCard == null && lowestTrumpCard != null)
             {
-                //play the card
-                PlayCard(playedCardIndex, ref river);
-            } else
-            {
-                //called from base class(Player)
-                base.Pass(ref river);
+                if (river.Count > 2 || (deck.Count + Cards.Count < 12)) bestViableCard = lowestTrumpCard;
             }
-                
+            int cardIndex = Cards.IndexOf(bestViableCard);
+            if (bestViableCard != null)
+            {
+                Cards.Remove(bestViableCard);
+            }
+            return Tuple.Create(bestViableCard, cardIndex);
         }
-
+        
         /// <summary>
-        /// AI plays a selected card to the river
+        /// AI Defend Logic
         /// </summary>
-        /// <param name="cardIndex">Index of card to be played</param>
-        /// <param name="river">River to play the card to</param>
-        private void PlayCard(int cardIndex, ref Deck river)
+        /// <param name="river">River cards</param>
+        /// <param name="deck">Deck cards</param>
+        /// <returns>The card played, and the index of the card</returns>
+        public Tuple<PlayingCard, int> Defend(List<PlayingCard> river, List<PlayingCard> deck = null)
         {
-            GameplayLog.Log(this.ToString() + " " + this.CurrentTurnStatus + " with " + this[cardIndex].ToString());
-            river.RiverInsert(this[cardIndex]);
-            this.Remove(this[cardIndex]);
+            PlayingCard bestViableCard = null;
+            PlayingCard lowestTrumpCard = null;
+            foreach (PlayingCard card in Cards)
+            {
+                if (river.Last().Suit != TrumpSuit && card.Suit == TrumpSuit)
+                {
+                    if (lowestTrumpCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(lowestTrumpCard.Rank))
+                    {
+                        lowestTrumpCard = card;
+                    }
+                }
+                else if ((card.Suit == river.Last().Suit) && DurakGame.GetDurakRank(card.Rank) > DurakGame.GetDurakRank(river.Last().Rank))
+                {
+                    if (bestViableCard == null || DurakGame.GetDurakRank(card.Rank) < DurakGame.GetDurakRank(bestViableCard.Rank))
+                    {
+                        bestViableCard = card;
+                    }
+                }
+            }
+            if (bestViableCard == null && lowestTrumpCard != null)
+            {
+                if (river.Count > 2 || (deck.Count + Cards.Count < 12)) bestViableCard = lowestTrumpCard;
+            }
+            int cardIndex = Cards.IndexOf(bestViableCard);
+            if (bestViableCard != null)
+            {
+                Cards.Remove(bestViableCard);
+            }
+            return Tuple.Create(bestViableCard, cardIndex);
         }
-
     }
 }

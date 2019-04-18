@@ -8,6 +8,7 @@ namespace CardLibrary
 {
     public enum CardSuit : byte
     {
+        Joker,
         Spades,
         Hearts,
         Diamonds, 

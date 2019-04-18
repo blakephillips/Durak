@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: UIEffects.cs
+ * 
+ * Description: Controls the effects that are seen on the main menu
+ * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +25,7 @@ namespace DurakXtreme
         /// <param name="btn">Button to pop</param>
         /// <param name="isEntering">True if mouse is entering, false otherwise</param>
         /// <param name="popSize">Amount to add to width and height</param>
-        public static void btnPop(Button btn, bool isEntering = true, int popSize = 20)
+        public static void controlPop(Control btn, bool isEntering = true, int popSize = 3)
         {
             if (isEntering == true)
             {
