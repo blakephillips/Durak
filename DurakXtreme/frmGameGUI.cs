@@ -203,7 +203,10 @@ namespace DurakXtreme
             }
             ResetColors(pnlPlayerBottom);
         }
-        //Dealer Methods
+        /// <summary>
+        /// Creates a new CardBox and deals it to the specified panel
+        /// </summary>
+        /// <param name="panel"></param>
         public void DealCardToPanel(Panel panel, PlayingCard card)
         {
             CardBox pbCard = new CardBox(card);
@@ -219,7 +222,10 @@ namespace DurakXtreme
                 cb.SetCardImage(cb.Card);
             }
         }
-        //GUI Methods
+        /// <summary>
+        /// Aligns the cards in the panel depending on which game panel is passed to it
+        /// </summary>
+        /// <param name="panel"></param>
         void AlignCards(Panel panel)
         {
             //panel.Update();
@@ -278,6 +284,11 @@ namespace DurakXtreme
                 }
             }
         }
+        /// <summary>
+        /// Hover effect enlarging a card by a specified factor
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void CardPop(object sender, EventArgs e)
         {
             float popRatio = 1.2f;
@@ -295,7 +306,11 @@ namespace DurakXtreme
                 card.Location = new Point(card.Location.X + (newWidth - CardBox.CARD_SIZE.Width) / 2, card.Location.Y + (newHeight - CardBox.CARD_SIZE.Height));
             }
         }
-        //Event Methods
+        /// <summary>
+        /// Checks the players hand for valid plays, applying
+        /// events and styles to cards based on whether or not
+        /// they are playable
+        /// </summary>
         void EvaluateHand()
         {
             if (durakGame.River.Count > 0)
@@ -327,6 +342,12 @@ namespace DurakXtreme
                 }
             }
         }
+        /// <summary>
+        /// CardClick(object sender, EventArgs e)
+        ///         Occurs every time a user clicks a card
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void CardClick(object sender, EventArgs e)
         {
 
@@ -484,13 +505,18 @@ namespace DurakXtreme
                 }
                 
             }
-            
         }
-        public void UpdateMessages(string message)
+        /// <summary>
+        /// Prints a message to the text box
+        /// </summary>
+        /// <param name="message">The PlayingCard selected from the GUI.</param>
+        public void PrintMessage(string message)
         {
             this.txtMessages.AppendText(message + "\r\n"); //Print game messages
         }
-
+        /// <summary>
+        /// Change the style of the UI based on whether the player is attacking or defending
+        /// </summary>
         public void UpdateUIStyles()
         {
             if (HumanPlayer.TurnStatus == TurnStatus.Defending)
@@ -539,7 +565,6 @@ namespace DurakXtreme
         /// <summary>
         /// Make sure UI and memory are in sync
         /// </summary>
-        /// <returns></returns>
         public bool CheckSync()
         {
             bool returnValue = true;

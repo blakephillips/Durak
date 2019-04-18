@@ -366,7 +366,7 @@ namespace DurakXtreme
                 Console.WriteLine(message);
             }
             
-            if (gui is frmGameGUI) gui.UpdateMessages(message);
+            if (gui is frmGameGUI) gui.PrintMessage(message);
         }
         // Returns the player currently attacking
         public IPlayer GetAttacker()
