@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: GameStatistics.cs
+ * 
+ * Description: Serializable class that holds the statistics and controls writing it to the hard drive.
+ * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

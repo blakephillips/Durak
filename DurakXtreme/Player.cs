@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: Player.cs
+ * 
+ * Description: Human player class
+ * 
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

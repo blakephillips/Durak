@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: GameplayLog.cs
+ * 
+ * Description: Controls displaying log data to console and writing it to a log file
+ * 
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

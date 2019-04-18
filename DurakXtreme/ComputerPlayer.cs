@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: ComputerPlayer.cs
+ * 
+ * Description: Controls AI logic for responding to various gameplay events
+ * 
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

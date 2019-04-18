@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: frmStatistics.cs
+ * 
+ * Description: Form that allows viewing the statistics recorded
+ * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;

@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* Authors: Blake, Clayton, Dylan
+ * File Name: frmGameGUI.cs
+ * 
+ * Description: Reflects changes in the gamestate to the user in a visual manner
+ * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
