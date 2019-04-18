@@ -15,9 +15,36 @@ namespace DurakXtreme
         }
         private void frmSettings_Load(object sender, EventArgs e)
         {
-            txtPlayerOne.Text = "Player 1";
-            txtPlayerTwo.Text = "Player 2 (AI)";
-        }
+            TextReader tr = new StreamReader("./DurakConfiguration");
+            string player1_name = tr.ReadLine();
+            string player2_name = tr.ReadLine();
+            string aiCardsVisible = tr.ReadLine();
+            tr.Close();
+
+            if (!String.IsNullOrEmpty(player1_name))
+            {
+                txtPlayerOne.Text = player1_name;
+            } else
+            {
+                txtPlayerOne.Text = "Player 1";
+            }
+            if (!String.IsNullOrEmpty(player2_name))
+            {
+                txtPlayerTwo.Text = player2_name;
+            }
+            else
+            {
+                txtPlayerTwo.Text = "Player 2";
+            }
+            bool isVisibleCards = false;
+            if (bool.Parse(aiCardsVisible))
+            {
+                isVisibleCards = bool.Parse(aiCardsVisible);
+                cbAiCardsVisible.Checked = isVisibleCards;
+            }
+
+        
+    }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
