@@ -19,9 +19,11 @@ namespace DurakXtreme
         public string player1Name = "Player 1";
         public string player2Name = "Player 2(AI)";
 
+        
 
         static public frmGameGUI gameForm;
         static public frmSettings formSettings;
+        static public frmStatistics formStatistics;
         public frmMainMenu()
         {
             InitializeComponent();
@@ -29,7 +31,7 @@ namespace DurakXtreme
 
         private void frmMainMenu_Load(object sender, EventArgs e)
         {
-            
+              
         }
 
         /// <summary>
@@ -100,6 +102,12 @@ namespace DurakXtreme
         {
             formSettings = new frmSettings(this);
             formSettings.ShowDialog();
+        }
+
+        private void btnStatistics_Click(object sender, EventArgs e)
+        {
+            formStatistics = new frmStatistics();
+            formStatistics.ShowDialog();
         }
     }
 }

@@ -199,6 +199,7 @@
             this.Name = "frmGameGUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Durak Xtreme";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmGameGUI_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pbTrump)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDeck)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDiscard)).EndInit();

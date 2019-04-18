@@ -34,6 +34,7 @@
             this.btnAbout = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
+            this.btnStatistics = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnExit
@@ -108,12 +109,27 @@
             this.btnSettings.UseVisualStyleBackColor = false;
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
+            // btnStatistics
+            // 
+            this.btnStatistics.BackColor = System.Drawing.Color.Lavender;
+            this.btnStatistics.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStatistics.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnStatistics.Location = new System.Drawing.Point(18, 233);
+            this.btnStatistics.Name = "btnStatistics";
+            this.btnStatistics.Size = new System.Drawing.Size(249, 56);
+            this.btnStatistics.TabIndex = 5;
+            this.btnStatistics.Text = "S&tatistics";
+            this.btnStatistics.UseVisualStyleBackColor = false;
+            this.btnStatistics.Click += new System.EventHandler(this.btnStatistics_Click);
+            // 
             // frmMainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnStatistics);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.btnAbout);
@@ -138,6 +154,7 @@
         private System.Windows.Forms.Button btnAbout;
         private System.Windows.Forms.Button btnPlay;
         private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.Button btnStatistics;
     }
 }
 

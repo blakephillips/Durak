@@ -112,6 +112,7 @@ namespace DurakXtreme
                     if (attackCardIndex == -1)
                     {
                         TakeRiver(ai);
+                        gui.gameStats.defensesRepelled++;
                     }
                     else
                     {
@@ -149,11 +150,16 @@ namespace DurakXtreme
                     }
                     else
                     {
-                        Print(defender.Name + " is defending against " + attacker.Name + "'s " + River.Last().ToString() + " with a " + defendCard.ToString() + "!");
-                        River.Add(defendCard);
-                        gui.PlayCardAt(defendCardIndex, Players.IndexOf(defender));
-                    
-                        gui.GetHumanResponse();
+                        if (River.Count == 12 || defender.Cards.Count == 0)
+                        {
+                            NextAttacker();
+                        } else
+                        {
+                            Print(defender.Name + " is defending against " + attacker.Name + "'s " + River.Last().ToString() + " with a " + defendCard.ToString() + "!");
+                            River.Add(defendCard);
+                            gui.PlayCardAt(defendCardIndex, Players.IndexOf(defender));
+                            gui.GetHumanResponse();
+                        }
                     }
                 }
                 if (defender.GetType() == typeof(Player))
@@ -388,7 +394,11 @@ namespace DurakXtreme
                         player.Cards.Add(deck.DrawTopCard());
 
                         if (player.GetType() == typeof(Player))
+                        {
                             gui.DealCardToPanel(gui.pnlPlayerBottom, player.Cards.Last());
+                            gui.gameStats.cardsDrawn++;
+                        }
+                           
                         if (player.GetType() == typeof(ComputerPlayer))
                             gui.DealCardToPanel(gui.pnlPlayerTop, player.Cards.Last());
                         gui.lblDeckCount.Text = deck.Count.ToString();
@@ -509,7 +519,21 @@ namespace DurakXtreme
                     Winner = Players[1];
                     Loser = Players[0];
                 }
-                if (Winner != null) gui.End(Winner, Loser);
+                if (Winner != null)
+                {
+                    if (Winner.GetType() == typeof(Player))
+                    {
+                        gui.gameStats.gamesWon++;
+                    }
+                    else
+                    {
+                        gui.gameStats.gamesLost++;
+                    }
+
+                    gui.End(Winner, Loser);
+                }
+
+
             }
         }
     }

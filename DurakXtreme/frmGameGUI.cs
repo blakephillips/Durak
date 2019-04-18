@@ -47,11 +47,13 @@ namespace DurakXtreme
         public string HumanPlayerName;
         public string ComputerPlayerName;
 
+        public GameStatistics gameStats = new GameStatistics();
+
         // GUI configuration variables
         private Color defenseColor = Color.FromArgb(70, 50, 50);
         private Color attackColor = Color.FromArgb(50, 70, 50);
 
-       
+        private frmMainMenu menuForm = new frmMainMenu();
 
         // frmGameGUI
         public frmGameGUI(frmMainMenu mainMenu)
@@ -72,6 +74,8 @@ namespace DurakXtreme
             HumanPlayerName = mainMenu.player1Name;
             ComputerPlayerName = mainMenu.player2Name;
 
+            menuForm = mainMenu;
+
             durakGame.Players[0].Name = HumanPlayerName;
             durakGame.Players[1].Name = ComputerPlayerName;
 
@@ -80,6 +84,7 @@ namespace DurakXtreme
             ComputerPlayer = durakGame.Players[1];
 
             
+            gameStats.InitializeStatistics();
 
 
             lblAIName.Text = ComputerPlayer.Name;
@@ -99,6 +104,8 @@ namespace DurakXtreme
 
             SoundPlayer dealSound = new System.Media.SoundPlayer(RESOURCES_PATH + "deal.wav");
             dealSound.Play();
+
+            gameStats.cardsDrawn = gameStats.cardsDrawn + DurakGame.STARTING_CARD_COUNT;
             for (int i = 0; i < DurakGame.STARTING_CARD_COUNT; i++)
             {
                 DealCardToPanel(this.pnlPlayerBottom, durakGame.Players[0].Cards[i]);
@@ -418,6 +425,7 @@ namespace DurakXtreme
             {
                 if (HumanPlayer.PuttingDown == true)
                 {
+                    gameStats.attacksWon++;
                     HumanPlayer.PuttingDown = false;
                     durakGame.TakeRiver(ComputerPlayer);
                 } else
@@ -488,6 +496,13 @@ namespace DurakXtreme
             endPrompt.Font = new Font("Arial", 30f);
             this.Controls.Add(endPrompt);
             this.Update();
+        }
+
+        private void frmGameGUI_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            gameStats.SerializeFile();
+            menuForm.Show();
+            
         }
     }
 }
