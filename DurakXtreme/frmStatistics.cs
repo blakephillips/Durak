@@ -19,6 +19,11 @@ namespace DurakXtreme
         GameStatistics gameStats = new GameStatistics();
         private void frmStatistics_Load(object sender, EventArgs e)
         {
+            GetStatistics();
+        }
+
+        private void GetStatistics()
+        {
             gameStats.InitializeStatistics();
 
             lblAttacksWonDisplay.Text = gameStats.attacksWon.ToString();
@@ -27,6 +32,12 @@ namespace DurakXtreme
             lblGamesWonDisplay.Text = gameStats.gamesWon.ToString();
             lblGamesLostDisplay.Text = gameStats.gamesLost.ToString();
 
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            gameStats.ResetStatistics();
+            GetStatistics();
         }
     }
 }

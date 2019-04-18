@@ -38,6 +38,7 @@
             this.lblCardsDrawn = new System.Windows.Forms.Label();
             this.lblDefensesRepelledDisplay = new System.Windows.Forms.Label();
             this.lblDefensesReppelled = new System.Windows.Forms.Label();
+            this.btnReset = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblGamesWon
@@ -130,11 +131,22 @@
             this.lblDefensesReppelled.TabIndex = 8;
             this.lblDefensesReppelled.Text = "Defenses Repelled:";
             // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(12, 116);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(178, 23);
+            this.btnReset.TabIndex = 10;
+            this.btnReset.Text = "&Reset Statistics";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // frmStatistics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(202, 118);
+            this.ClientSize = new System.Drawing.Size(202, 143);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.lblDefensesRepelledDisplay);
             this.Controls.Add(this.lblDefensesReppelled);
             this.Controls.Add(this.lblAttacksWonDisplay);
@@ -148,7 +160,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmStatistics";
-            this.Text = "frmStatistics";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Statistics";
             this.Load += new System.EventHandler(this.frmStatistics_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -167,5 +180,6 @@
         private System.Windows.Forms.Label lblCardsDrawn;
         private System.Windows.Forms.Label lblDefensesRepelledDisplay;
         private System.Windows.Forms.Label lblDefensesReppelled;
+        private System.Windows.Forms.Button btnReset;
     }
 }

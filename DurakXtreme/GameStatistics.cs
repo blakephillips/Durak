@@ -19,12 +19,12 @@ namespace DurakXtreme
         public int attacksWon { get; set; }
         public int defensesRepelled { get; set; }
 
-        private string fileName = "stats.dstats";
+        private const string FILE_NAME = "stats.dstats";
 
         public void InitializeStatistics()
         {
 
-            if (!File.Exists(fileName))
+            if (!File.Exists(FILE_NAME))
             {
                 gamesWon = 0;
                 gamesLost = 0;
@@ -43,7 +43,7 @@ namespace DurakXtreme
         {
             GameStatistics gameStats = new GameStatistics();
             IFormatter formatter = new BinaryFormatter();
-            Stream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+            Stream fs = new FileStream(FILE_NAME, FileMode.Create, FileAccess.Write);
             formatter.Serialize(fs, this);
             fs.Close();
         }
@@ -51,7 +51,7 @@ namespace DurakXtreme
         private void DeserializeFile()
         {
             IFormatter formatter = new BinaryFormatter();
-            Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            Stream fs = new FileStream(FILE_NAME, FileMode.Open, FileAccess.Read);
             GameStatistics gameStatistics = (GameStatistics)formatter.Deserialize(fs);
             fs.Close();
 
@@ -61,6 +61,14 @@ namespace DurakXtreme
             this.gamesLost = gameStatistics.gamesLost;
             this.gamesWon = gameStatistics.gamesWon;
         }
+
+
+        public void ResetStatistics()
+        {
+            File.Delete(FILE_NAME);
+            InitializeStatistics();
+        }
+
 
     }
 }
